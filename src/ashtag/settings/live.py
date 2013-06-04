@@ -1,0 +1,1 @@
+from ashtag.settings.base import *

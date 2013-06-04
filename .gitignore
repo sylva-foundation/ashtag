@@ -1,0 +1,6 @@
+*.sqlite3
+*.pyc
+.DS_Store
+.sass-cache
+*.ecowatch
+*.sublime-workspace
