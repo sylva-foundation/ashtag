@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'ashtag.apps.public',
     'ashtag.apps.sightings',
 
+    'pipeline',
     'south',
 )
 
@@ -167,3 +168,10 @@ LOGGING = {
         },
     }
 }
+
+# Pipeline configuration
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+PIPELINE_CSS_COMPRESSOR = None
+PIPELINE_JS_COMPRESSOR = None
+
+from ashtag.settings.assets import *
