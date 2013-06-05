@@ -41,7 +41,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'AshTag'
-copyright = u'2013, Adam Charnock & Steve Pike'
+from datetime import date
+copyright = u"%d, Adapt" % date.today().year
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
