@@ -1,2 +1,4 @@
 --requirement=requirements/base.txt
 dotcloud
+sphinxjp.themes.basicstrap
+sphinx

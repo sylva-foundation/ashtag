@@ -6,3 +6,4 @@
 *.sublime-workspace
 .dotcloud
 /static
+/docs/_build
