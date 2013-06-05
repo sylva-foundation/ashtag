@@ -1,0 +1,14 @@
+#!/bin/bash -e
+
+# Set the PYTHONPATH
+echo 'export PYTHONPATH="/home/dotcloud/current/src"' >> ~/.profile
+
+# Re-source the profile to get the new value
+source ~/.profile
+
+# Ensure DB is created an setup/migrated
+cd ~/current/scripts
+python createdb.py
+django-admin.py syncdb --noinput
+django-admin.py migrate
+django-admin.py collectstatic --noinput

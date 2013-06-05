@@ -1,5 +1,7 @@
 www:
     type: python
-    postinstall: ./app/postgresql.py
+    postinstall: scripts/postinstall
+    config:
+        python_version: v2.7
 db:
     type: postgresql
