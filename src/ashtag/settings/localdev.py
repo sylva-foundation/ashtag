@@ -3,6 +3,10 @@ from ashtag.settings.base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+INSTALLED_APPS += ('database_email_backend',)
+
+EMAIL_BACKEND = 'database_email_backend.backend.DatabaseEmailBackend'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
