@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'ashtag.apps.public',
     'ashtag.apps.sightings',
 
+    'django_extensions',
     'pipeline',
     'south',
 )

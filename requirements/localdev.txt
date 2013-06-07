@@ -2,3 +2,4 @@
 dotcloud
 sphinxjp.themes.basicstrap
 sphinx
+werkzeug
