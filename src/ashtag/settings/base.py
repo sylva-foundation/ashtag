@@ -178,6 +178,7 @@ PIPELINE_JS_COMPRESSOR = None
 
 # Django registration etc
 ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_OPEN = True
 LOGIN_REDIRECT_URL = '/sightings/'
 
 from ashtag.settings.assets import *
