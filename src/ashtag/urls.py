@@ -5,7 +5,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^account/', include('ashtag.apps.account.urls', namespace='account', app_name='account')),
+    url(r'^accounts/', include('registration.backends.default.urls', app_name='registration')),
     url(r'^api/', include('ashtag.apps.api.urls', namespace='api', app_name='api')),
     url(r'^core/', include('ashtag.apps.core.urls', namespace='core', app_name='core')),
     url(r'^app/', include('ashtag.apps.sightings.urls', namespace='sightings', app_name='sightings')),

@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+	<head>
+		<title>{% block title %}{% endblock %} - AshTag</title>
+		{% load compressed %}
+		{% compressed_css 'commoncss' %}
+		{% compressed_js 'commonjs' %}
+	</head>
+	<body>
+		{% block content %}{% endblock %}
+	</body>
+</html>

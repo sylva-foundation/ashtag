@@ -118,6 +118,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    PROJECT_ROOT / 'templates'
 )
 
 INSTALLED_APPS = [
@@ -130,7 +131,6 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     # 'django.contrib.admindocs',
 
-    'ashtag.apps.account',
     'ashtag.apps.api',
     'ashtag.apps.core',
     'ashtag.apps.public',
@@ -139,6 +139,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'pipeline',
     'south',
+    'registration',
 ]
 
 # A sample logging configuration. The only tangible logging
@@ -174,5 +175,9 @@ LOGGING = {
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS_COMPRESSOR = None
 PIPELINE_JS_COMPRESSOR = None
+
+# Django registration etc
+ACCOUNT_ACTIVATION_DAYS = 7
+LOGIN_REDIRECT_URL = '/sightings/'
 
 from ashtag.settings.assets import *
