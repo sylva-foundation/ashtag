@@ -7,6 +7,9 @@
 		{% compressed_js 'commonjs' %}
 	</head>
 	<body>
+		{% load cookielaw_tags %}
+		{% cookielaw_banner %}
+		
 		{% block content %}{% endblock %}
 	</body>
 </html>

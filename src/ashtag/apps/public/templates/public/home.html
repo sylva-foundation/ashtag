@@ -1,18 +1,9 @@
-<html>
-<head>
-	<title>AshTag Home</title>
-	{% load compressed %}
-	{% compressed_css 'commoncss' %}
-	{% compressed_js 'commonjs' %}
-</head>
-<body>
-<h1>Home page</h1>
-<p>
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
 	There once was a boy named Lee,<br/>
 	Who always threw rocks at a tree.<br/>
 	One day when it shivered,<br/>
 	Lee shaked and quivered<br/>
 	When out shot hundreds of bees!
-</p>
-</body>
-</html>
+{% endblock %}
