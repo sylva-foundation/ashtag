@@ -1,0 +1,10 @@
+{% extends "ashtag-base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+	<h1>Buy a tag pack!</h1>
+	{% for product in products %}
+	<h3>{{ product.title }}</h3>
+	{% include "catalogue/partials/add_to_basket_form.html" %}
+	{% endfor %}
+	
+{% endblock %}

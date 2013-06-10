@@ -17,3 +17,5 @@ DATABASES = {
         'PORT': int(env['DOTCLOUD_DB_SQL_PORT']),
     }
 }
+
+PAYPAL_SANDBOX_MODE = False

@@ -1,6 +1,8 @@
 --requirement=base.txt
-dotcloud
+# Use this dotcloud CLI fork with requests>=1.0 support until 
+# dotcloud 0.9.6 is released to pypi
+git+http://github.com/methane/dotcloud-cli.git@972fbf4713180c4b52b4d21d1f129f303c363d0f#egg=dotcloud
 sphinxjp.themes.basicstrap
 sphinx
 werkzeug==0.8.3
-django-database-email-backend==0.2.1
+git+http://github.com/stefanfoulis/django-database-email-backend.git@develop#egg=django-database-email-backend

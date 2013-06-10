@@ -1,6 +1,9 @@
 # Django settings for ashtag project.
 
+import os
+from oscar.defaults import *
 from path import path
+from oscar import OSCAR_MAIN_TEMPLATE_DIR
 
 PROJECT_ROOT = path(__file__).dirname().abspath().realpath().parent.parent.parent
 APPS_ROOT = PROJECT_ROOT / 'src' / 'ashtag' / 'apps'
@@ -92,6 +95,11 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'w93FX5DCAWM:AmzkMw!Uz-kIOktJyC1mo;r45*W9jYa6M1l37Z'
 
+AUTHENTICATION_BACKENDS = (
+    'oscar.apps.customer.auth_backends.Emailbackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -107,7 +115,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages'
+    'django.contrib.messages.context_processors.messages',
+
+    'oscar.apps.search.context_processors.search_form',
+    'oscar.apps.promotions.context_processors.promotions',
+    'oscar.apps.checkout.context_processors.checkout',
+    'oscar.apps.customer.notifications.context_processors.notifications',
+    'oscar.core.context_processors.metadata',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,6 +132,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'oscar.apps.basket.middleware.BasketMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'ashtag.urls'
@@ -129,9 +145,15 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    PROJECT_ROOT / 'templates'
+    PROJECT_ROOT / 'templates',
+    OSCAR_MAIN_TEMPLATE_DIR,
+    # This is a trick (i.e. a hack) for django-oscar-paypal to allow 
+    # us to override oscar's templates more easily
+    # (See http://django-oscar-paypal.readthedocs.org/en/latest/express.html)
+    path(OSCAR_MAIN_TEMPLATE_DIR).parent,
 )
 
+from oscar import get_core_apps as oscar_get_core_apps
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,19 +162,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.flatpages',
     # 'django.contrib.admindocs',
 
     'ashtag.apps.api',
     'ashtag.apps.core',
     'ashtag.apps.public',
     'ashtag.apps.sightings',
+    'ashtag.apps.store',
 
     'django_extensions',
     'pipeline',
     'south',
     'registration',
     'cookielaw',
-]
+
+    # oscar
+    'compressor',
+    'paypal', 
+] + oscar_get_core_apps()
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -192,5 +220,21 @@ PIPELINE_JS_COMPRESSOR = None
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_OPEN = True
 LOGIN_REDIRECT_URL = '/sightings/'
+
+# Oscar
+OSCAR_INITIAL_ORDER_STATUS = 'Pending'
+OSCAR_INITIAL_LINE_STATUS = 'Pending'
+OSCAR_ORDER_STATUS_PIPELINE = {
+    'Pending': ('Being processed', 'Cancelled',),
+    'Being processed': ('Processed', 'Cancelled',),
+    'Cancelled': (),
+}
+
+# Oscar PayPal
+PAYPAL_API_USERNAME = os.environ['PAYPAL_API_USERNAME']
+PAYPAL_API_PASSWORD = os.environ['PAYPAL_API_PASSWORD']
+PAYPAL_API_SIGNATURE = os.environ['PAYPAL_API_SIGNATURE']
+PAYPAL_CURRENCY = "GBP"
+PAYPAL_ALLOW_NOTE = False
 
 from ashtag.settings.assets import *
