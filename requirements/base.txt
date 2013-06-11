@@ -8,3 +8,4 @@ django-cookie-law==1.0.0
 # django-oscar (latest version, compatible with Django 1.5)
 git+http://github.com/tangentlabs/django-oscar.git@issue/472/django1.5#egg=django-oscar
 django-oscar-paypal==0.4.1
+django-model-utils==1.4.0

@@ -163,6 +163,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.flatpages',
+    'django.contrib.gis',
     # 'django.contrib.admindocs',
 
     'ashtag.apps.api',
