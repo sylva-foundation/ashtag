@@ -10,20 +10,26 @@ quickly using a virtual machine. You will need to download and install the follo
 - `VirtualBox`_
 - `Vagrant`_
 
-Clone the AshTag repository into a directory of your choosing::
+Clone the AshTag repository into a directory of your choosing:
     
+.. code-block:: bash
+
     # Note use "git://github.com/adapt/ashtag.git" for read-only access
     git clone git@github.com:adapt/ashtag.git
     cd ashtag
 
-Now setup the VM using vagrant::
+Now setup the VM using vagrant:
     
+.. code-block:: bash
+
     # Start the VM. As the VM doesn't exist, this will download and 
     # configure it
     vagrant up
 
-Once complete, you can SSH into the sever and run the django development server::
-    
+Once complete, you can SSH into the sever and run the django development server:
+
+.. code-block:: bash
+
     # SSH into the VM
     vagrant ssh
     # You are now on the virtual machine, so you can run the django dev server
@@ -36,12 +42,16 @@ Starting and Stopping the Virtual Machine
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you are finished working on the project, you can shut down the virtual machine to 
-save on system resources::
+save on system resources:
+
+.. code-block:: bash
 
     # Shut down the VM
     vagrant halt 
 
-When you come back to the project, you can simply start it using::
+When you come back to the project, you can simply start it using:
+
+.. code-block:: bash
 
     # Start the VM again (as the VM exists, this will be a relatively fast)
     vagrant up
@@ -52,7 +62,9 @@ Using virtualenvwrapper on Mac OS X (more involved)
 
 AshTag uses GeoDjango for storing locations. See the `GeoDjango installation instructions`_.
 
-However, users of brew on Mac OS X may find the following useful::
+However, users of brew on Mac OS X may find the following useful:
+
+.. code-block:: bash
     
     sudo pip install numpy
     brew update
