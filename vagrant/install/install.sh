@@ -15,17 +15,21 @@ PIP_DOWNLOAD_CACHE=$PROJECT_DIR/.pip_download_cache
 
 PGSQL_VERSION=9.1
 
-# Need to fix locale so that Postgres creates databases in UTF-8
 cp -p $PROJECT_DIR/vagrant/install/etc-bash.bashrc /etc/bash.bashrc
-# locale-gen en_GB.UTF-8
-# dpkg-reconfigure locales
+
+# Need to fix locale so that Postgres creates databases in UTF-8
+if [ ! -f /etc/vagrant-locale-gen-flag ]; then
+    locale-gen en_GB.UTF-8
+    dpkg-reconfigure locales
+    touch /etc/vagrant-locale-gen-flag
+fi
 
 export LANGUAGE=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
 
 # Install essential packages from Apt
-# apt-get update -y
+apt-get update -y
 # Python dev packages
 apt-get install -y build-essential python python-dev python-setuptools python-pip
 # Postgresql
@@ -46,8 +50,9 @@ easy_install -U pip
 easy_install virtualenv virtualenvwrapper stevedore virtualenv-clone
 
 # bash environment global setup
-cp -p $PROJECT_DIR/vagrant/install/bashrc /home/vagrant/.bashrc
-cp -p $PROJECT_DIR/vagrant/install/profile /home/vagrant/.profile
+ln -sf $PROJECT_DIR/vagrant/install/bashrc /home/vagrant/.bashrc
+ln -sf $PROJECT_DIR/vagrant/install/profile /home/vagrant/.profile
+ln -sf $PROJECT_DIR/vagrant/install/motd /home/vagrant/.motd
 su - vagrant -c "mkdir -p $PIP_DOWNLOAD_CACHE"
 
 # ---
@@ -65,8 +70,6 @@ if [ ! -d $VIRTUALENV_DIR ]; then
 fi
 
 su - vagrant -c "$VIRTUALENV_DIR/bin/pip install -r $PROJECT_DIR/requirements/localdev.txt"
-
-echo "workon $VIRTUALENV_NAME" >> /home/vagrant/.bashrc
 
 # Django project setup
 su - vagrant -c "django-admin.py syncdb --noinput && django-admin.py migrate"

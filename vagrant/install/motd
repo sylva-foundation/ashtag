@@ -1,0 +1,23 @@
+
+============================================================
+=========== Welcome to the AshTag development VM ===========
+============================================================
+
+You can start the Django development server  with:
+
+	django-admin.py runserver
+
+This will then be accessible in your web browser at 127.0.0.1:8000
+
+---
+
+After pulling code changes you may need to bring the database 
+up-to-date using these commands:
+
+	django-admin.py syncdb
+	django-admin.py migrate
+
+You may also need to install any new/updated requirements using:
+
+	pip install -r ~/ashtag/requirements/localdev.txt
+

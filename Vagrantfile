@@ -2,16 +2,14 @@
 # vi: set ft=ruby :
 
 Vagrant::Config.run do |config|
-	# Base box to build off, and download URL for when it doesn't exist on the user's system already
-	config.vm.box = "precise64"
-	config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+	
+	config.vm.box = "ashtag64"
+	config.vm.box_url = "/Users/adam/Projects/ashtag/package.box"
 
-	# As an alternative to precise32, VMs can be built from the 'django-base' box as defined at
-	# https://github.com/torchbox/vagrant-django-base , which has more of the necessary server config
-	# baked in and thus takes less time to initialise. To go down this route, you will need to build
-	# and host django-base.box yourself, and substitute your own URL below.
-	#config.vm.box = "django-base"
-	#config.vm.box_url = "http://example.com/path/to/your/django-base.box"
+  # If you wish you can use the precise64 box instead. The build will 
+  # take longer, but it may save you a large download.
+  # config.vm.box = "precise64"
+  # config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 	
 	# Boot with a GUI so you can see the screen. (Default is headless)
 	# config.vm.boot_mode = :gui
