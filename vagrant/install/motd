@@ -7,7 +7,7 @@ You can start the Django development server  with:
 
 	django-admin.py runserver
 
-This will then be accessible in your web browser at 127.0.0.1:8000
+This will then be accessible in your web browser at http://127.0.0.1:8888
 
 ---
 

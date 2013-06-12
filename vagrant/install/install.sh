@@ -73,3 +73,22 @@ su - vagrant -c "$VIRTUALENV_DIR/bin/pip install -r $PROJECT_DIR/requirements/lo
 
 # Django project setup
 su - vagrant -c "django-admin.py syncdb --noinput && django-admin.py migrate"
+
+
+cat << EOF
+
+======================================================================
+
+AshTag virtual machine setup complete. Now SSH into your new VM using:
+
+    vagrant ssh
+    
+Then run the django development server with:
+
+    django-admin.py runserver
+    
+Then access AshTag in your web browser here:
+
+    http://127.0.0.1:8000
+
+EOF
