@@ -7,7 +7,7 @@
 Vagrant::Config.run do |config|
     
     config.vm.box = "ashtag64"
-    config.vm.box_url = "/Users/adam/Projects/ashtag/package.box"
+    config.vm.box_url = "https://dl.dropboxusercontent.com/u/41936/ashtag64.box"
 
     # If you wish you can use the precise64 box instead. The build will 
     # take longer, but it may save you a large download.

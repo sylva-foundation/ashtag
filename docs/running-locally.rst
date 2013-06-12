@@ -11,8 +11,9 @@ quickly using a virtual machine. You will need to download and install the follo
 - `Vagrant`_
 
 Clone the AshTag repository into a directory of your choosing::
-
-    git clone https://github.com/adapt/ashtag.git
+    
+    # Note use "git://github.com/adapt/ashtag.git" for read-only access
+    git clone git@github.com:adapt/ashtag.git
     cd ashtag
 
 Now setup the VM using vagrant::
