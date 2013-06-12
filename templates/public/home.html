@@ -1,9 +1,7 @@
 {% extends "ashtag-base.html" %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
-	There once was a boy named Lee,<br/>
-	Who always threw rocks at a tree.<br/>
-	One day when it shivered,<br/>
-	Lee shaked and quivered<br/>
-	When out shot hundreds of bees!
+	<h1>AshTag!</h1>
+	<p><a href="{% url 'sightings:home' %}">Enter the app</a> (user's will need to login once implemented).</p>
+	<p>templates/public/home.html</p>
 {% endblock %}
