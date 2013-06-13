@@ -21,8 +21,8 @@ Vagrant::Config.run do |config|
     # via the IP.
     # config.vm.network "33.33.33.10"
     
-    # Make the Django dev server available to the host machine on 8888.
-    config.vm.forward_port 8000, 8888
+    # Make the Django dev server available to the host machine on 8080.
+    config.vm.forward_port 8080, 8080
     
     # Share an additional folder to the guest VM. The first argument is
     # an identifier, the second is the path on the guest to mount the

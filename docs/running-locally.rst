@@ -33,10 +33,19 @@ Once complete, you can SSH into the sever and run the django development server:
     # SSH into the VM
     vagrant ssh
     # You are now on the virtual machine, so you can run the django dev server
-    django-admin.py runserver
+    runserver
+
+You should now be able to open http://127.0.0.1:8080/ in your web browser.
 
 The files in your cloned repository will be kept in sync with those on the VM, so you 
 can go ahead and start editing files locally.
+
+.. note:: 
+
+    ``runserver`` is simply and alias for the somewhat longer command::
+
+        django-admin.py runserver 0.0.0.0:8080
+
 
 Starting and Stopping the Virtual Machine
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

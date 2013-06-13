@@ -85,10 +85,10 @@ AshTag virtual machine setup complete. Now SSH into your new VM using:
     
 Then run the django development server with:
 
-    django-admin.py runserver
+    runserver
     
 Then access AshTag in your web browser here:
 
-    http://127.0.0.1:8000
+    http://127.0.0.1:8080
 
 EOF

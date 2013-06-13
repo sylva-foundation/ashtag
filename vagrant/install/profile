@@ -21,6 +21,8 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
+alias runserver='django-admin.py runserver 0.0.0.0:8080'
+
 export WORKON_HOME=$HOME/.virtualenvs
 
 export PYTHONPATH=/home/vagrant/ashtag/src
