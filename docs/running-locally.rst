@@ -65,6 +65,16 @@ When you come back to the project, you can simply start it using:
     # Start the VM again (as the VM exists, this will be a relatively fast)
     vagrant up
 
+Reconfiguring the Virtual Machine
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the Vagrant config or build scripts change it will probably be necessary to 
+rebuild the VM. To do this, simply destroy and recreate it:
+
+.. code-block:: bash
+
+    vagrant destroy
+    vagrant up
 
 Using virtualenvwrapper on Mac OS X (more involved)
 ---------------------------------------------------
