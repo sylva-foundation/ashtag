@@ -79,6 +79,44 @@ rebuild the VM. To do this, simply destroy and recreate it:
 Using virtualenvwrapper on Mac OS X (more involved)
 ---------------------------------------------------
 
+This section of the guide assumes you already have ``virtualenvwrapper`` setup. 
+Checkout the `virtualenvwrapper documentation`_ for details of how to do this.
+
+First, you will need to checkout the code:
+
+.. code-block:: bash
+
+    # Note use "git://github.com/adapt/ashtag.git" for read-only access
+    git clone git@github.com:adapt/ashtag.git
+    cd ashtag
+
+Setting up the Environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Install the dependencies for the local development environment:
+
+.. code-block:: bash
+
+    pip install -r requirements/localdev.txt
+
+
+Now edit your environment's ``postactivate`` hook to include the following:
+
+.. code-block:: bash
+    
+    # Add this to your postactive hook ($VIRTUAL_ENV/bin/postactivate)
+    export PYTHONPATH="$PROJECT_HOME/ashtag/src"
+    export DJANGO_SETTINGS_MODULE=ashtag.settings.localdev
+
+And now souce the file to load the new settings into your environment:
+
+.. code-block:: bash
+
+    source $VIRTUAL_ENV/bin/postactivate
+
+Setup GeoDjango
+~~~~~~~~~~~~~~~
+
 AshTag uses GeoDjango for storing locations. See the `GeoDjango installation instructions`_.
 
 However, users of brew on Mac OS X may find the following useful:
@@ -92,3 +130,4 @@ However, users of brew on Mac OS X may find the following useful:
 .. _GeoDjango installation instructions: https://docs.djangoproject.com/en/1.5/ref/contrib/gis/install/
 .. _Vagrant: http://www.vagrantup.com/
 .. _VirtualBox: https://www.virtualbox.org/
+.. _virtualenvwrapper documentation: http://virtualenvwrapper.readthedocs.org/
