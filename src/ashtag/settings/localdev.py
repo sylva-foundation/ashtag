@@ -3,7 +3,10 @@ from ashtag.settings.base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-INSTALLED_APPS += ('database_email_backend',)
+INSTALLED_APPS += (
+    'database_email_backend',
+    'django_nose',
+)
 
 EMAIL_BACKEND = 'database_email_backend.backend.DatabaseEmailBackend'
 
@@ -23,3 +26,6 @@ HAYSTACK_CONNECTIONS = {
         'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
     },
 }
+
+# Django Nose
+TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
