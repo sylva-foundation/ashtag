@@ -8,6 +8,7 @@ install:
   - pip install pep8 --use-mirrors
 #  - pip install https://github.com/dcramer/pyflakes/tarball/master
   - pip install -q -r requirements/localdev.txt --use-mirrors
+  - sudo apt-get install gdal
 before_script:
   - "pep8 --exclude=migrations --ignore=W404,E501,E128,W292,E122,E124 src"
 #  - pyflakes -x W src
