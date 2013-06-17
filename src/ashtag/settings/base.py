@@ -13,7 +13,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Adam Charnock', 'adam@adamcharnock.com'),
-    ('Steve Pike', 'stephen.pike@gmail.com'),
+    ('Steve Pike', 'ashtag@stevepike.co.uk'),
 )
 
 MANAGERS = ADMINS
@@ -147,7 +147,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     PROJECT_ROOT / 'templates',
     OSCAR_MAIN_TEMPLATE_DIR,
-    # This is a trick (i.e. a hack) for django-oscar-paypal to allow 
+    # This is a trick (i.e. a hack) for django-oscar-paypal to allow
     # us to override oscar's templates more easily
     # (See http://django-oscar-paypal.readthedocs.org/en/latest/express.html)
     path(OSCAR_MAIN_TEMPLATE_DIR).parent,
@@ -180,7 +180,7 @@ INSTALLED_APPS = [
 
     # oscar
     'compressor',
-    'paypal', 
+    'paypal',
 ] + oscar_get_core_apps()
 
 # A sample logging configuration. The only tangible logging
