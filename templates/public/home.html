@@ -1,74 +1,24 @@
-{% extends "ashtag-base.html" %}
+{% extends "core/jqm-page.html" %}
+
 {% block title %}Home{% endblock %}
+{% block class %}home-page{% endblock %}
+{% block no-page-title %}{% endblock %}
 
-{% block content %}
-    {% load cookielaw_tags %}
-
-    <div data-role="page" data-theme="a"  class="home-page">    
-        {% cookielaw_banner %}
-
-        <div data-role="panel" id="menu-panel" data-display="reveal">
-             <ul data-role="listview" data-icon="false" class="menu-list">   
-                 <li><a href="index.html">Home</a></li>
-                 <li><a href="buy-tags.html">Buy Tags</a></li>
-                 <li><a href="submit-sighting.html">Submit Sightings</a></li>
-                 <li><a href="sightings.html">All Sightings</a></li>
-                 <li><a href="about.html">About</a></li>
-                 <li><a href="contact.html">Contact</a></li>
-                 <li><a href="terms-and-conditions.html">Terms &amp; Conditions</a></li>
-                 <li><a href="privacy.html">Privacy Policy</a></li>
-                 <li><a href="login.html">Log in</a></li>
-                 <li><a href="signup.html">Sign up</a></li>
-             </ul>
-        </div><!-- /panel -->     
-        
-        <div data-role="header" class="at-header">
-            <h1 class="logo"><a href="#"><img src="{{ STATIC_URL }}images/ashtaglogo.png" /></a></h1>
-            <a href="#menu-panel" class="menu-button">Menu</a>
-            <a href="my-tags.html" class="mytags-button">My Tags</a>
-        </div><!--//at-header-->    
-                
-        <div data-role="content" class="at-content" role="main">
-            <div class="at-intro">
-                <p>Help identify ash trees with dieback disease</p>
-            </div><!--//at-intro-->
-            <ul data-role="listview" data-inset="true" class="home-listview" >
-                <li class="login"><a href="login.html">Log in</a></li>
-                <li class="signup"><a href="signup.html">Sign up</a></li>
-                <li class="buy-tags"><a href="buy-tags.html">Buy Tags</a></li>
-                <li class="submit-sighting"><a href="submit-sighting.html">Submit Sighting</a></li>
-                <li class="sightings"><a href="sightings.html">Sightings</a></li>
-            </ul>                
-        </div><!--//at-content-->
-        
-        <div data-role="footer" class="at-footer">
-            <div class="twitter-follow-wrapper">
-            <a href="https://twitter.com/AshTag_Adapt" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @AshTag_Adapt</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            </div><!--//twitter-follow-wrapper-->               
-            <ul class="site-links">
-                <li><a href="#">About</a></li>
-                <li><a href="#">Terms &amp; Conditions</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-            <div class="supporters">
-                <h3>Supported by:</h3>
-                <ul class="logos clearfix">
-                    <li class="adap"><a rel="external" href="http://www.adaptlowcarbongroup.co.uk">Adapt Low Carbon Group</a></li>
-                    <li class="uea"><a rel="external" href="http://www.uea.ac.uk/">University of East Anglia</a></li>
-                </ul>
-            </div>
+{% block page %}
             
-            <div class="credits">
-                <p>Made by <a rel="external" href="http://uk.linkedin.com/pub/steve-pike/10/a71/884">Steve Pike</a> and <a rel="external" href="http://adamcharnock.com/">Adam Charnock</a></p>
-                <p>Designed by <a rel="external" href="http://3rdwavemedia.com/">3rd Wave Media</a></p>
-            </div>
-            <small class="copyright">
-                Copyright &copy; 2013 Ashtag.org
-            </small>
-        </div><!--//at-footer-->                       
-        
-    </div><!--//home-page-->
-{% endblock %}
+    <div data-role="content" class="at-content" role="main">
+        <div class="at-intro">
+            <p>Help identify ash trees with dieback disease</p>
+        </div><!--//at-intro-->
+        <ul data-role="listview" data-inset="true" class="home-listview" >
+            <li class="login"><a href="login.html">Log in</a></li>
+            <li class="signup"><a href="signup.html">Sign up</a></li>
+            <li class="buy-tags"><a href="buy-tags.html">Buy Tags</a></li>
+            <li class="submit-sighting"><a href="submit-sighting.html">Submit Sighting</a></li>
+            <li class="sightings"><a href="sightings.html">Sightings</a></li>
+        </ul>                
+    </div><!--//at-content-->
+
+{% endblock page %}
 
 
