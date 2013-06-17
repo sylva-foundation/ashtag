@@ -1,5 +1,10 @@
 from django.views.generic import TemplateView, DetailView
+from django.http import HttpResponse
+from django.shortcuts import render
+
 from ashtag.apps.core.models import Sighting
+
+from .forms import SightingForm, AnonSightingForm
 
 
 class MyTagsView(TemplateView):
@@ -48,6 +53,27 @@ class MapView(TemplateView):
 
 class SubmitView(TemplateView):
     template_name = 'sightings/submit.html'
+    form_class = SightingForm
+
+    def _get_form_class(self, request):
+        if not request.user.is_authenticated():
+            return AnonSightingForm
+        else:
+            return SightingForm
+
+    def get(self, request, *args, **kwargs):
+        form = self._get_form_class()
+        return render(request,  self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self._get_form_class(request.POST, request.FILES)
+        if form.is_valid():
+            sighting = form.save(commit=False)
+            if request.user.is_authenticated():
+                sighting.creator_email = request.user.email
+            sighting.save()
+            # TODO: redirect to "tahnks"
+            return HttpResponse("Thanks")
 
     def get_context_data(self, **kwargs):
         context = super(SubmitView, self).get_context_data(**kwargs)
