@@ -7,7 +7,7 @@ import floppyforms as flforms
 
 from exifpy import EXIF
 
-from .models import Sighting
+from ashtag.apps.core.models import Sighting
 from .exif_utils import get_lat_lon
 
 
