@@ -4,6 +4,7 @@ python:
 env:
   - DJANGO=1.5.1
 install:
+  - sudo apt-get install python-gdal
   - pip install -q Django==$DJANGO --use-mirrors
   - pip install pep8 --use-mirrors
 #  - pip install https://github.com/dcramer/pyflakes/tarball/master
