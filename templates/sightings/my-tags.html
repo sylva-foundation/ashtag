@@ -1,0 +1,52 @@
+{% extends "core/jqm-page.html" %}
+
+{% block title %}My Tags{% endblock %}
+{% block class %}my-tags-page{% endblock %}
+
+{% block page %}
+            
+            <div data-role="content" class="at-content" role="main">
+                
+                <div class="sightings-wrapper "> 
+                    <div class="my-tags-wrapper sightings-view-wrapper ui-texture-wrapper">
+                        <ul data-role="listview" data-inset="true" class="my-tags-list" >
+                            <li>
+                                <a href="sighting.html">
+                                    <img src="http://static.ias-ess.org/media/sightings/107.JPG.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
+                                    <h2>Tag: <span class="tag-number">#12345</span></h2>
+                                    <p>Last updated: June 14, 2013, 3:45 PM</p>                         
+                                </a>
+                            </li>
+                            
+                            <li>
+                                <a href="sighting.html">
+                                    <img src="http://static.ias-ess.org/media/sightings/107.JPG.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
+                                    <h2>Tag: <span class="tag-number">#12345</span></h2>
+                                    <p>Last updated: June 14, 2013, 3:45 PM</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="sighting.html">
+                                    <img src="http://static.ias-ess.org/media/sightings/ashdieback_002.jpg.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
+                                    <h2>Tag: #12345</h2>
+                                    <p>Last updated: June 14, 2013, 3:45 PM</p>                                 
+                                </a>
+                            </li>
+                        </ul><!--//sightings-list-->
+                        <div class="cta-btn-wrapper">
+                            <a class="add-tree-button" href="submit-sighting.html" data-role="button" data-icon="plus" >Tag another tree</a>
+                        </div>
+                        
+                        <div data-role="popup" id="auth" class="ui-content">
+                            <p>You need to log in to view the untagged tree.</p>
+                            <div class="cta-btn-wrapper">
+                                <a href="login.html" data-role="button" data-inline="true" data-mini="true">Log in</a>
+                            </div><!--//cta-btn-wrapper-->
+                            <a href="#" class="cancel-button" data-role="button" data-rel="back" data-inline="true" data-mini="true">Cancel</a>                       
+                        </div><!--//#auth-->
+                                    
+                    </div><!--//my-tags-wrapper-->                 
+                </div><!--//sightings-wrapper-->               
+            </div><!--//at-cont
+
+{% endblock page %}

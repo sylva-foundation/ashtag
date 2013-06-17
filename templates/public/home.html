@@ -11,13 +11,13 @@
             <p>Help identify ash trees with dieback disease</p>
         </div><!--//at-intro-->
         <ul data-role="listview" data-inset="true" class="home-listview" >
-            <li class="login"><a href="login.html">Log in</a></li>
-            <li class="signup"><a href="signup.html">Sign up</a></li>
-            <li class="buy-tags"><a href="buy-tags.html">Buy Tags</a></li>
-            <li class="submit-sighting"><a href="submit-sighting.html">Submit Sighting</a></li>
-            <li class="sightings"><a href="sightings.html">Sightings</a></li>
+            <li class="login"><a href="{% url 'auth_login' %}">Log in</a></li>
+            <li class="signup"><a href="{% url 'registration_register' %}">Sign up</a></li>
+            <li class="buy-tags"><a href="{% url 'store:tagpacks' %}">Buy Tags</a></li>
+            <li class="submit-sighting"><a href="{% url 'sightings:submit' %}">Submit Sighting</a></li>
+            <li class="sightings"><a href="{% url 'sightings:map' %}">Sightings</a></li>
         </ul>                
-    </div><!--//at-content-->
+    </div><!--//at-content--> 
 
 {% endblock page %}
 

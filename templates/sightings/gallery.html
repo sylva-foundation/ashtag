@@ -1,0 +1,30 @@
+{% extends "core/jqm-page.html" %}
+
+{% block title %}Gallery{% endblock %}
+{% block class %}gallery-page{% endblock %}
+
+{% block page %}
+            
+    <div data-role="content" class="at-content" role="main">
+        
+        <div class="gallery-wrapper ui-texture-wrapper ui-shadow">
+            <ul class="gallery clearfix">  
+                <li><a href="images/dummy/image1.jpg" rel="external"><img src="{{ STATIC_URL }}images/dummy/image1.jpg" alt="01" /></a></li>
+                <li><a href="images/dummy/image2.jpg" rel="external"><img src="{{ STATIC_URL }}images/dummy/image2.jpg" alt="02" /></a></li>
+                <li><a href="images/dummy/image1.jpg" rel="external"><img src="{{ STATIC_URL }}images/dummy/image1.jpg" alt="03" /></a></li>
+                <li><a href="images/dummy/image2.jpg" rel="external"><img src="{{ STATIC_URL }}images/dummy/image2.jpg" alt="04" /></a></li>
+                <li><a href="images/dummy/image1.jpg" rel="external"><img src="{{ STATIC_URL }}images/dummy/image1.jpg" alt="05" /></a></li>
+                <li><a href="images/dummy/image2.jpg" rel="external"><img src="{{ STATIC_URL }}images/dummy/image2.jpg" alt="06" /></a></li>
+                <li><a href="images/dummy/image1.jpg" rel="external"><img src="{{ STATIC_URL }}images/dummy/image1.jpg" alt="07" /></a></li>
+                <li><a href="images/dummy/image2.jpg" rel="external"><img src="{{ STATIC_URL }}images/dummy/image2.jpg" alt="08" /></a></li>
+                <li><a href="images/dummy/image1.jpg" rel="external"><img src="{{ STATIC_URL }}images/dummy/image1.jpg" alt="09" /></a></li>
+               
+            </ul><!--//gallery-->
+                           
+        </div><!--//gallery-wrapper--> 
+                      
+    </div><!--//at-content-->
+
+{% endblock page %}
+
+

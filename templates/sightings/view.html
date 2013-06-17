@@ -1,0 +1,48 @@
+{% extends "core/jqm-page.html" %}
+
+{% block title %}Sighting{% endblock %}
+{% block class %}sighting-page{% endblock %}
+
+{% block page %}
+            
+            <div data-role="content" class="at-content" role="main">
+
+                <div class="single-sighting-wrapper ui-texture-wrapper ui-shadow clearfix">
+                    <h2 class="heading">Tag: #12345</h2>
+                    <a data-role="button" data-inline="true" data-icon="alert" class="report-button" data-rel="popup" data-position-to="window" data-transition="pop" href="#report-popup" data-mini="true">Report this sighting</a>
+                    <div class="meta">
+                        <p>Last updated on: 14 June 2013, 14:00 PM</p>
+                        <p>Submitted on: 22 May 2013, 9:30 AM</p>
+                    </div><!--//meta-->
+
+                    <div class="gallery-thumb">
+                        <a href="sighting-gallery.html"><img src="http://static.ias-ess.org/media/sightings/107.JPG.456x272_q85_crop-smart.jpg" /></a>
+                    </div><!--//gallery-thumb-->
+                    <div class="location-map">
+                        <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=norwich&amp;aq=&amp;sll=51.468489,-2.590709&amp;sspn=0.377695,0.725098&amp;ie=UTF8&amp;hq=&amp;hnear=Norwich,+Norfolk,+United+Kingdom&amp;t=m&amp;z=12&amp;ll=52.630886,1.297355&amp;output=embed"></iframe>
+                    </div>
+                    <div class="comments">
+                        <h3>Comments and Updates</h3>
+                        <p>Intro blurb goes here lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consectetur imperdiet lacus, sed fringilla tellus luctus sed. In vitae congue arcu.</p>
+                        <ul class="comments-list">
+                            <li class="ui-corner-all">
+                                <span class="info">By Steve Pike, 14th June, 2013 </span>
+                                <span class="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lobortis lectus tristique velit luctus egestas. Praesent vel dapibus nisi. Nam at lacinia nibh. Curabitur hendrerit augue magna, non consectetur nunc faucibus ut. </span>
+                            </li>
+                            <li class="ui-corner-all">
+                                <span class="info">By Steve Pike, 3rd June, 2013 </span>
+                                <span class="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lobortis lectus tristique velit luctus egestas. Praesent vel dapibus nisi. Nam at lacinia nibh. Curabitur hendrerit augue magna, non consectetur nunc faucibus ut. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc lobortis lectus tristique velit luctus egestas. Praesent vel dapibus nisi. Nam at lacinia nibh. Curabitur hendrerit augue magna, non consectetur nunc faucibus ut. </span>
+                            </li>
+                        </ul>
+                        <form class="comments-form">
+                            <label for="sighting-comment">Leave a comment/update:</label>
+                            <textarea cols="40" rows="8" name="comment" id="sighting-comment"></textarea>
+                        </form>
+                    </div><!--//comments-->
+                    
+                                    
+                </div><!--//single-sighting-wrapper-->
+
+{% endblock page %}
+
+
