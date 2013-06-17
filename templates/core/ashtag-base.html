@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %} - AshTag</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        {% load compressed %}
+        {% compressed_css 'commoncss' %}
+        {% compressed_js 'commonjs' %}
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>  
+        <link rel="shortcut icon" href="images/favicon.ico">
+    </head>
+
+    <body>
+        {% block content %}{% endblock %}
+    </body>    
+</html>

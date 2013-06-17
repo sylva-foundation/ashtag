@@ -1,10 +1,29 @@
 {% extends "registration/registration_base.html" %}
-{% block title %}Register for an account{% endblock %}
-{% block content %}
-<table>
-    <form method='post' action=''>{% csrf_token %}
-        {{ form }}
-        <tr><td></td><td><input type="submit" value="Send activation email" /></td>
-    </form>
-</table>
-{% endblock %}
+
+{% block title %}Signup{% endblock %}
+{% block class %}signup-page{% endblock %}
+{% block id %}signup-page{% endblock %}
+
+{% block page %}
+
+    <div data-role="content" class="at-content" role="main"> 
+        <form class="form signup-form ui-shadow" name="signup-form" action="" method="post" data-ajax="false">
+            {% csrf_token %}
+
+            {{ form }}
+
+            <fieldset data-role="controlgroup" >
+                <input type="checkbox" name="show-password" id="show-password" onchange="document.forms['signup-form'].password.type = (this.checked) ? 'text' : 'password'" />
+                <label for="show-password">Show password</label>
+            </fieldset>
+            <p class="legal">By clicking Sign Up, I agree to the <a href="#">Terms and Conditions</a></p>
+            <div class="cta-btn-wrapper">
+                <input class="button signup-submit" type="submit" value="Sign Up" name="signup-submit" />
+            </div>
+            <div class="form-text-wrapper">
+                <p class="signup-text">Already have an account?<br /><a href="login.html" >Log in now</a></p>
+            </div>
+        </form><!--//signup-form-->                           
+    </div><!--//at-content-->
+
+{% endblock page %}

@@ -1,0 +1,37 @@
+{% extends "core/ashtag-base.html" %}
+
+{% block content %}
+<div data-role="page" data-theme="{% block theme %}a{% endblock %}" id="{% block id %}{% endblock %}"  class="{% block class %}{% endblock %}">
+
+    {% load cookielaw_tags %}
+    {% cookielaw_banner %}
+
+    <div data-role="panel" id="menu-panel" data-display="reveal">
+         <ul data-role="listview" data-icon="false" class="menu-list">   
+             <li><a href="index.html">Home</a></li>
+             <li><a href="buy-tags.html">Buy Tags</a></li>
+             <li><a href="submit-sighting.html">Submit Sightings</a></li>
+             <li><a href="sightings.html">All Sightings</a></li>
+             <li><a href="about.html">About</a></li>
+             <li><a href="contact.html">Contact</a></li>
+             <li><a href="terms-and-conditions.html">Terms &amp; Conditions</a></li>
+             <li><a href="privacy.html">Privacy Policy</a></li>
+             <li><a href="login.html">Log in</a></li>
+             <li><a href="signup.html">Sign up</a></li>
+         </ul>
+    </div><!-- /panel -->     
+
+    <div data-role="header" class="at-header">
+        <h1 class="logo"><a href="#"><img src="{{ STATIC_URL }}images/ashtaglogo.png" /></a></h1>
+        {% block no-page-title %}
+        <h2 class="page-title">{% block page-title %}{% block title %}{% endblock %}{% endblock %}</h2>
+        {% endblock %}
+        <a href="#menu-panel" class="menu-button">Menu</a>
+        <a href="my-tags.html" class="mytags-button">My Tags</a>
+    </div><!--//at-header-->    
+
+    {% block page %}{% endblock %}
+
+    {% include "core/includes/footer.html" %}
+</div>
+{% endblock %}

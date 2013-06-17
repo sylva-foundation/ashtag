@@ -1,0 +1,53 @@
+{% extends "core/jqm-page.html" %}
+
+{% block title %}Submit a Sighting{% endblock %}
+{% block class %}submit-sighting-page{% endblock %}
+{% block id %}submit-sighting-page{% endblock %}
+
+{% block page %}
+            
+    <div data-role="content" class="at-content" role="main">
+        <form class="form submit-sighting-form ui-shadow" action="" method="post" data-ajax="false">
+            <div class="form-intro">
+                <p>Intro blurb goes here lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas cursus aliquam eros luctus posuere. Cras tincidunt, eros ac sagittis dapibus.</p>
+            </div>
+            <div class="form-row">
+                <label for="email">Email Address</label>
+                <input class="email" type="email" name="email" id="email" value="" placeholder="Enter your email" required aria-required="true" />
+            </div><!--//form-row-->
+            <div class="form-row">
+                <label for="tag-number">Tag Number (if present)</label>
+                <input class="tag-number" type="text" name="tag-number" id="tag-number" placeholder="eg. 12344" />
+            </div><!--//form-row-->
+            <div class="form-row">
+                <label for="select-photo">Select a photo</label>
+                <input id="select-photo" type="file" name="files[]" single />
+            </div><!--//form-row-->
+            
+            <div class="form-row">
+            <fieldset data-role="controlgroup">
+                <legend>Does this tree appear to have the Ash Dieback Disease?</legend>
+                    <input type="radio" name="radio-choice-1" id="radio-choice-1" value="choice-1" checked="checked" />
+                    <label for="radio-choice-1">I don't know</label>
+        
+                    <input type="radio" name="radio-choice-1" id="radio-choice-2" value="choice-2"  />
+                    <label for="radio-choice-2">Yes</label>
+        
+                    <input type="radio" name="radio-choice-1" id="radio-choice-3" value="choice-3"  />
+                    <label for="radio-choice-3">No</label>
+            </fieldset>
+            </div><!--//form-row-->
+            <div class="form-row">
+            <label for="comment">Leave a comment</label>
+            <textarea cols="40" rows="8" name="comment" id="comment"></textarea>
+            </div><!--//form-row-->
+
+            <div class="cta-btn-wrapper">
+                <input class="button submit-sighting" type="submit" value="Submit" name="submit-sighting" />                        </div>                    
+        </form><!--//submit-sighting-form-->                          
+   
+    </div><!--//at-content-->  
+
+{% endblock page %}
+
+

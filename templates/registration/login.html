@@ -1,26 +1,39 @@
-{% extends "registration/registration_base.html" %}
+{% extends "core/jqm-page.html" %}
+
 {% block title %}Login{% endblock %}
-{% block content %}
+{% block class %}login-page{% endblock %}
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+{% block page %}
 
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
-<p><a href="{% url 'auth_password_reset' %}">Forgot</a> your password?  <a href="{% url 'registration_register' %}">Need an account</a>?</p>
+<div data-role="content" class="at-content" role="main">
+    <form class="form login-form ui-shadow" action="{% url 'django.contrib.auth.views.login' %}" method="post" data-ajax="false">
+        {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+        {% endif %}
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
+        {% csrf_token %}
 
-{% endblock %}
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        
+        {{ form.password.label_tag }}
+        {{ form.password }}
+
+        {% comment %}
+        <fieldset data-role="controlgroup">
+            <input type="checkbox" id="remember-login" name="remember-login" />
+            <label for="remember-login">Keep me logged in</label>
+        </fieldset>
+        {% endcomment %}
+
+        <div class="cta-btn-wrapper">
+            <input class="button login-submit" type="submit" value="Log In" name="login-submit" />
+        </div>
+        <div class="form-text-wrapper">
+            <p class="reset-text"><a href="{% url 'auth_password_reset' %}" data-ajax="false">Forgot password?</a></p>
+            <p class="signup-text">Don't have an account yet?<br /><a href="{% url 'registration_register' %}" >Sign up now</a></p>
+        </div>
+    </form><!--//login-form-->                            
+</div><!--//at-content-->
+
+{% endblock page %}
