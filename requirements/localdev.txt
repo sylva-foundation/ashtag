@@ -6,3 +6,4 @@ sphinxjp.themes.basicstrap
 sphinx
 werkzeug==0.8.3
 git+http://github.com/stefanfoulis/django-database-email-backend.git@develop#egg=django-database-email-backend
+django-nose

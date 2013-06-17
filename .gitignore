@@ -9,3 +9,5 @@
 /docs/_build
 .pip_download_cache
 .vagrant
+*.swp
+*.swo
