@@ -178,6 +178,7 @@ INSTALLED_APPS = [
     'south',
     'registration',
     'cookielaw',
+    'storages',
 
     # oscar
     'compressor',
@@ -238,5 +239,20 @@ PAYPAL_API_PASSWORD = os.environ.get('PAYPAL_API_PASSWORD', 'not-set')
 PAYPAL_API_SIGNATURE = os.environ.get('PAYPAL_API_SIGNATURE', 'not-set')
 PAYPAL_CURRENCY = "GBP"
 PAYPAL_ALLOW_NOTE = False
+
+# File storage configuration
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'ashtag-localdev')
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=31536000, public',
+}
+
+if os.environ.get('AWS_MEDIA_ENABLE', False):
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+if os.environ.get('AWS_STATIC_ENABLE', False):
+    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 from ashtag.settings.assets import *
