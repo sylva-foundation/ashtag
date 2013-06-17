@@ -107,6 +107,11 @@ Now edit your environment's ``postactivate`` hook to include the following:
     # Add this to your postactive hook ($VIRTUAL_ENV/bin/postactivate)
     export PYTHONPATH="$PROJECT_HOME/ashtag/src"
     export DJANGO_SETTINGS_MODULE=ashtag.settings.localdev
+    export DJANGO_SECRET_KEY="RANDOM STRING HERE"
+
+.. warning::
+    
+    Ensure you replace `RANDOM STRING HERE` with a random string, especially for deployment.
 
 And now souce the file to load the new settings into your environment:
 
