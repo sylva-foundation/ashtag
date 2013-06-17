@@ -43,8 +43,8 @@ class Tree(RandomIdMixin, TimestampedMixin, CreatorMixin, models.Model):
     tag_number = models.CharField(
         max_length=10, db_index=True, null=True, blank=True)
 
-    class Meta:
-        abstract = True  # Just testing for now
+#    class Meta:
+#        abstract = True  # Just testing for now
 
 
 class Sighting(RandomIdMixin, TimestampedMixin, CreatorMixin, models.Model):
@@ -64,8 +64,8 @@ class Sighting(RandomIdMixin, TimestampedMixin, CreatorMixin, models.Model):
 
     objects = models.GeoManager()
 
-    class Meta:
-        abstract = True  # Just testing for now
+#    class Meta:
+#        abstract = True  # Just testing for now
 
 
 class Comment(TimestampedMixin, CreatorMixin, models.Model):
