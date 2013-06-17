@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
 import json
+import urllib
+
+from django.core.files import File
 
 from fabric.api import run, local, hosts, cd, task, env, get, abort
 from fabric.contrib.console import confirm
@@ -40,8 +44,16 @@ def get_sightings():
 
 
 @task
-def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json'):
-    """Put sightings from a fixture file into db."""
+def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json',
+                     skip_images=False, pks__gte=0):
+    """Put sightings from a fixture file into db.
+
+    :param settings: change to change settings file inside ashtag.settings...
+    :param json_file: change to use locally dumped json
+    :param skip_images: set True to ignore images
+    :param pks__gte: set > 0 to limit import (or do an update, etc.)
+
+    """
     django.settings_module('ashtag.settings.%s' % settings)
     from ashtag.apps.core.models import Sighting, Tree
     dumped_json = ""
@@ -52,6 +64,9 @@ def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json'):
     ash_sightings = filter(lambda x: x['fields']['taxon'] == 100004, sightings)
     not_rejects = filter(lambda x: not x['fields']['rejected'], ash_sightings)
     have_emails = filter(lambda x: x['fields']['email'], not_rejects)
+    only_pks = sorted(
+        filter(lambda x: x['pk'] >= int(pks__gte), have_emails),
+        key=lambda x: x['pk'])
 
     print red("%s sightings don't have emails" % (
         len(not_rejects) - len(have_emails)
@@ -59,8 +74,9 @@ def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json'):
 
     unknown = Sighting.DISEASE_STATE.unknown
     diseased = Sighting.DISEASE_STATE.diseased
-
-    for sighting in have_emails:
+    print green("Processing %s sightings with PK >= %s" % (
+        len(only_pks), pks__gte))
+    for sighting in only_pks:
         tree = Tree.objects.create()
         fields = sighting['fields']
         s = Sighting.objects.create(
@@ -71,5 +87,13 @@ def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json'):
         )
         s.created = fields['datetime']
         s.creator_email = fields['email']
+        if not skip_images:
+            image = urllib.urlretrieve(
+                "http://ias-ess.org/static/media/%s" % fields['photo'])
+            s.image.save(
+                os.path.basename(fields['photo']),
+                File(open(image[0]))
+            )
         s.save()
-    print green("Made %s Trees and Sightings" % len(have_emails))
+    print green("Made %s Trees and Sightings, latest PK = %s" % (
+        len(pks__gte), only_pks[-1]['pk']))
