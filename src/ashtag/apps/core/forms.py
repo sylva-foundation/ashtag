@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import logging
 from decimal import Decimal
 
 import floppyforms as flforms
@@ -20,6 +21,7 @@ class SightingForm(flforms.ModelForm):
 
     class Meta:
         model = Sighting
+        exclude = ('tree', 'created', 'modified', 'creator_email')
 
         widgets = {
             'location': PointWidget,
@@ -30,7 +32,7 @@ class SightingForm(flforms.ModelForm):
         c_data = self.cleaned_data
         exif = None
         try:
-            f = c_data['photo'].file
+            f = c_data['image'].file
             f.seek(0)
             exif = EXIF.process_file(f)
             # weird little hack for some vals are malformatted...
@@ -40,7 +42,6 @@ class SightingForm(flforms.ModelForm):
                 except:
                     exif[i[0]] = i[1].printable
         except Exception, e:
-            import logging
             logging.error(e)
             exif = None
 
@@ -63,3 +64,15 @@ class SightingForm(flforms.ModelForm):
             self._errors["location"] = self.error_class([msg])
 
         return c_data
+
+
+class AnonSightingForm(SightingForm):
+    """Wraps up sightings by non-auth'd users."""
+
+    class Meta:
+        model = Sighting
+        exclude = ('tree', 'created', 'modified')
+
+        widgets = {
+            'location': PointWidget,
+        }
