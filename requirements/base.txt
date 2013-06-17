@@ -10,3 +10,5 @@ git+http://github.com/TyMaszWeb/django-cookie-law.git@9388c041ee41c972c109ba6500
 git+http://github.com/tangentlabs/django-oscar.git@issue/472/django1.5#egg=django-oscar
 django-oscar-paypal==0.4.1
 django-model-utils==1.4.0
+django-storages==1.1.8
+boto==2.9.5
