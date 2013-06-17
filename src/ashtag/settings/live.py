@@ -2,7 +2,7 @@ from ashtag.settings.base import *
 
 import json
 with open('/home/dotcloud/environment.json') as f:
-	env = json.load(f)
+    env = json.load(f)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
