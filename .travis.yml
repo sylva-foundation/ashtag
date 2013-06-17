@@ -12,4 +12,4 @@ before_script:
   - "pep8 --exclude=migrations --ignore=W404,E501,E128,W292,E122,E124 src"
 #  - pyflakes -x W src
 script:
-  - python src/manage.py test --settings=ashtag.settings.testing
+  - PYTHONPATH=src django-admin.py test --settings=ashtag.settings.testing
