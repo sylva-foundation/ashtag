@@ -127,6 +127,17 @@ However, users of brew on Mac OS X may find the following useful:
     brew update
     brew install geos proj postgis gdal libgeoip
 
+Start it up
+~~~~~~~~~~~
+
+Now sync the db and start the development server:
+
+.. code-block:: bash
+    
+    django-admin.py syncdb
+    django-admin.py migrate
+    django-admin.py runserver
+
 .. _GeoDjango installation instructions: https://docs.djangoproject.com/en/1.5/ref/contrib/gis/install/
 .. _Vagrant: http://www.vagrantup.com/
 .. _VirtualBox: https://www.virtualbox.org/
