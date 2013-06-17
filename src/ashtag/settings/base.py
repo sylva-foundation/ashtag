@@ -242,13 +242,12 @@ PAYPAL_ALLOW_NOTE = False
 
 # File storage configuration
 
-if os.environ.get('AWS_MEDIA_ENABLE', False) or os.environ.get('AWS_STATIC_ENABLE', False):
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'ashtag-localdev')
-    AWS_HEADERS = {
-        'Cache-Control': 'max-age=31536000, public',
-    }
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'ashtag-localdev')
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=31536000, public',
+}
 
 if os.environ.get('AWS_MEDIA_ENABLE', False):
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
