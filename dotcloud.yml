@@ -1,6 +1,5 @@
 www:
     type: python
-    prebuild: scripts/prebuild
     postinstall: scripts/postinstall
     config:
         python_version: v2.7
