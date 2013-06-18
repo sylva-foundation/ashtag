@@ -28,22 +28,37 @@ export LANGUAGE=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
 
+# Post-gis repositories
+apt-get install -y python-software-properties
+apt-add-repository -y ppa:sharpie/for-science
+apt-add-repository -y ppa:sharpie/postgis-stable
+apt-add-repository -y ppa:ubuntugis/ubuntugis-unstable
+apt-add-repository -y ppa:olivier-berten/geo
+
 # Install essential packages from Apt
 apt-get update -y
 # Python dev packages
 apt-get install -y build-essential python python-dev python-setuptools python-pip
-# Postgresql
-apt-get install -y postgresql-$PGSQL_VERSION libpq-dev
 # Dependencies for image processing with PIL
 apt-get install -y libjpeg62-dev zlib1g-dev libfreetype6-dev liblcms1-dev
 # Other required utilities
 apt-get install -y git
-# Dependencies for GeoDjango
-apt-get install -y binutils libproj-dev gdal-bin
+# Postgres + PostGIS
+apt-get install -y binutils libproj-dev build-essential postgresql-9.1 postgresql-server-dev-9.1 libxml2-dev proj libjson0-dev xsltproc docbook-xsl docbook-mathml gettext postgresql-contrib-9.1 pgadmin3
+apt-get install -y libgdal-dev
+
 
 # postgresql global setup
 cp $PROJECT_DIR/vagrant/install/pg_hba.conf /etc/postgresql/$PGSQL_VERSION/main/
 /etc/init.d/postgresql reload
+
+# postgis setup
+apt-get install -y postgresql-9.1-postgis2 
+
+# postgres user & db setup
+psql postgres postgres -c 'CREATE ROLE vagrant WITH SUPERUSER LOGIN'
+psql postgres vagrant -c 'CREATE DATABASE ashtag'
+psql ashtag vagrant -c 'CREATE EXTENSION postgis'
 
 # virtualenv global setup
 easy_install -U pip
