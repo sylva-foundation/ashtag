@@ -132,6 +132,34 @@ However, users of brew on Mac OS X may find the following useful:
     brew update
     brew install geos proj postgis gdal libgeoip
 
+
+PostGIS
+~~~~~~~
+
+PostGIS is the production geospatial database, and it's not too hard to get
+running on a Mac (v easy on linux):
+
+Use Postgres.app
+----------------
+
+Postgres.app from Heroku: http://postgresapp.com/ can be used. In order to
+enable the spatial element, simply create a database (let's call it ashtag) and
+then enable the spatial element:
+
+.. code-block:: bash
+
+    createdb ashtag
+    psql -h localhost ashtag
+
+    ashtag=# CREATE EXTENSION postgis;
+
+In theory, that's it...
+
+Note that we do `-h localhost` because the Postgres.app is not using the normal
+sockets approach, rather it binds to 0.0.0.0 (or 127.0.0.1 by default I think)
+on port 5432. If you're using linux then probably you don't need that bit.
+
+
 Start it up
 ~~~~~~~~~~~
 
