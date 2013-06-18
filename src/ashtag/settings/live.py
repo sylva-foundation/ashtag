@@ -19,3 +19,9 @@ DATABASES = {
 }
 
 PAYPAL_SANDBOX_MODE = False
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
