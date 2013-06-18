@@ -4,13 +4,19 @@ python:
 env:
   - DJANGO=1.5.1
 install:
-  - sudo apt-get install python-gdal
+  - sudo apt-get install -y python-gdal
+  - sudo apt-get install -qq libgeos-dev libproj-dev postgresql-9.1-postgis
   - pip install -q Django==$DJANGO --use-mirrors
   - pip install pep8 --use-mirrors
 #  - pip install https://github.com/dcramer/pyflakes/tarball/master
   - pip install -q -r requirements/localdev.txt --use-mirrors
 before_script:
   - "pep8 --exclude=migrations --ignore=W404,E501,E128,W292,E122,E124 src"
+  - createdb -U postgres template_postgis
+  - psql -U postgres -d template_postgis -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
+  - psql -U postgres -d template_postgis -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
+  - createdb -U postgres -T template_postgis ashtag
 #  - pyflakes -x W src
 script:
+#  - echo "done"
   - PYTHONPATH=src django-admin.py test --settings=ashtag.settings.testing
