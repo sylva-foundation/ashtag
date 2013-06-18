@@ -9,11 +9,9 @@ from .models import Sighting, Tree
 
 class SightingAdmin(admin.ModelAdmin):
 
-    list_display=(
-
-        'created', 'link', 'tree_tag_number', 'thumbnail', 'creator_email',
-        'creator', 'disease_state', 'notes')
-    search_fields=('tree__tag_number',)
+    list_display = ('created', 'link', 'tree_tag_number', 'thumbnail',
+                    'creator_email', 'creator', 'disease_state', 'notes')
+    search_fields = ('tree__tag_number',)
 
     def tree_tag_number(self, obj):
         return obj.tree.tag_number
@@ -44,3 +42,4 @@ class SightingAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Sighting, SightingAdmin)
+admin.site.register(Tree)
