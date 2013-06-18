@@ -177,7 +177,6 @@ INSTALLED_APPS = [
     'pipeline',
     'south',
     'registration',
-    'cookielaw',
     'storages',
 
     # oscar
