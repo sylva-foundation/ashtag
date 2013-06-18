@@ -42,4 +42,5 @@ class SightingAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Sighting, SightingAdmin)
-admin.site.register(Tree)
+admin.site.register(
+    Tree, search_fields=('tag_number',), list_display=('id', 'tag_number'))
