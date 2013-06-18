@@ -7,16 +7,20 @@ from django import forms
 
 from exifpy import EXIF
 
-from ashtag.apps.core.models import Sighting
+from ashtag.apps.core.models import Sighting, Tree
 from .exif_utils import get_lat_lon
 
 
 class SightingForm(forms.ModelForm):
-    tag_number = forms.CharField(max_length=10)
+    tag_number = forms.CharField(max_length=10, required=False)
 
     class Meta:
         model = Sighting
         exclude = ('id', 'tree', 'created', 'modified', 'creator_email')
+
+    def __init__(self, user, *args, **kwargs):
+        super(SightingForm, self).__init__(*args, **kwargs)
+        self.user = user
 
     def clean(self):
         """Do some work to get EXIF, locations etc."""
@@ -53,6 +57,25 @@ class SightingForm(forms.ModelForm):
             # User has not supplied location and there is no EXIF
             msg = "Please add a location for this sighting!"
             self._errors["location"] = self.error_class([msg])
+
+
+        c_data['tree'] = None
+        if c_data.get('tag_number'):
+            try:
+                c_data['tree'] = Tree.objects.get(
+                    tag_number=c_data.get('tag_number'))
+            except Tree.DoesNotExist:
+                # Either this is mis-typed, or it is new.
+                # for now, let's raise... I want a 'Claim a tree' page...
+                # TODO: redirect to claim a tree or something... nicer.
+                self._errors["tag_number"] = self.error_class(
+                    ["This tag number hasn't been claimed yet! Go to 'Claim a tree'"])
+        else:
+            c_data['tree'] = Tree.objects.create(
+                creator_email=self.user.email
+                if self.user.is_authenticated()
+                else c_data['creator_email']
+            )
 
         return c_data
 
