@@ -5,4 +5,4 @@ www:
     config:
         python_version: v2.7
 db:
-    type: postgresql
+    type: postgis
