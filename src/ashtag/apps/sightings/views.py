@@ -1,6 +1,5 @@
 from django.views.generic import TemplateView, DetailView
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from ashtag.apps.core.models import Sighting
 
@@ -74,8 +73,7 @@ class SubmitView(TemplateView):
                 sighting.creator_email = request.user.email
             sighting.tree = form.cleaned_data['tree']
             sighting.save()
-            # TODO: redirect to "tahnks"
-            return HttpResponse("Thanks")
+            return redirect('sightings:sent')
         else:
             return render(request, self.template_name, {'form': form})
 
@@ -85,6 +83,10 @@ class SubmitView(TemplateView):
         # set template context here
 
         return context
+
+
+class SentView(TemplateView):
+    template_name = 'sightings/thanks.html'
 
 
 class SightingView(DetailView):
