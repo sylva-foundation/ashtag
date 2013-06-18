@@ -93,10 +93,12 @@ First, you will need to checkout the code:
 Setting up the Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Install the dependencies for the local development environment:
+Install the dependencies for the local development environment (note you have
+to install django first, because django-registration has a bug):
 
 .. code-block:: bash
 
+    pip install Django==1.5.1
     pip install -r requirements/localdev.txt
 
 
