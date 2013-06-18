@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 from model_utils import Choices
@@ -71,8 +72,10 @@ class Sighting(CreatorMixin, models.Model):
         return u"{0} @ {1}".format(self.tree, self.created)
 
     def get_absolute_url(self):
-        # TODO: Fix me up with a URL please guv
-        return ""
+        if self.tree.tag_number:
+            return reverse('sightings:view', args=[self.tree.tag_number])
+        else:
+            return reverse('sightings:map')
 
 
 class Comment(models.Model):

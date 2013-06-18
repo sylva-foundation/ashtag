@@ -26,17 +26,17 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
 
     def link(self, obj):
         return """
-        <a href="%s">
+        <a href="{0}">
         See
-        </a>""" % (obj.get_absolute_url())
+        </a>""".format(obj.get_absolute_url())
     link.allow_tags = True
 
     def thumbnail(self, obj):
         im = get_thumbnail(obj.image, '450x270')
         return """
-        <a href="%s">
-        <img src="%s" width="228px" height="135px"/>
-        </a>""" % (obj.image.url, im.url)
+        <a href="{0}">
+        <img src="{1}" width="228px" height="135px"/>
+        </a>""".format(obj.image.url, im.url)
     thumbnail.allow_tags = True
 
     def reject(self, request, queryset):
