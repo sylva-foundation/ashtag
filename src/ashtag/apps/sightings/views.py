@@ -62,11 +62,11 @@ class SubmitView(TemplateView):
             return SightingForm
 
     def get(self, request, *args, **kwargs):
-        form = self._get_form_class()
+        form = self._get_form_class(request)
         return render(request,  self.template_name, {'form': form})
 
     def post(self, request):
-        form = self._get_form_class(request.POST, request.FILES)
+        form = self._get_form_class(request)(request.POST, request.FILES)
         if form.is_valid():
             sighting = form.save(commit=False)
             if request.user.is_authenticated():

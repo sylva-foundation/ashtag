@@ -1,5 +1,12 @@
 {% extends "core/jqm-page.html" %}
 
+{% block extra_head %}
+<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true"></script>
+<style type="text/css">
+    .map { width:100%; height: 300px; }
+</style>
+{% endblock extra_head %}
+
 {% block title %}Submit a Sighting{% endblock %}
 {% block class %}submit-sighting-page{% endblock %}
 {% block id %}submit-sighting-page{% endblock %}
@@ -9,44 +16,113 @@
     <div data-role="content" class="at-content" role="main">
         <form class="form submit-sighting-form ui-shadow" action="" method="post" data-ajax="false">
             <div class="form-intro">
-                <p>Intro blurb goes here lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas cursus aliquam eros luctus posuere. Cras tincidunt, eros ac sagittis dapibus.</p>
+                <p>Intro blurb goes here lorem ipsum dolor sit amet,
+                consectetur adipiscing elit. Maecenas cursus aliquam eros
+                luctus posuere. Cras tincidunt, eros ac sagittis dapibus.</p>
             </div>
+            {% if not request.user.is_authenticated %}
             <div class="form-row">
-                <label for="email">Email Address</label>
-                <input class="email" type="email" name="email" id="email" value="" placeholder="Enter your email" required aria-required="true" />
+                <label for="email" class="ui-input-text">Email Address</label>
+                <input class="email" type="email"
+                    name="creator_email" id="id_creator_email"
+                    value="" placeholder="Enter your email"
+                    required aria-required="true" />
+            </div><!--//form-row-->
+            {% endif %}
+            <div class="form-row">
+                <label for="id_tag_number">Tag Number (if present)</label>
+                <input class="tag-number" type="text" name="tag_number"
+                    id="id_tag_number" placeholder="eg. 12344" />
             </div><!--//form-row-->
             <div class="form-row">
-                <label for="tag-number">Tag Number (if present)</label>
-                <input class="tag-number" type="text" name="tag-number" id="tag-number" placeholder="eg. 12344" />
+                <label for="id_image">Select a photo</label>
+                <input id="id_image" type="file" name="image" single />
             </div><!--//form-row-->
+            
             <div class="form-row">
-                <label for="select-photo">Select a photo</label>
-                <input id="select-photo" type="file" name="files[]" single />
-            </div><!--//form-row-->
+                <label for="id_location" class="ui-input-text">Tree location</label>
+                <div id="map_canvas" class="map"></div>
+                <input type="text" name="location" id="id_location" />
+            </div>
             
             <div class="form-row">
             <fieldset data-role="controlgroup">
                 <legend>Does this tree appear to have the Ash Dieback Disease?</legend>
-                    <input type="radio" name="radio-choice-1" id="radio-choice-1" value="choice-1" checked="checked" />
-                    <label for="radio-choice-1">I don't know</label>
+                <input type="radio" name="disease_state"
+                    id="id_disease_state_1" value="unknown" checked="checked" />
+                    <label for="id_disease_state_1">I don't know</label>
         
-                    <input type="radio" name="radio-choice-1" id="radio-choice-2" value="choice-2"  />
-                    <label for="radio-choice-2">Yes</label>
+                    <input type="radio" name="disease_state"
+                        id="id_disease_state_2" value="diseased"  />
+                    <label for="id_disease_state_2">Yes</label>
         
-                    <input type="radio" name="radio-choice-1" id="radio-choice-3" value="choice-3"  />
-                    <label for="radio-choice-3">No</label>
+                    <input type="radio" name="disease_state"
+                        id="id_disease_state_3" value="notdiseased"  />
+                    <label for="id_disease_state_3">No</label>
             </fieldset>
             </div><!--//form-row-->
             <div class="form-row">
-            <label for="comment">Leave a comment</label>
-            <textarea cols="40" rows="8" name="comment" id="comment"></textarea>
+            <label for="id_notes">Leave a comment</label>
+            <textarea cols="40" rows="8" name="notes" id="id_notes"></textarea>
             </div><!--//form-row-->
 
             <div class="cta-btn-wrapper">
-                <input class="button submit-sighting" type="submit" value="Submit" name="submit-sighting" />                        </div>                    
+                <input class="button submit-sighting" type="submit" value="Submit" name="submit-sighting" />
+            </div>
         </form><!--//submit-sighting-form-->                          
    
     </div><!--//at-content-->  
+
+<script type="text/javascript">
+        var defaultZoom = 5;
+        var defaultLat = 54.03;
+        var defaultLng = -3.67;
+
+        $(document).bind('pageinit', function() {
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position){
+                        initialize(19, position.coords.latitude, position.coords.longitude);
+                    },
+                    function() {
+                        initialize(defaultZoom, defaultLat, defaultLng);
+                    });
+            } else {
+                initialize(defaultZoom, defaultLat, defaultLng);
+            }
+        });
+
+        function updateLocation(latLng, create){
+            if (create !== undefined && create) {
+                $('#map_canvas').gmap('clear', 'markers');
+                $('#map_canvas').gmap('addMarker', {
+                    'position': latLng, 
+                    'draggable': true, 
+                    'bounds': false
+                }).dragend(function(event) {
+                    updateLocation(event.latLng, false);
+                }).click( function() {
+                });
+            }
+            $('#id_location').val(
+                "POINT (" + latLng.lng() + " " + latLng.lat() + ")");
+        }
+        
+        function initialize(zoom, lat, lng) {
+            var latLng = new google.maps.LatLng(lat, lng);
+            var mapOpts = {
+                center: latLng,
+                zoom: zoom,
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            };
+            $('#map_canvas').gmap(mapOpts).bind('init', function(event, map) {
+                updateLocation(latLng, true);
+                $(map).click( function(event) {
+                    updateLocation(event.latLng, true);
+                });
+            });
+        }
+</script>
 
 {% endblock page %}
 

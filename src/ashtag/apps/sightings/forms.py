@@ -3,7 +3,7 @@
 import logging
 from decimal import Decimal
 
-import floppyforms as flforms
+from django import forms
 
 from exifpy import EXIF
 
@@ -11,21 +11,12 @@ from ashtag.apps.core.models import Sighting
 from .exif_utils import get_lat_lon
 
 
-class PointWidget(flforms.gis.PointWidget, flforms.gis.BaseOsmWidget):
-    pass
-
-
-class SightingForm(flforms.ModelForm):
-
-    location = flforms.gis.PointField(required=False, widget=PointWidget)
+class SightingForm(forms.ModelForm):
+    tag_number = forms.CharField(max_length=10)
 
     class Meta:
         model = Sighting
-        exclude = ('tree', 'created', 'modified', 'creator_email')
-
-        widgets = {
-            'location': PointWidget,
-        }
+        exclude = ('id', 'tree', 'created', 'modified', 'creator_email')
 
     def clean(self):
         """Do some work to get EXIF, locations etc."""
@@ -71,8 +62,4 @@ class AnonSightingForm(SightingForm):
 
     class Meta:
         model = Sighting
-        exclude = ('tree', 'created', 'modified')
-
-        widgets = {
-            'location': PointWidget,
-        }
+        exclude = ('id', 'tree', 'created', 'modified')
