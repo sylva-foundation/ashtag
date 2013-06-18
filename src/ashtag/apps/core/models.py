@@ -7,20 +7,8 @@ from model_utils import Choices
 from ashtag.apps.core.utils import pk_generator
 
 
-class RandomIdMixin(object):
-    """Mixin providing random ID, length 6."""
-    id = models.CharField(max_length=6, primary_key=True, default=pk_generator)
-
-
-class TimestampedMixin(object):
-    """Mixin providing created and modified fields."""
-    created = AutoCreatedField('created')
-    modified = AutoLastModifiedField('modified')
-
-
 class CreatorMixin(object):
     """Mixin providing the email details of the creator (User or email)."""
-    creator_email = models.EmailField()
 
     @property
     def creator(self):
@@ -38,16 +26,15 @@ class CreatorMixin(object):
         return self._creator
 
 
-class Tree(RandomIdMixin, TimestampedMixin, CreatorMixin, models.Model):
+class Tree(CreatorMixin, models.Model):
     """A tree, complete with tag number."""
+    id = models.CharField(max_length=6, primary_key=True, default=pk_generator)
+    creator_email = models.EmailField(max_length=254)
     tag_number = models.CharField(
         max_length=10, db_index=True, null=True, blank=True)
 
-    class Meta:
-        abstract = True  # Just testing for now
 
-
-class Sighting(RandomIdMixin, TimestampedMixin, CreatorMixin, models.Model):
+class Sighting(CreatorMixin, models.Model):
     """Sighting, recording date, time, location, notes, image, tree, state."""
     DISEASE_STATE = Choices(
         (None, 'unknown', "I don't know"),
@@ -55,6 +42,10 @@ class Sighting(RandomIdMixin, TimestampedMixin, CreatorMixin, models.Model):
         (False, 'notdiseased', "Not diseased"),
     )
 
+    id = models.CharField(max_length=6, primary_key=True, default=pk_generator)
+    created = AutoCreatedField('created')
+    modified = AutoLastModifiedField('modified')
+    creator_email = models.EmailField(max_length=254)
     tree = models.ForeignKey('Tree', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='sightings/%Y/%m/%d')
     disease_state = models.NullBooleanField(
@@ -64,12 +55,17 @@ class Sighting(RandomIdMixin, TimestampedMixin, CreatorMixin, models.Model):
 
     objects = models.GeoManager()
 
-    class Meta:
-        abstract = True  # Just testing for now
+    def get_absolute_url(self):
+        # TODO: Fix me up with a URL please guv
+        return ""
 
 
-class Comment(TimestampedMixin, CreatorMixin, models.Model):
+class Comment(models.Model):
     """A comment, can be used on a sighting."""
+    created = AutoCreatedField('created')
+    modified = AutoLastModifiedField('modified')
+    creator_email = models.EmailField(max_length=254)
+
     comment = models.TextField()
     tree = models.ForeignKey('Tree', on_delete=models.CASCADE)
 

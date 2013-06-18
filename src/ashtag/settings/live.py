@@ -9,7 +9,7 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'ashtag',
         'USER': env['DOTCLOUD_DB_SQL_LOGIN'],
         'PASSWORD': env['DOTCLOUD_DB_SQL_PASSWORD'],
@@ -19,3 +19,9 @@ DATABASES = {
 }
 
 PAYPAL_SANDBOX_MODE = False
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
