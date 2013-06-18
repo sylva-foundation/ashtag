@@ -215,7 +215,7 @@ LOGGING = {
 }
 
 # Pipeline configuration
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'ashtag.apps.core.storages.PipelineForgivingStorage'
 PIPELINE_CSS_COMPRESSOR = None
 PIPELINE_JS_COMPRESSOR = None
 
