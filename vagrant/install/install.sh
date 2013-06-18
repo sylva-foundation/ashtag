@@ -43,9 +43,10 @@ apt-get install -y build-essential python python-dev python-setuptools python-pi
 apt-get install -y libjpeg62-dev zlib1g-dev libfreetype6-dev liblcms1-dev
 # Other required utilities
 apt-get install -y git
+
 # Postgres + PostGIS
-dpkg -s libgdal-dev > /dev/null
-if [ $? != 0 ]; then
+PKG_OK=$(dpkg-query -W --showformat='${Status}\n' libgdal-dev|grep "install ok installed"|true)
+if [ "" == "$PKG_OK" ]; then
     apt-get install -y binutils libproj-dev build-essential postgresql-9.1 postgresql-server-dev-9.1 libxml2-dev proj libjson0-dev xsltproc docbook-xsl docbook-mathml gettext postgresql-contrib-9.1 pgadmin3
     apt-get install -y libgdal-dev
 fi
