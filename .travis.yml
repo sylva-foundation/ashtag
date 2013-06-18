@@ -13,7 +13,6 @@ install:
 before_script:
   - "pep8 --exclude=migrations --ignore=W404,E501,E128,W292,E122,E124 src"
   - createdb -U postgres template_postgis
-  - createlang -U postgres plpgsql template_postgis
   - psql -U postgres -d template_postgis -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
   - psql -U postgres -d template_postgis -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
   - createdb -U postgres -T template_postgis ashtag
