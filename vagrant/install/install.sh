@@ -4,7 +4,7 @@
 
 # Installation settings
 
-PROJECT_NAME=$1
+PROJECT_NAME=ashtag
 
 DB_NAME=$PROJECT_NAME
 VIRTUALENV_NAME=$PROJECT_NAME
@@ -44,8 +44,11 @@ apt-get install -y libjpeg62-dev zlib1g-dev libfreetype6-dev liblcms1-dev
 # Other required utilities
 apt-get install -y git
 # Postgres + PostGIS
-apt-get install -y binutils libproj-dev build-essential postgresql-9.1 postgresql-server-dev-9.1 libxml2-dev proj libjson0-dev xsltproc docbook-xsl docbook-mathml gettext postgresql-contrib-9.1 pgadmin3
-apt-get install -y libgdal-dev
+dpkg -s libgdal-dev > /dev/null
+if [ $? != 0 ]; then
+    apt-get install -y binutils libproj-dev build-essential postgresql-9.1 postgresql-server-dev-9.1 libxml2-dev proj libjson0-dev xsltproc docbook-xsl docbook-mathml gettext postgresql-contrib-9.1 pgadmin3
+    apt-get install -y libgdal-dev
+fi
 
 
 # postgresql global setup
@@ -56,9 +59,9 @@ cp $PROJECT_DIR/vagrant/install/pg_hba.conf /etc/postgresql/$PGSQL_VERSION/main/
 apt-get install -y postgresql-9.1-postgis2 
 
 # postgres user & db setup
-psql postgres postgres -c 'CREATE ROLE vagrant WITH SUPERUSER LOGIN'
-psql postgres vagrant -c 'CREATE DATABASE ashtag'
-psql ashtag vagrant -c 'CREATE EXTENSION postgis'
+psql postgres postgres -c 'CREATE ROLE vagrant WITH SUPERUSER LOGIN' || true
+psql postgres vagrant -c 'CREATE DATABASE ashtag' || true
+psql ashtag vagrant -c 'CREATE EXTENSION postgis' || true
 
 # virtualenv global setup
 easy_install -U pip
