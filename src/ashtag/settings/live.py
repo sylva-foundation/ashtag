@@ -19,5 +19,3 @@ DATABASES = {
 }
 
 PAYPAL_SANDBOX_MODE = False
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3.S3Storage'
