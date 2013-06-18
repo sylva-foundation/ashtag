@@ -44,13 +44,16 @@ def create_dbs():
                         print("database already exists, moving on to next step.")
                     exit(0)
                 # see if it is postgresql
-                elif db_type.endswith('postgresql_psycopg2'):
+                elif db_type.endswith('postgresql_psycopg2') or db_type.endswith('postgis'):
                     print 'creating database %s on %s' % (db_name, host)
                     con = psycopg2.connect(host=host, user=user, password=password, port=port, database='postgres')
                     con.set_isolation_level(0)
                     cur = con.cursor()
                     try:
                         cur.execute('CREATE DATABASE %s' % db_name)
+                        if db_type.endswith('postgis'):
+                            con = psycopg2.connect(host=host, user=user, password=password, port=port, database=db_name)
+                            cur.execute('CREATE EXTENSION postgis')
                     except psycopg2.ProgrammingError as detail:
                         print detail
                         print 'moving right along...'

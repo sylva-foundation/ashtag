@@ -1,4 +1,6 @@
 #!/bin/bash -e
 
+# A workaround for github preventing downloads from EC2 (weird!)
 pip install https://dl.dropboxusercontent.com/u/41936/django-haystack-fd83d3f449c2197f93040bb3d7bc6083ea8e48b7.tar.gz#egg=django-haystack==2.0.0-beta
+# A workaround for djdango-regisration requring django to be present during the install
 pip install django==1.5.1
