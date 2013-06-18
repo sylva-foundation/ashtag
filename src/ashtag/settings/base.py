@@ -177,7 +177,6 @@ INSTALLED_APPS = [
     'pipeline',
     'south',
     'registration',
-    'cookielaw',
     'storages',
 
     # oscar
@@ -222,7 +221,7 @@ PIPELINE_JS_COMPRESSOR = None
 # Django registration etc
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_OPEN = True
-LOGIN_REDIRECT_URL = '/sightings/'
+LOGIN_REDIRECT_URL = 'sightings:my-tags'
 
 # Oscar
 OSCAR_INITIAL_ORDER_STATUS = 'Pending'
