@@ -20,6 +20,7 @@ PIPELINE_JS = {
             'js/jquery.mobile.min.js',
             'js/*.js',
 
+            'compiled-js/lib/panes.js',
             'compiled-js/lib/*.js',
             'compiled-js/panes/*.js',
             'compiled-js/*.js',
