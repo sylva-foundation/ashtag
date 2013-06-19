@@ -1,5 +1,8 @@
 {% extends "core/ashtag-base.html" %}
 
+{% load tz_detect %}
+
+
 {% block content %}
 <div data-role="page" data-theme="{% block theme %}a{% endblock %}" id="{% block id %}{% endblock %}"  class="{% block class %}{% endblock %}">
 
@@ -31,4 +34,6 @@
 
     {% include "core/includes/footer.html" %}
 </div>
+
+{% tz_detect %}
 {% endblock %}
