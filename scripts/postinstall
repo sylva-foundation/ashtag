@@ -11,4 +11,4 @@ cd ~/current/scripts
 python createdb.py
 django-admin.py syncdb --noinput
 django-admin.py migrate
-django-admin.py collectstatic --noinput
+django-admin.py collectstatic --noinput -i coffeescript
