@@ -1,35 +1,42 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib import admin
+from django.contrib.gis import admin as gis_admin
+from django.core.urlresolvers import reverse
 
 from sorl.thumbnail import get_thumbnail
 
 from .models import Sighting, Tree
 
 
-class SightingAdmin(admin.ModelAdmin):
+class SightingAdmin(gis_admin.GeoModelAdmin):
 
     list_display = ('created', 'link', 'tree_tag_number', 'thumbnail',
                     'creator_email', 'creator', 'disease_state', 'notes')
     search_fields = ('tree__tag_number',)
 
     def tree_tag_number(self, obj):
-        return obj.tree.tag_number
+        return """
+        <a href="{0}">{1}</a>
+        """.format(
+            reverse('admin:core_tree_change', args=[obj.tree.id]),
+            obj.tree.tag_number or obj.tree.id)
     tree_tag_number.short_description = 'tree'
+    tree_tag_number.allow_tags = True
 
     def link(self, obj):
         return """
-        <a href="%s">
+        <a href="{0}">
         See
-        </a>""" % (obj.get_absolute_url())
+        </a>""".format(obj.get_absolute_url())
     link.allow_tags = True
 
     def thumbnail(self, obj):
         im = get_thumbnail(obj.image, '450x270')
         return """
-        <a href="%s">
-        <img src="%s" width="228px" height="135px"/>
-        </a>""" % (obj.image.url, im.url)
+        <a href="{0}">
+        <img src="{1}" width="228px" height="135px"/>
+        </a>""".format(obj.image.url, im.url)
     thumbnail.allow_tags = True
 
     def reject(self, request, queryset):

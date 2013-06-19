@@ -11,5 +11,6 @@ urlpatterns = patterns('ashtag.apps.sightings.views',
     url('^gallery/$', GalleryView.as_view(), name='gallery'),
     url('^map/$', MapView.as_view(), name='map'),
     url('^submit/$', SubmitView.as_view(), name='submit'),
+    url('^sent/$', SentView.as_view(), name='sent'),
     url('^view/(?P<pk>[a-z0-9]+)/$', SightingView.as_view(), name='view'),
 )

@@ -107,7 +107,7 @@ Now edit your environment's ``postactivate`` hook to include the following:
 .. code-block:: bash
     
     # Add this to your postactive hook ($VIRTUAL_ENV/bin/postactivate)
-    export PYTHONPATH="$PROJECT_HOME/ashtag/src"
+    export PYTHONPATH="$PROJECT_HOME/ashtag/src:$PROJECT_HOME/ashtag/lib"
     export DJANGO_SETTINGS_MODULE=ashtag.settings.localdev
     export DJANGO_SECRET_KEY="RANDOM STRING HERE"
 
