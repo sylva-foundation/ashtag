@@ -15,6 +15,8 @@ class LatLngMixin(object):
 
 class TreeResource(LatLngMixin, NamespacedModelResource):
     latlng = fields.ListField()
+    updates = fields.ToManyField(
+        'ashtag.apps.api.api.SightingResource', 'sighting_set')
 
     class Meta:
         queryset = Tree.objects.all()
@@ -25,7 +27,7 @@ class TreeResource(LatLngMixin, NamespacedModelResource):
 
 class SightingResource(LatLngMixin, NamespacedModelResource):
     latlng = fields.ListField()
-    tree = fields.ForeignKey(TreeResource, 'tree', full=True)
+    tree = fields.ForeignKey(TreeResource, 'tree')
 
     class Meta:
         queryset = Sighting.objects.all()
