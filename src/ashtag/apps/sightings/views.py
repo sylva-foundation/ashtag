@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, DetailView
 from django.shortcuts import render, redirect
 
-from ashtag.apps.core.models import Sighting
+from ashtag.apps.core.models import Tree
 
 from .forms import SightingForm, AnonSightingForm
 
@@ -89,12 +89,13 @@ class SentView(TemplateView):
     template_name = 'sightings/thanks.html'
 
 
-class SightingView(DetailView):
-    model = Sighting
+class TreeView(DetailView):
+    """Summary page for a particular tree."""
+    model = Tree
     template_name = 'sightings/views.html'
 
     def get_context_data(self, **kwargs):
-        context = super(SubmitView, self).get_context_data(**kwargs)
+        context = super(TreeView, self).get_context_data(**kwargs)
 
         # set template context here
 

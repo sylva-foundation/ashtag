@@ -77,16 +77,19 @@ def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json',
     print green("Processing %s sightings with PK >= %s" % (
         len(only_pks), pks__gte))
     for sighting in only_pks:
-        tree = Tree.objects.create()
         fields = sighting['fields']
+        tree = Tree.objects.create(
+            location=fields['location'],
+            creator_email=fields['email']
+        )
         s = Sighting.objects.create(
             tree=tree,
             location=fields['location'],
             notes="Imported from IAS-ESS: http://ias-ess.org/ias/sighting/%s" % sighting['pk'],
-            disease_state=diseased if fields['verified'] else unknown
+            disease_state=diseased if fields['verified'] else unknown,
+            created=fields['datetime'],
+            creator_email=fields['email']
         )
-        s.created = fields['datetime']
-        s.creator_email = fields['email']
         if not skip_images:
             image = urllib.urlretrieve(
                 "http://ias-ess.org/static/media/%s" % fields['photo'])
