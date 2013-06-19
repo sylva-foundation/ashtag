@@ -19,6 +19,11 @@ PIPELINE_JS = {
             'js/jquery.min.js',
             'js/jquery.mobile.min.js',
             'js/*.js',
+
+            'compiled-js/lib/panes.js',
+            'compiled-js/lib/*.js',
+            'compiled-js/panes/*.js',
+            'compiled-js/*.js',
         ),
         'output_filename': 'js/common.js',
     }

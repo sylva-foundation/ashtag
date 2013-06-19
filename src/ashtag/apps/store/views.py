@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 
-from oscar.apps.catalogue.models import Product
+from ashtag.apps.store.models import TagPack
 
 
 class TagPacksView(TemplateView):
@@ -9,7 +9,7 @@ class TagPacksView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(TagPacksView, self).get_context_data(**kwargs)
 
-        products = Product.objects.filter(product_class__slug="tag-pack")
+        products = TagPack.objects.order_by_tags()
         products = filter(lambda p: p.is_available_to_buy, products)
         context['products'] = products
 

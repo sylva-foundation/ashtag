@@ -1,12 +1,14 @@
 {% extends "core/jqm-page.html" %}
 
 {% block title %}Buy Tags{% endblock %}
-{% block class %}but-tags-page{% endblock %}
+{% block class %}buy-tags-page{% endblock %}
+{% block id %}buy-tags-page{% endblock %}
 
 {% block page %}
 
             <div data-role="content" class="at-content" role="main">
-                <div class="buy-tags-wrapper ui-texture-wrapper ui-shadow">
+                <form class="buy-tags-wrapper ui-texture-wrapper ui-shadow" action="{% url 'basket:add' %}" method="post" data-ajax="false">
+                    {% csrf_token %}
                     <div class="tags-thumb">
                         <img class="ui-shadow" src="http://www.elegantepress.com/wp-content/uploads/gallery/bambalyne/bambalyne_tag1.jpg" />
                     </div>
@@ -15,7 +17,7 @@
 
                         <div class="select-tags">
                             <label>Select tags</label>
-                            <select class="tags-options">
+                            <select class="tags-options" name="product_id">
                                 {% for product in products %}
                                 <option data-price="{{ product.stockrecord.price_incl_tax }}" value="{{ product.id }}">{{ product.title }}</option>
                                 {% endfor %}
@@ -39,7 +41,7 @@
                         <div class="price-postage-wrapper clearfix">
                             <p class="price">
                                 <span class="price-label">Price:</span> 
-                                 <span class="price-value">&#163;26.00</span>
+                                 <span class="price-value">&#163;<span class="price-placehodler"></span></span>
                             </p>
                             <p class="postage">
                                 (Postage: &#163;3.00)
@@ -50,7 +52,7 @@
                         <input  class="button add-to-basket" type="submit" name="add-to-basket" value="Add to Basket" />
                     </div>                    
 
-                </div><!--//buy-tags-wrapper-->               
+                </form><!--//buy-tags-wrapper-->               
             </div><!--//at-content-->
 
 

@@ -183,7 +183,7 @@ INSTALLED_APPS = [
     # oscar
     'compressor',
     'paypal',
-] + oscar_get_core_apps()
+] + oscar_get_core_apps(['ashtag.apps.oscar.shipping'])
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
