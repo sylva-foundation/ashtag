@@ -24,7 +24,7 @@
         <h2 class="page-title">{% block page-title %}{% block title %}{% endblock %}{% endblock %}</h2>
         {% endblock %}
         <a href="#menu-panel" class="menu-button">Menu</a>
-        <a href="my-tags.html" class="mytags-button">My Tags</a>
+        <a href="{% url 'sightings:my-tags' %}" class="mytags-button">My Tags</a>
     </div><!--//at-header-->    
 
     {% block page %}{% endblock %}
