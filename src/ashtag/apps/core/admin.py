@@ -51,4 +51,4 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
 admin.site.register(Sighting, SightingAdmin)
 admin.site.register(
     Tree, gis_admin.GeoModelAdmin,
-    search_fields=('tag_number',), list_display=('id', 'tag_number'))
+    search_fields=('tag_number',), list_display=('id', 'tag_number', 'creator_email'))
