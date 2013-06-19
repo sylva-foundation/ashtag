@@ -77,8 +77,8 @@ def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json',
     print green("Processing %s sightings with PK >= %s" % (
         len(only_pks), pks__gte))
     for sighting in only_pks:
-        tree = Tree.objects.create()
         fields = sighting['fields']
+        tree = Tree.objects.create(location=fields['location'])
         s = Sighting.objects.create(
             tree=tree,
             location=fields['location'],

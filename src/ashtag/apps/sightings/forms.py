@@ -71,6 +71,7 @@ class SightingForm(forms.ModelForm):
                     ["This tag number hasn't been claimed yet! Go to 'Claim a tree'"])
         else:
             c_data['tree'] = Tree.objects.create(
+                location=c_data.get('location'),
                 creator_email=self.user.email
                 if self.user.is_authenticated()
                 else c_data['creator_email']

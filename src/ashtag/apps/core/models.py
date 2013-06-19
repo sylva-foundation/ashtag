@@ -33,6 +33,9 @@ class Tree(CreatorMixin, models.Model):
     creator_email = models.EmailField(max_length=254)
     tag_number = models.CharField(
         max_length=10, db_index=True, null=True, blank=True)
+    location = models.PointField()
+
+    objects = models.GeoManager()
 
     class Meta:
         ordering = ('tag_number',)
