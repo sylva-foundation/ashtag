@@ -4,7 +4,7 @@ from django.views.generic import TemplateView, DetailView
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.core.mail import mail_managers
 
 from ashtag.apps.core.models import Tree, Sighting
@@ -186,8 +186,8 @@ class TreeView(DetailView):
                     tree.get_absolute_url(),
                     reverse('admin:core_tree_change', args=[tree.id]),
                     request.user.email
-                        if request.user.is_authenticated()
-                        else 'anonymous',
+                    if request.user.is_authenticated()
+                    else 'anonymous',
                     "a tree"
                 )
             )
@@ -223,8 +223,8 @@ class TreeView(DetailView):
                         tree.get_absolute_url(),
                         reverse('admin:core_sighting_change', args=[sighting.id]),
                         request.user.email
-                            if request.user.is_authenticated()
-                            else 'anonymous',
+                        if request.user.is_authenticated()
+                        else 'anonymous',
                         "an update"
                     ),
                     fail_silently=True)
@@ -235,7 +235,6 @@ class TreeView(DetailView):
 
         return HttpResponse(
             json.dumps(result), content_type="application/json; charset=utf-8")
-
 
     def get_context_data(self, **kwargs):
         context = super(TreeView, self).get_context_data(**kwargs)

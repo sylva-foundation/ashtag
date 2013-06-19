@@ -10,4 +10,3 @@ def email_owner(tree, subject, message, fail_silently=True):
         message,
         [tree.creator_email],
         fail_silently=fail_silently)
-
