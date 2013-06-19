@@ -3,7 +3,8 @@
   var _ref,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    _this = this;
 
   module("ashtag.panes");
 
@@ -67,9 +68,9 @@
 
   })(ashtag.lib.panes.BasePane);
 
-  $(function() {
-    if ($('#buy-tags-page').length) {
-      return new ashtag.panes.BuyTagsPane($('#buy-tags-page form'));
+  $(window).on('pagechange', function(event, obj) {
+    if (obj.toPage.attr('id') === 'buy-tags-page') {
+      return new ashtag.panes.BuyTagsPane(obj.toPage);
     }
   });
 
