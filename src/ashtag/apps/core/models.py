@@ -76,7 +76,7 @@ class Sighting(CreatorMixin, models.Model):
 
     def get_absolute_url(self):
         if self.tree.tag_number:
-            return reverse('sightings:view', args=[self.tree.tag_number])
+            return reverse('sightings:tree', args=[self.tree.tag_number])
         else:
             return reverse('sightings:map')
 
