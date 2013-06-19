@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from tastypie.resources import ModelResource
+from tastypie.resources import NamespacedModelResource
 from tastypie import fields
 
 from ..core.models import Sighting, Tree
 
 
-class TreeResource(ModelResource):
+class TreeResource(NamespacedModelResource):
     class Meta:
         queryset = Tree.objects.all()
         resource_name = 'tree'
@@ -14,7 +14,7 @@ class TreeResource(ModelResource):
         allowed_methods = ['get']
 
 
-class SightingResource(ModelResource):
+class SightingResource(NamespacedModelResource):
     tree = fields.ForeignKey(TreeResource, 'tree', full=True)
     class Meta:
         queryset = Sighting.objects.all()

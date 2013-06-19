@@ -1,11 +1,11 @@
 from django.conf.urls import patterns, include
 
-from tastypie.api import Api
+from tastypie.api import NamespacedApi
 
 from .api import SightingResource, TreeResource
 
 
-v1_api = Api(api_name='v1')
+v1_api = NamespacedApi(api_name='v1', urlconf_namespace='api')
 v1_api.register(TreeResource())
 v1_api.register(SightingResource())
 
