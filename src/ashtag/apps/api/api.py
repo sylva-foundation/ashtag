@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from tastypie.resources import NamespacedModelResource
 from tastypie import fields
 
-from ..core.models import Sighting, Tree
+from ashtag.apps.core.models import Sighting, Tree
 
 
 class LatLngMixin(object):
