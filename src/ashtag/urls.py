@@ -12,7 +12,8 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
 
     url(r'^accounts/', include('registration.backends.simple.urls', app_name='registration')),
-    url(r'^api/', include('ashtag.apps.api.urls', namespace='api', app_name='api')),
+    # TastyPie doesn't like namespaces :-(
+    url(r'^api/', include('ashtag.apps.api.urls')),
     url(r'^core/', include('ashtag.apps.core.urls', namespace='core', app_name='core')),
     url(r'^sightings/', include('ashtag.apps.sightings.urls', namespace='sightings', app_name='sightings')),
 
