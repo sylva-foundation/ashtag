@@ -7,7 +7,8 @@
 {% block page %}
 
             <div data-role="content" class="at-content" role="main">
-                <form class="buy-tags-wrapper ui-texture-wrapper ui-shadow">
+                <form class="buy-tags-wrapper ui-texture-wrapper ui-shadow" action="{% url 'basket:add' %}" method="post" data-ajax="false">
+                    {% csrf_token %}
                     <div class="tags-thumb">
                         <img class="ui-shadow" src="http://www.elegantepress.com/wp-content/uploads/gallery/bambalyne/bambalyne_tag1.jpg" />
                     </div>
@@ -16,7 +17,7 @@
 
                         <div class="select-tags">
                             <label>Select tags</label>
-                            <select class="tags-options">
+                            <select class="tags-options" name="product_id">
                                 {% for product in products %}
                                 <option data-price="{{ product.stockrecord.price_incl_tax }}" value="{{ product.id }}">{{ product.title }}</option>
                                 {% endfor %}
