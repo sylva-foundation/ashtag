@@ -1,6 +1,6 @@
 import json
 
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
@@ -48,15 +48,13 @@ Have a good day!
 """
 
 
-class MyTagsView(TemplateView):
+class MyTagsView(ListView):
     template_name = 'sightings/my-tags.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(MyTagsView, self).get_context_data(**kwargs)
-
-        # set template context here
-
-        return context
+    def get_queryset(self):
+        trees = Tree.objects.filter(creator_email=self.request.user.email)
+        trees = sorted(trees, key=lambda t: (bool(t.tag_number), t.created), reverse=True)
+        return trees
 
 
 class ListView(TemplateView):
@@ -147,7 +145,12 @@ class TreeView(DetailView):
 
     def get_object(self):
         try:
-            return self.queryset.get(tag_number=self.kwargs['tag_number'])
+            return self.queryset.get(tag_number=self.kwargs['identifier'])
+        except Tree.DoesNotExist:
+            pass
+
+        try:
+            return self.queryset.get(pk=self.kwargs['identifier'])
         except Tree.DoesNotExist:
             raise Http404
 

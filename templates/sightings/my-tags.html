@@ -10,28 +10,31 @@
                 <div class="sightings-wrapper "> 
                     <div class="my-tags-wrapper sightings-view-wrapper ui-texture-wrapper">
                         <ul data-role="listview" data-inset="true" class="my-tags-list" >
-                            <li>
-                                <a href="sighting.html">
+                            {% for tree in object_list %}
+                            {% with tree.display_sighting as sighting %}
+                            <li class="{% if tree.tag_number %}tagged{% else %}untagged{% endif %}">
+                                {% if tree.tag_number %}<a href="{{ tree.get_absolute_url }}">{% endif %}
                                     <img src="http://static.ias-ess.org/media/sightings/107.JPG.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
-                                    <h2>Tag: <span class="tag-number">#12345</span></h2>
-                                    <p>Last updated: June 14, 2013, 3:45 PM</p>                         
-                                </a>
+                                    {% if tree.tag_number %}
+                                    <h2>Tag: <span class="tag-number">#{{ tree.tag_number }}</span></h2>
+                                    {% else %}
+                                    <h2>Untagged tree</h2>
+                                    <p>
+                                        Tagging a tree will allow other people to monitor it's health. 
+                                        <a href="{% url 'store:tagpacks' %}">Get a tagging pack</a> 
+                                        and then 
+                                        <a href="{{ tree.get_absolute_url }}">tag this tree</a>.
+                                    </p>
+                                    {% endif %}
+                                    
+                                    {% if tree.tag_number %}
+                                    <p>Last updated: {{ tree.sighting_set.latest.created|date:"F j, Y, f A" }}</p>
+                                    {% endif %}
+
+                                {% if tree.tag_number %}</a>{% endif %}
                             </li>
-                            
-                            <li>
-                                <a href="sighting.html">
-                                    <img src="http://static.ias-ess.org/media/sightings/107.JPG.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
-                                    <h2>Tag: <span class="tag-number">#12345</span></h2>
-                                    <p>Last updated: June 14, 2013, 3:45 PM</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="sighting.html">
-                                    <img src="http://static.ias-ess.org/media/sightings/ashdieback_002.jpg.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
-                                    <h2>Tag: #12345</h2>
-                                    <p>Last updated: June 14, 2013, 3:45 PM</p>                                 
-                                </a>
-                            </li>
+                            {% endwith %}
+                            {% endfor %}
                         </ul><!--//sightings-list-->
                         <div class="cta-btn-wrapper">
                             <a class="add-tree-button" href="submit-sighting.html" data-role="button" data-icon="plus" >Tag another tree</a>
