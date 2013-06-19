@@ -91,8 +91,15 @@ class SentView(TemplateView):
 
 class TreeView(DetailView):
     """Summary page for a particular tree."""
-    model = Tree
-    template_name = 'sightings/views.html'
+    queryset = Tree.objects.exclude(hidden=True)
+    template_name = 'sightings/view.html'
+
+    def get_object(self):
+        try:
+            return self.queryset.get(tag_number=self.kwargs['tag_number'])
+        except Tree.DoesNotExist:
+            raise Http404
+
 
     def get_context_data(self, **kwargs):
         context = super(TreeView, self).get_context_data(**kwargs)
