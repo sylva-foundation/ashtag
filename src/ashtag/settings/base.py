@@ -236,6 +236,8 @@ OSCAR_ORDER_STATUS_PIPELINE = {
     'Being processed': ('Processed', 'Cancelled',),
     'Cancelled': (),
 }
+# Check for a sensible flow before enabling this
+OSCAR_ALLOW_ANON_CHECKOUT = True
 
 # Oscar PayPal
 PAYPAL_API_USERNAME = os.environ.get('PAYPAL_API_USERNAME', 'not-set')
