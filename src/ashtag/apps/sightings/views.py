@@ -62,7 +62,7 @@ class SubmitView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         form = self._get_form_class(request)
-        return render(request,  self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request):
         form_class = self._get_form_class(request)

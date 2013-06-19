@@ -58,7 +58,6 @@ class SightingForm(forms.ModelForm):
             msg = "Please add a location for this sighting!"
             self._errors["location"] = self.error_class([msg])
 
-
         c_data['tree'] = None
         if c_data.get('tag_number'):
             try:
