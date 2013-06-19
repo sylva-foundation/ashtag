@@ -178,6 +178,7 @@ INSTALLED_APPS = [
     'south',
     'registration',
     'storages',
+    'tastypie',
 
     # oscar
     'compressor',

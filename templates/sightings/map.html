@@ -1,24 +1,99 @@
 {% extends "core/jqm-page.html" %}
 
+{% block extra_head %}
+<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true"></script>
+
+<style>
+    .map {
+        width: 100%;
+        height: 400px;
+    }
+</style>
+{% endblock extra_head %}
+
 {% block title %}Sightings{% endblock %}
 {% block class %}sightings-page sightings-map-view-page{% endblock %}
 
 {% block page %}
             
-            <div data-role="content" class="at-content" role="main">
-                <div data-role="navbar">
-                    <ul>                       
-                        <li><a  class="ui-btn-active ui-state-persist" href="sightings.html">Map view</a></li>
-                        <li><a  href="sightings-list-view.html">List View</a></li>                      
-                    </ul>
-                </div><!-- /navbar -->
-                <div class="sightings-wrapper ui-texture-wrapper">
-                    <div class="map-view-wrapper sightings-view-wrapper">
-                        <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=norwich&amp;aq=&amp;sll=51.468489,-2.590709&amp;sspn=0.377695,0.725098&amp;ie=UTF8&amp;hq=&amp;hnear=Norwich,+Norfolk,+United+Kingdom&amp;t=m&amp;z=12&amp;ll=52.630886,1.297355&amp;output=embed"></iframe>
-                    </div>                  
-                </div><!--//sightings-wrapper-->               
-            </div><!--//at-content-->
+    <div data-role="content" class="at-content" role="main">
+        <div data-role="navbar">
+            <ul>
+                <li><a  class="ui-btn-active ui-state-persist" href="{% url 'sightings:map' %}">Map view</a></li>
+                <li><a  href="sightings-list-view.html">List View</a></li>
+            </ul>
+        </div><!-- /navbar -->
+        <div class="sightings-wrapper ui-texture-wrapper">
+            <div class="map-view-wrapper sightings-view-wrapper">
+                <div id="map_canvas" class="map"></div>
+            </div>
+        </div><!--//sightings-wrapper-->
+    </div><!--//at-content-->
 
+    <script type="text/javascript">
+        var defaultZoom = 5;
+        // centroid of UK ish.
+        var defaultLat = 54.03;
+        var defaultLng = -3.67;
+
+        $(document).bind('pageinit', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position){
+                        initialize(8, position.coords.latitude, position.coords.longitude);
+                    },
+                    function() {
+                        initialize(defaultZoom, defaultLat, defaultLng);
+                    },
+                    {timeout:5000});
+            } else {
+                initialize(defaultZoom, defaultLat, defaultLng);
+            }
+        });
+        
+        function initialize(zoom, lat, lng) {
+            // create map and set marker
+            var latLng = new google.maps.LatLng(lat, lng);
+            var mapOpts = {
+                center: latLng,
+                zoom: zoom,
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            };
+            $('#map_canvas').gmap(mapOpts).bind('init', function(event, map) {getLocations()});
+        }
+
+
+        function getLocations() {
+            $.getJSON("{% url 'api:api_dispatch_list' resource_name='tree' api_name='v1' %}", function (json) {
+                $.each(json["objects"], function(i, entry){
+                    addTree(entry);
+                });
+            });
+        }
+
+        function addTree(tree) {
+            var latLng = new google.maps.LatLng(tree.latlng[0], tree.latlng[1]);
+            var iconBase = 'https://maps.google.com/mapfiles/kml/';
+            var icon, scaledSize, click;
+            if (tree.tag_number){
+                icon = iconBase + 'shapes/parks.png';
+                scaledSize = {width: 24, height: 24};
+                click = function(event){ location = tree.view_url };
+            } else {
+                icon = iconBase + 'paddle/red-circle-lv.png';
+                scaledSize = {width: 10, height: 10};
+                click = function(event){ /* nothing to do for now */ };
+            }
+            $('#map_canvas').gmap('addMarker', {
+                'position': latLng, 
+                icon: {
+                    url: icon,
+                    scaledSize: scaledSize
+                }
+            }).click(click);
+        }
+
+</script>
 {% endblock page %}
 
 

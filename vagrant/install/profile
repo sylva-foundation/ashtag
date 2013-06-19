@@ -25,7 +25,7 @@ alias runserver='django-admin.py runserver 0.0.0.0:8080'
 
 export WORKON_HOME=$HOME/.virtualenvs
 
-export PYTHONPATH=/home/vagrant/ashtag/src
+export PYTHONPATH=/home/vagrant/ashtag/src:/home/vagrant/ashtag/lib
 export DJANGO_SETTINGS_MODULE=ashtag.settings.localdev
 export DJANGO_SECRET_KEY="ashtag-development-key-change-for-deployment"
 export PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE

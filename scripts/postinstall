@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # Set the PYTHONPATH
-echo 'export PYTHONPATH="/home/dotcloud/current/src"' >> ~/.profile
+echo 'export PYTHONPATH="/home/dotcloud/current/src:/home/dotcloud/current/lib"' >> ~/.profile
 
 # Re-source the profile to get the new value
 source ~/.profile

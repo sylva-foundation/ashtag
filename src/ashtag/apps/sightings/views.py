@@ -1,5 +1,9 @@
 from django.views.generic import TemplateView, DetailView
-from ashtag.apps.core.models import Sighting
+from django.shortcuts import render, redirect
+
+from ashtag.apps.core.models import Tree
+
+from .forms import SightingForm, AnonSightingForm
 
 
 class MyTagsView(TemplateView):
@@ -48,6 +52,30 @@ class MapView(TemplateView):
 
 class SubmitView(TemplateView):
     template_name = 'sightings/submit.html'
+    form_class = SightingForm
+
+    def _get_form_class(self, request):
+        if not request.user.is_authenticated():
+            return AnonSightingForm
+        else:
+            return SightingForm
+
+    def get(self, request, *args, **kwargs):
+        form = self._get_form_class(request)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form_class = self._get_form_class(request)
+        form = form_class(request.user, request.POST, request.FILES)
+        if form.is_valid():
+            sighting = form.save(commit=False)
+            if request.user.is_authenticated():
+                sighting.creator_email = request.user.email
+            sighting.tree = form.cleaned_data['tree']
+            sighting.save()
+            return redirect('sightings:sent')
+        else:
+            return render(request, self.template_name, {'form': form})
 
     def get_context_data(self, **kwargs):
         context = super(SubmitView, self).get_context_data(**kwargs)
@@ -57,12 +85,17 @@ class SubmitView(TemplateView):
         return context
 
 
-class SightingView(DetailView):
-    model = Sighting
+class SentView(TemplateView):
+    template_name = 'sightings/thanks.html'
+
+
+class TreeView(DetailView):
+    """Summary page for a particular tree."""
+    model = Tree
     template_name = 'sightings/views.html'
 
     def get_context_data(self, **kwargs):
-        context = super(SubmitView, self).get_context_data(**kwargs)
+        context = super(TreeView, self).get_context_data(**kwargs)
 
         # set template context here
 

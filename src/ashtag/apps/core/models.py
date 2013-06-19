@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 from model_utils import Choices
@@ -32,6 +33,18 @@ class Tree(CreatorMixin, models.Model):
     creator_email = models.EmailField(max_length=254)
     tag_number = models.CharField(
         max_length=10, db_index=True, null=True, blank=True)
+    location = models.PointField()
+
+    objects = models.GeoManager()
+
+    class Meta:
+        ordering = ('tag_number',)
+
+    def __unicode__(self):
+        if self.tag_number:
+            return u"Claimed Tree #{0}".format(self.tag_number)
+        else:
+            return u"Unclaimed Tree {0}".format(self.id)
 
 
 class Sighting(CreatorMixin, models.Model):
@@ -55,9 +68,17 @@ class Sighting(CreatorMixin, models.Model):
 
     objects = models.GeoManager()
 
+    class Meta:
+        ordering = ('-created',)
+
+    def __unicode__(self):
+        return u"{0} @ {1}".format(self.tree, self.created)
+
     def get_absolute_url(self):
-        # TODO: Fix me up with a URL please guv
-        return ""
+        if self.tree.tag_number:
+            return reverse('sightings:view', args=[self.tree.tag_number])
+        else:
+            return reverse('sightings:map')
 
 
 class Comment(models.Model):
