@@ -38,6 +38,6 @@ class ashtag.panes.BuyTagsPane extends ashtag.lib.panes.BasePane
         return parseInt(quantity, 10)
 
 
-$ ->
-    if $('#buy-tags-page').length
-        new ashtag.panes.BuyTagsPane $('#buy-tags-page form')
+$(window).on 'pagechange', (event, obj) =>
+    if obj.toPage.attr('id') == 'buy-tags-page'
+        new ashtag.panes.BuyTagsPane obj.toPage

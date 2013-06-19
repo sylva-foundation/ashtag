@@ -1,0 +1,147 @@
+{% extends "core/jqm-page.html" %}
+
+{% load currency_filters %}
+
+{% block class %}order-thank-you-page{% endblock %}
+{% block id %}order-thank-you-page{% endblock %}
+{% block title %}Confirmation of order {{ order.number }}{% endblock title %}
+
+
+{% block page %}
+    <div data-role="content" class="at-content" role="main">
+        <h1>Confirmation for order #{{ order.number }}</h1>
+
+        <p>Your order has been placed and a confirmation email has ben sent - your order number is
+        <strong>{{ order.number }}</strong></p>
+        <p>Please make a note of this reference or print this page and quote it in any communication with us regarding your order.</p>
+
+        <dl>
+            <dt>Address</dt>
+            <dd>
+                {% for field in order.shipping_address.active_address_fields %}
+                {{ field }}<br/>
+                {% endfor %}
+            </dd>
+            {% if order.shipping_address.phone_number %}
+            <dt>Contact number</dt>
+            <dd>{{ order.shipping_address.phone_number }}</dd>
+            {% endif %}
+            {% if order.shipping_address.notes %}
+            <dt>Shipping notes</dt>
+            <dd>{{ order.shipping_address.notes }}</dd>
+            {% endif %}
+            <dt>Shipping method</dt>
+            <dd>{{ order.shipping_method }}</dd>
+        </dl>
+
+        <h3>Payment</h3>
+        {% for source in order.sources.all %}
+        {{ source }}
+        {% empty %}
+        No payment was required for this order.
+        {% endfor %}
+
+        <h3>Order details</h3>
+
+        {% for line in order.lines.all %}
+            <h4>{{ line.description }}</h4>
+            <p>Estimated dispatch date: {{ line.est_dispatch_date|default:"-" }}</p>
+            <p>Quantity: {{ line.quantity }}</p>
+            <p>Cost: {{ line.line_price_before_discounts_incl_tax|currency }}</p>
+        {% endfor %}
+
+        <h4>Basket</h4>
+
+        <table>
+            {% with discounts=order.basket_discounts %}
+            {% if discounts %}
+                <tr>
+                    <td>Basket total (before discounts)</td>
+                    <td>{{ order.basket_total_before_discounts_incl_tax|currency }}</td>
+                </tr>
+                {% for discount in discounts %}
+                <tr>
+                    <td><span>Discount</span> {{ discount.offer }}</td>
+                    <td>- {{ discount.amount|currency }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th>Basket total (after discounts)</th>
+                    <th>{{ order.basket_total_incl_tax|currency }}</th>
+                </tr>
+            {% else %}
+                <tr>
+                    <th>Basket total</th>
+                    <th>{{ order.basket_total_incl_tax|currency }}</th>
+                </tr>
+            {% endif %}
+            {% endwith %}
+
+            <tr>
+                <th colspan="2"><h4>Shipping</h4></th>
+            </tr>
+            <tr>
+                <td>Shipping method</td>
+                <td>{{ order.shipping_method }}</td>
+            </tr>
+            {% if order.has_shipping_discounts %}
+                <tr>
+                    <td>Shipping charge (before discounts)</td>
+                    <td>{{ order.shipping_before_discounts_incl_tax|currency }}</td>
+                </tr>
+                {% for discount in order.shipping_discounts %}
+                <tr>
+                    <td><span>Discount</span> {{ discount.offer }}</td>
+                    <td>- {{ discount.amount|currency }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th>Shipping charge (after discounts)</th>
+                    <th>{{ order.shipping_incl_tax|currency }}</th>
+                </tr>
+            {% else %}
+                <tr>
+                    <th>Shipping charge</th>
+                    <th>{{ order.shipping_incl_tax|currency }}</th>
+                </tr>
+            {% endif %}
+
+            {% with actions=order.post_order_actions %}
+                {% if actions %}
+                    <tr>
+                        <th colspan="2">&nbsp;</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><h4>Post order actions</h4></th>
+                    </tr>
+                    {% for action in order.post_order_actions %}
+                    <tr>
+                        <td colspan="2"><p>{{ action.message }}</p></td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <tr>
+                <th colspan="2">&nbsp;</th>
+            </tr>
+            <tr>
+                <td><h4>Order total</h4></td>
+                <td><h4>{{ order.total_incl_tax|currency }}</h4></td>
+            </tr>
+
+        </table>
+
+
+        {% if not order.user %}
+                <h2>Tracking your order</h2>
+            <p>You can
+                <a href="{% url 'customer:anon-order' order.number order.verification_hash %}">track the status of your order</a>.
+            </p>
+        {% endif %}
+
+        <div>
+            <a onclick="window.print()" href="#">Print this page</a>
+            <a href="/">Back to home page</a>
+        </div>
+    </div>
+{% endblock page %}
