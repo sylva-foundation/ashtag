@@ -92,6 +92,10 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+FIXTURE_DIRS = (
+    PROJECT_ROOT / 'fixtures',
+)
+
 # Pull the SECRET_KEY from the environment.
 if os.environ.get('DJANGO_SECRET_KEY'):
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
