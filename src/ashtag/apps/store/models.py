@@ -10,6 +10,7 @@ class TagPackManager(QueryManager):
     def order_by_tags(self, reverse=False):
         return sorted(self.all(), key=lambda p: p.num_tags, reverse=reverse)
 
+
 class TagPack(Product):
 
     objects = TagPackManager()
@@ -22,4 +23,3 @@ class TagPack(Product):
         if not hasattr(self, '_num_tags'):
             self._num_tags = self.attribute_values.get(attribute__code='num_tags_in_pack').value
         return self._num_tags
-
