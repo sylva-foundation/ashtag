@@ -31,3 +31,6 @@ export DJANGO_SECRET_KEY="ashtag-development-key-change-for-deployment"
 export PIP_DOWNLOAD_CACHE=$PIP_DOWNLOAD_CACHE
 
 source $WORKON_HOME/ashtag/bin/activate
+if [ -f "$WORKON_HOME/ashtag/bin/postactivate" ]; then
+    source $WORKON_HOME/ashtag/bin/postactivate
+fi
