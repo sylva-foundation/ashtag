@@ -1,0 +1,64 @@
+{% extends "core/jqm-page.html" %}
+
+{% load thumbnail %}
+{% load currency_filters %}
+
+{% block class %}basket-page{% endblock %}
+{% block id %}basket-page{% endblock %}
+{% block title %}Basket{% endblock %}
+
+{% block page %}
+            
+    <div data-role="content" class="at-content" role="main">
+
+    {% if basket.is_empty %}
+        <p>Your basket is empty.</p>
+        <p><a href="{% url 'store:tagpacks' %}">Buy tags</a></p>
+    {% else %}
+
+        <form action="" method="post" data-ajax="false">
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+            {% for form in formset %}
+            <div class="basket-items">
+                {{ form.id }}
+                <h4>{{ form.instance.description }}</h4>
+                <div class="{% if form.errors %}error{% endif %}">
+                    {{ form.quantity }}
+                    <button type="submit">Update</button>
+                    <a href="#" data-id="{{ forloop.counter0 }}" class="remove">Remove</a>
+                    <div style="display:none">
+                        {{ form.DELETE }}
+                    </div>
+                    {% for field_errors in form.errors.values %}
+                        {% for error in field_errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                <div class="price">
+                    {{ form.instance.unit_price_incl_tax|currency }}
+                </div>
+            </div>
+            {% endfor %}
+        </form>
+
+        <div class="totals">
+            <h2>Totals</h2>
+            {% include 'basket/partials/basket_totals.html' with editable=1 %}
+        </div>
+
+
+        <div class="form-actions">
+            <a href="{% url 'paypal-redirect' %}" data-ajax="false"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" align="left" style="margin-right:7px;"></a>
+            {% comment %}
+            <a href="{% url 'checkout:index' %}">Proceed to checkout</a>
+            {% endcomment %}
+        </div>
+
+    {% endif %}
+
+    </div><!--//at-content-->
+
+{% endblock page %}
