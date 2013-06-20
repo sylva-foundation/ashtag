@@ -2,6 +2,9 @@ module "ashtag"
 
 class ashtag.FileStore
     constructor: () ->
+        @imageFieldName = "image"
+        @imageFieldName = "meta"
+
         @enabled = @_supported()
         ashtag.lib.mixins.Observable::augment @
         
@@ -10,7 +13,7 @@ class ashtag.FileStore
         
         @db = @getDb()
         @initialiseDb()
-        @pushToServer() # send any pending files
+        @allToServer() # send any pending files
 
     _supported: ->
         return !!window.openDatabase
@@ -67,11 +70,8 @@ class ashtag.FileStore
                 [fileName, meta, fileData], 
                 =>
                     deferred.resolve()
-                    # uploader.enable();
-                    # uploader.pushQueueToServer();
                 =>
                     deferred.reject()
-                    # uploader.enable();
         return deferred
 
     _handleStoreSuccess: =>
@@ -80,6 +80,50 @@ class ashtag.FileStore
     _handleStoreFailure: =>
         console.log('failure')
     
-
-    pushToServer: ->
+    allToServer: ->
         # upload files to the server
+        deferred = $.Deferred()
+        send = =>    
+            @popToServer().then ->
+                    deferred.notify()
+                , ->
+                    deferred.resolve()
+        deferred.then null, null, send
+        send()
+        return deferred
+
+    popToServer: ->
+        # pop one file off and send it to the server
+        deferred = $.Deferred()
+        @db.transaction (tx) ->
+          tx.executeSql "SELECT * FROM [files] LIMIT 1", [], (tx, res) ->
+            if not res.rows.length
+                deferred.reject()
+            else
+                item = res.rows[0]
+                console.log(res.rows)
+                console.log(item)
+                @sendToServer(item.name, item.file, item.meta).then ->
+                    tx.executeSql "DELETE FROM [files] WHERE [id] = ?", [item.id],
+                        -> deferred.resolve(),
+                        -> deferred.resolve()
+                , -> deferred.resolve()
+        return deferred
+
+    sendToServer: (name, file, meta) ->
+        # For now we assume that 'meta' is url encoded already
+        data = [
+            "#{@imageFieldName}_name=#{name}"
+            "#{@imageFieldName}=#{file}"
+        ]
+        if meta
+            data.push(meta)
+
+        return $.ajax
+            data: data.join '&'
+            type: 'POST'
+
+
+        
+
+

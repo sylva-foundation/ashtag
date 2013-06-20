@@ -9,6 +9,8 @@
       this._handleStoreFailure = __bind(this._handleStoreFailure, this);
       this._handleStoreSuccess = __bind(this._handleStoreSuccess, this);
       this._storeFile = __bind(this._storeFile, this);
+      this.imageFieldName = "image";
+      this.imageFieldName = "meta";
       this.enabled = this._supported();
       ashtag.lib.mixins.Observable.prototype.augment(this);
       if (!this._supported) {
@@ -16,7 +18,7 @@
       }
       this.db = this.getDb();
       this.initialiseDb();
-      this.pushToServer();
+      this.allToServer();
     }
 
     FileStore.prototype._supported = function() {
@@ -96,7 +98,60 @@
       return console.log('failure');
     };
 
-    FileStore.prototype.pushToServer = function() {};
+    FileStore.prototype.allToServer = function() {
+      var deferred, send,
+        _this = this;
+      deferred = $.Deferred();
+      send = function() {
+        return _this.popToServer().then(function() {
+          return deferred.notify();
+        }, function() {
+          return deferred.resolve();
+        });
+      };
+      deferred.then(null, null, send);
+      send();
+      return deferred;
+    };
+
+    FileStore.prototype.popToServer = function() {
+      var deferred;
+      deferred = $.Deferred();
+      this.db.transaction(function(tx) {
+        return tx.executeSql("SELECT * FROM [files] LIMIT 1", [], function(tx, res) {
+          var item;
+          if (!res.rows.length) {
+            return deferred.reject();
+          } else {
+            item = res.rows[0];
+            console.log(res.rows);
+            console.log(item);
+            return this.sendToServer(item.name, item.file, item.meta).then(function() {
+              return tx.executeSql("DELETE FROM [files] WHERE [id] = ?", [item.id], function() {
+                return deferred.resolve();
+              }, function() {
+                return deferred.resolve();
+              });
+            }, function() {
+              return deferred.resolve();
+            });
+          }
+        });
+      });
+      return deferred;
+    };
+
+    FileStore.prototype.sendToServer = function(name, file, meta) {
+      var data;
+      data = ["" + this.imageFieldName + "_name=" + name, "" + this.imageFieldName + "=" + file];
+      if (meta) {
+        data.push(meta);
+      }
+      return $.ajax({
+        data: data.join('&'),
+        type: 'POST'
+      });
+    };
 
     return FileStore;
 
