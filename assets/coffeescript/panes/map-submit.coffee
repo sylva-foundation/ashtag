@@ -40,7 +40,3 @@ class ashtag.panes.SubmitSightingMapPane extends ashtag.panes.MapBasePane
         @createMarker()
 
 
-
-$(window).on 'pagechange', (event, obj) =>
-    if obj.toPage.attr('id') == 'submit-sighting-page'
-        new ashtag.panes.SubmitSightingMapPane obj.toPage
