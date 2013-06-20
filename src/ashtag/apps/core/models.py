@@ -71,7 +71,6 @@ class Tree(CreatorMixin, models.Model):
         return qs.latest()
 
 
-
 class Sighting(CreatorMixin, models.Model):
     """Sighting, recording date, time, location, notes, image, tree, state."""
     DISEASE_STATE = Choices(
