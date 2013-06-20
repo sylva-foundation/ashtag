@@ -40,12 +40,10 @@
 
     FileStore.prototype.initialiseDb = function() {
       var _this = this;
-      return this.db.transaction(function(tx) {
-        return tx.executeSql("CREATE TABLE IF NOT EXISTS [files] (                               [id] INTEGER PRIMARY KEY AUTOINCREMENT,                              [name], [meta], [file]                          )", [], function() {
-          return _this.enable();
-        }, function() {
-          return _this.disable();
-        });
+      return this.query("CREATE TABLE IF NOT EXISTS [files] (                     [id] INTEGER PRIMARY KEY AUTOINCREMENT,                    [name], [meta], [file]                )").then(function() {
+        return _this.enable();
+      }, function() {
+        return _this.disable();
       });
     };
 
@@ -62,7 +60,6 @@
     FileStore.prototype._readFile = function(file, meta) {
       var deferred, reader,
         _this = this;
-      console.log('read');
       deferred = $.Deferred();
       reader = new FileReader();
       reader.onloadend = function(e) {
@@ -71,31 +68,23 @@
         return deferred.resolve(file.name, fileData, meta);
       };
       reader.readAsDataURL(file);
-      return deferred;
+      return deferred.promise();
     };
 
     FileStore.prototype._storeFile = function(fileName, fileData, meta) {
-      var deferred,
-        _this = this;
-      console.log('store');
+      var deferred;
       deferred = $.Deferred();
-      this.db.transaction(function(tx) {
-        return tx.executeSql("INSERT INTO [files] ([name], [meta], [file]) VALUES (?, ?, ?)", [fileName, meta, fileData], function() {
-          return deferred.resolve();
-        }, function() {
-          return deferred.reject();
-        });
+      this.query("INSERT INTO [files] ([name], [meta], [file]) VALUES (?, ?, ?)", [fileName, meta, fileData]).then(function() {
+        return deferred.resolve();
+      }, function() {
+        return deferred.reject();
       });
-      return deferred;
+      return deferred.promise();
     };
 
-    FileStore.prototype._handleStoreSuccess = function() {
-      return console.log('success');
-    };
+    FileStore.prototype._handleStoreSuccess = function() {};
 
-    FileStore.prototype._handleStoreFailure = function() {
-      return console.log('failure');
-    };
+    FileStore.prototype._handleStoreFailure = function() {};
 
     FileStore.prototype.allToServer = function() {
       var deferred,
@@ -117,7 +106,7 @@
         deferred.then(null, null, send);
         return send();
       });
-      return deferred;
+      return deferred.promise();
     };
 
     FileStore.prototype.popToServer = function(row) {
@@ -133,7 +122,7 @@
       }, function() {
         return deferred.resolve();
       });
-      return deferred;
+      return deferred.promise();
     };
 
     FileStore.prototype.sendRequest = function(name, file, meta) {
@@ -165,7 +154,7 @@
           return deferred.resolve(rows);
         });
       });
-      return deferred;
+      return deferred.promise();
     };
 
     return FileStore;

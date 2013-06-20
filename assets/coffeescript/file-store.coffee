@@ -18,31 +18,32 @@ class ashtag.FileStore
         return !!window.openDatabase
 
     disable: ->
+        # Disable offline uploading through the FileStore
         @enabled = false
         @fire 'disable'
 
     enable: ->
+        # Disable offline uploading through the FileStore
         @enabled = true
         @fire 'enable'
 
     getDb: ->
+        # Get the db connection
         return window.openDatabase('uploader', '', 'Pending uploads', 10 * 1024 * 1024)
 
     initialiseDb: ->
-        # initialise the db if necessary
-        @db.transaction (tx) => 
-            tx.executeSql "CREATE TABLE IF NOT EXISTS [files] ( 
-                              [id] INTEGER PRIMARY KEY AUTOINCREMENT,
-                              [name], [meta], [file]
-                          )"
-            , []
-            , => # success 
-                @enable()
-            , => # failure; fallback to online uploads
-                @disable()
+        # create the table if necessary
+        @query("CREATE TABLE IF NOT EXISTS [files] ( 
+                    [id] INTEGER PRIMARY KEY AUTOINCREMENT,
+                    [name], [meta], [file]
+                )")
+        .then(
+            => @enable() #success
+            => @disable() # failure; fallback to online uploads
+        )
 
     storeFile: (file, meta='') ->
-        # Store the file and meta data, returning a deferred
+        # Store the file and meta data, returning a promise
         if not @enabled
             throw 'Offline uploading disabled'
 
@@ -52,35 +53,32 @@ class ashtag.FileStore
 
 
     _readFile: (file, meta) ->
-        console.log('read')
+        # read a file into a FileReader. Returns a promise
         deferred = $.Deferred()
         reader = new FileReader()
         reader.onloadend = (e) =>
             fileData = e.target.result
             deferred.resolve(file.name, fileData, meta)
         reader.readAsDataURL(file)
-        return deferred
+        return deferred.promise()
 
     _storeFile: (fileName, fileData, meta) =>
-        console.log('store')
+        # store a file into the db. Returns a promise
         deferred = $.Deferred()
-        @db.transaction (tx) =>
-            tx.executeSql "INSERT INTO [files] ([name], [meta], [file]) VALUES (?, ?, ?)", 
-                [fileName, meta, fileData], 
-                =>
-                    deferred.resolve()
-                =>
-                    deferred.reject()
-        return deferred
+        @query("INSERT INTO [files] ([name], [meta], [file]) VALUES (?, ?, ?)", [fileName, meta, fileData]).then(
+            -> deferred.resolve()
+            -> deferred.reject()
+        )
+        return deferred.promise()
 
     _handleStoreSuccess: =>
-        console.log('success')
+        # image successfully stored locally
 
     _handleStoreFailure: =>
-        console.log('failure')
+        # failed to store image locally
     
     allToServer: ->
-        # upload files to the server
+        # upload all locally stored files to the server. Returns a promise
         deferred = $.Deferred()
         @query("SELECT * FROM [files]").then (rows) =>
             send = =>
@@ -94,10 +92,10 @@ class ashtag.FileStore
             deferred.then null, null, send
             send()
 
-        return deferred
+        return deferred.promise()
 
     popToServer: (row) ->
-        # pop one file off and send it to the server
+        # send the file specified by the db row `row` to the server. Returns a promise
         deferred = $.Deferred()
         @sendRequest(row.name, row.file, row.meta).then =>
             @query("DELETE FROM [files] WHERE [id] = ?", [row.id]).then(
@@ -105,9 +103,10 @@ class ashtag.FileStore
                 -> deferred.resolve()
             )
         , -> deferred.resolve()
-        return deferred
+        return deferred.promise()
 
     sendRequest: (name, file, meta) ->
+        # Do the file request to the server
         # For now we assume that 'meta' is url encoded already
         data = [
             "#{@imageFieldName}_name=#{name}"
@@ -121,6 +120,7 @@ class ashtag.FileStore
             type: 'POST'
 
     query: (sql, values=[]) ->
+        # Utility method to run queries against the server. Returns a promise
         deferred = $.Deferred()
         @db.transaction (tx) =>
             tx.executeSql sql, values, (tx, res) =>
@@ -128,7 +128,7 @@ class ashtag.FileStore
                 while rows.length < res.rows.length
                     rows.push res.rows.item(rows.length)
                 deferred.resolve rows
-        return deferred
+        return deferred.promise()
 
 
         
