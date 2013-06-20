@@ -12,7 +12,10 @@ class ashtag.panes.MapBasePane extends ashtag.lib.panes.BasePane
     setupEvents: ->
 
     start: ->
-        @setupMap()
+        if window.google
+            @setupMap()
+        else
+            @$map.addClass('unavailable-offline').html('<div class="msg">Map unavailable when offline</div>')
 
     setupMap: ->
         mapOptions =
