@@ -33,11 +33,11 @@
     FlaggingPane.prototype.start = function() {};
 
     FlaggingPane.prototype.handleFlagClick = function(event) {
-      var el;
-      el = $(event.currentTarget);
-      this.flag_type = el.attr('data-flag-type');
-      this.flag_id = el.attr('data-flag-id');
-      this.handled_button = el;
+      var $el;
+      $el = $(event.currentTarget);
+      this.flag_type = $el.attr('data-flag-type');
+      this.flag_id = $el.attr('data-flag-id');
+      this.handled_button = $el;
       return this.$dialogFlagType.html(" " + this.flag_type);
     };
 

@@ -15,10 +15,10 @@ class ashtag.panes.FlaggingPane extends ashtag.lib.panes.BasePane
     start: ->
 
     handleFlagClick: (event) =>
-        el = $(event.currentTarget)
-        @flag_type = el.attr('data-flag-type')
-        @flag_id = el.attr('data-flag-id')
-        @handled_button = el
+        $el = $(event.currentTarget)
+        @flag_type = $el.attr('data-flag-type')
+        @flag_id = $el.attr('data-flag-id')
+        @handled_button = $el
         @$dialogFlagType.html " #{@flag_type}"
 
     handleReportClick: (event) =>
