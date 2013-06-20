@@ -3,8 +3,7 @@
   var _ref,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    _this = this;
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   module("ashtag.panes");
 
@@ -52,7 +51,8 @@
         bounds: false,
         map: this.map
       });
-      return google.maps.event.addDomListener(marker, 'dragend', this.handleDragEnd);
+      google.maps.event.addDomListener(marker, 'dragend', this.handleDragEnd);
+      return this.updateLocation(this.defaultLat, this.defaultLng);
     };
 
     SubmitSightingMapPane.prototype.handleDragEnd = function(e) {
@@ -71,11 +71,5 @@
     return SubmitSightingMapPane;
 
   })(ashtag.panes.MapBasePane);
-
-  $(window).on('pagechange', function(event, obj) {
-    if (obj.toPage.attr('id') === 'submit-sighting-page') {
-      return new ashtag.panes.SubmitSightingMapPane(obj.toPage);
-    }
-  });
 
 }).call(this);

@@ -13,4 +13,4 @@ django-storages==1.1.8
 boto==2.9.5
 sorl-thumbnail==11.12
 django-tastypie==0.9.15
-https://github.com/adamcharnock/django-tz-detect/archive/v0.1.4.tar.gz
+https://github.com/adamcharnock/django-tz-detect/archive/v0.1.4.tar.gz#egg=django-tz-detect
