@@ -29,7 +29,7 @@ class TreeResource(LatLngMixin, NamespacedModelResource):
 
     def dehydrate_view_url(self, bundle):
         """Get the view url for this tree."""
-        return reverse('sightings:tree', args=[bundle.obj.id])
+        return bundle.obj.get_absolute_url()
 
 
 class SightingResource(LatLngMixin, NamespacedModelResource):
