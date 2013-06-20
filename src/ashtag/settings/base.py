@@ -139,6 +139,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'oscar.apps.basket.middleware.BasketMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'tz_detect.middleware.TimezoneMiddleware',
 )
 
 ROOT_URLCONF = 'ashtag.urls'
@@ -183,6 +184,7 @@ INSTALLED_APPS = [
     'registration',
     'storages',
     'tastypie',
+    'tz_detect',
 
     # oscar
     'compressor',
@@ -207,7 +209,11 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+        },
     },
     'loggers': {
         'django.request': {
@@ -215,6 +221,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'django.db': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
     }
 }
 

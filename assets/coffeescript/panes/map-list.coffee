@@ -26,16 +26,16 @@ class ashtag.panes.MapListPane extends ashtag.panes.MapBasePane
 
         if tree.tag_number
             icon =
-                url: 'https://maps.google.com/mapfiles/kml/shapes/parks.png'
+                url: '/static/images/map-tree-icon-green.png'
                 scaledSize:
-                    width: 24
-                    height: 24
+                    width: 32
+                    height: 32
         else
             icon = 
-                url: 'https://maps.google.com/mapfiles/kml/paddle/red-circle-lv.png'
+                url: '/static/images/map-tree-icon-orange.png'
                 scaledSize:
-                    width: 24
-                    height: 24
+                    width: 18
+                    height: 18
 
         markerOpts = 
             icon: icon

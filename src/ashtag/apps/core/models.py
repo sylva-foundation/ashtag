@@ -49,7 +49,8 @@ class Tree(CreatorMixin, models.Model):
     objects = models.GeoManager()
 
     class Meta:
-        ordering = ('tag_number',)
+        ordering = ('-created',)
+        get_latest_by = ('created',)
 
     def __unicode__(self):
         if self.tag_number:
@@ -58,10 +59,19 @@ class Tree(CreatorMixin, models.Model):
             return u"Unclaimed Tree {0}".format(self.id)
 
     def get_absolute_url(self):
-        if self.tag_number:
-            return reverse('sightings:tree', args=[self.tag_number])
-        else:
-            return reverse('sightings:map')
+        return reverse('sightings:tree', args=[self.tag_number or self.pk])
+
+    @property
+    def display_sighting(self):
+        """Get the sighting which should be displayed for this tree
+
+        We assume this should be the lastest sighting by the tree's creator
+        """
+        qs = self.sighting_set.filter(
+            creator_email=self.creator_email,
+            hidden=False
+        )
+        return qs.latest()
 
 
 class Sighting(CreatorMixin, models.Model):
