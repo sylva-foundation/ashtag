@@ -8,10 +8,14 @@
     <div data-role="content" class="at-content" role="main">
         <div class="single-sighting-wrapper ui-texture-wrapper ui-shadow clearfix">
             <h2 class="heading">Tag: #{{ object.tag_number }}</h2>
+            {% if not object.flagged %}
             <a data-role="button" data-inline="true" data-icon="alert"
                 class="report-button" data-rel="popup"
                 data-position-to="window" data-transition="pop"
                 href="#report-popup" data-mini="true">Report this sighting</a>
+            {% else %}
+            <span class="flagged">This sighting has been flagged as inappropriate.</span> 
+            {% endif %}
             <div class="meta">
                 <p>Last update on: {{ updates.latest.created }}</p>
                 <p>Submitted on: {{ object.created }} {% if tagged %} by {{ object.creator|default:"a spotter" }}{% endif %}</p>
@@ -19,8 +23,7 @@
 
             <div class="gallery-thumb">
                 <a href="sighting-gallery.html">
-                    {# what do we want here? latest image? #}
-                    {% thumbnail updates.latest.image '750x600' crop='center' as thmb %}
+                    {% thumbnail object.display_sighting.image '750x600' crop='center' as thmb %}
                     <img src="{{ thmb.url }}" />
                     {% endthumbnail %}
                 </a>
@@ -34,13 +37,15 @@
                 <ul class="comments-list">
                     {% for update in updates %}
                     <li class="ui-corner-all">
-                        {% thumbnail updates.latest.image '150x150' crop='center' as thmb %}
+                        {% thumbnail update.image '150x150' crop='center' as thmb %}
                         <img src="{{ thmb.url }}" />
+                        {% empty %} {# no image means this is a comment or something. #}
+                        <img src="{{ STATIC_URL }}/picture_of_a_person.png" alt="Person face" />
                         {% endthumbnail %}
                         <span class="info">Spotted on {{ update.created }} by {{ update.creator|default:"a spotter" }}</span>
                         <span class="details{% if not update.notes %} empty{% endif %}">
                             {{ update.notes|default:"No note was left with this update." }}</span>
-                        <span class="disease">{{ update.get_disease_statedisplay }}</span>
+                        <div class="disease_state disease_{{ update.disease_state }}">{{ update.get_disease_state_display }}</div>
                         {% if not update.flagged %}
                         <a data-role="button" data-inline="true" data-icon="alert"
                             class="report-button" data-rel="popup"
