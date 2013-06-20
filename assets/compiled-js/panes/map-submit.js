@@ -51,7 +51,8 @@
         bounds: false,
         map: this.map
       });
-      return google.maps.event.addDomListener(marker, 'dragend', this.handleDragEnd);
+      google.maps.event.addDomListener(marker, 'dragend', this.handleDragEnd);
+      return this.updateLocation(this.defaultLat, this.defaultLng);
     };
 
     SubmitSightingMapPane.prototype.handleDragEnd = function(e) {

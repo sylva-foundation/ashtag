@@ -28,6 +28,7 @@ class ashtag.panes.SubmitSightingMapPane extends ashtag.panes.MapBasePane
             map: @map
 
         google.maps.event.addDomListener marker, 'dragend', @handleDragEnd
+        @updateLocation(@defaultLat, @defaultLng)
 
     handleDragEnd: (e) =>
         @updateLocation e.latLng.lat(), e.latLng.lng()

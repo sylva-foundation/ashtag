@@ -3,7 +3,6 @@ module "ashtag"
 class ashtag.FileStore
     constructor: () ->
         @imageFieldName = "image"
-        @imageFieldName = "meta"
 
         @enabled = @_supported()
         ashtag.lib.mixins.Observable::augment @
@@ -27,7 +26,7 @@ class ashtag.FileStore
         @fire 'enable'
 
     getDb: ->
-        return window.openDatabase('uploader', '', 'Pending uploads', 10 * 1024 * 1024);
+        return window.openDatabase('uploader', '', 'Pending uploads', 10 * 1024 * 1024)
 
     initialiseDb: ->
         # initialise the db if necessary
@@ -83,34 +82,32 @@ class ashtag.FileStore
     allToServer: ->
         # upload files to the server
         deferred = $.Deferred()
-        send = =>    
-            @popToServer().then ->
-                    deferred.notify()
-                , ->
+        @query("SELECT * FROM [files]").then (rows) =>
+            send = =>
+                row = rows.pop()
+                if row
+                    @popToServer(row).then ->
+                        deferred.notify()
+                else
                     deferred.resolve()
-        deferred.then null, null, send
-        send()
+
+            deferred.then null, null, send
+            send()
+
         return deferred
 
-    popToServer: ->
+    popToServer: (row) ->
         # pop one file off and send it to the server
         deferred = $.Deferred()
-        @db.transaction (tx) ->
-          tx.executeSql "SELECT * FROM [files] LIMIT 1", [], (tx, res) ->
-            if not res.rows.length
-                deferred.reject()
-            else
-                item = res.rows[0]
-                console.log(res.rows)
-                console.log(item)
-                @sendToServer(item.name, item.file, item.meta).then ->
-                    tx.executeSql "DELETE FROM [files] WHERE [id] = ?", [item.id],
-                        -> deferred.resolve(),
-                        -> deferred.resolve()
-                , -> deferred.resolve()
+        @sendRequest(row.name, row.file, row.meta).then =>
+            @query("DELETE FROM [files] WHERE [id] = ?", [row.id]).then(
+                -> deferred.resolve()
+                -> deferred.resolve()
+            )
+        , -> deferred.resolve()
         return deferred
 
-    sendToServer: (name, file, meta) ->
+    sendRequest: (name, file, meta) ->
         # For now we assume that 'meta' is url encoded already
         data = [
             "#{@imageFieldName}_name=#{name}"
@@ -122,6 +119,16 @@ class ashtag.FileStore
         return $.ajax
             data: data.join '&'
             type: 'POST'
+
+    query: (sql, values=[]) ->
+        deferred = $.Deferred()
+        @db.transaction (tx) =>
+            tx.executeSql sql, values, (tx, res) =>
+                rows = []
+                while rows.length < res.rows.length
+                    rows.push res.rows.item(rows.length)
+                deferred.resolve rows
+        return deferred
 
 
         
