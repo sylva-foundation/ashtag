@@ -3,6 +3,7 @@
 
 {% block title %}Sighting{% endblock %}
 {% block class %}sighting-page{% endblock %}
+{% block id %}tree-page{% endblock %}
 
 {% block page %}
     <div data-role="content" class="at-content" role="main">
@@ -12,12 +13,12 @@
             <a data-role="button" data-inline="true" data-icon="alert"
                 class="report-button" data-rel="popup"
                 data-position-to="window" data-transition="pop"
-                href="#popupDialog" data-mini="true">
+                href="#popupDialog" data-mini="true" data-flag-type="tree"
+                data-flag-id="{{ update.id }}">
                 Report this tree
             </a>
-            {% else %}
-            <span class="flagged">This sighting has been flagged as inappropriate.</span>
             {% endif %}
+            <div class="flagged{% if not object.flagged %} hidden{% endif %}">This sighting has been flagged as inappropriate.</div>
             <div class="meta">
                 <p>Last update on: {{ updates.latest.created }}</p>
                 <p>Submitted on: {{ object.created }} {% if tagged %} by {{ object.creator|default:"a spotter" }}{% endif %}</p>
@@ -38,7 +39,7 @@
                 <p>Intro blurb goes here lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consectetur imperdiet lacus, sed fringilla tellus luctus sed. In vitae congue arcu.</p>
                 <ul class="comments-list">
                     {% for update in updates %}
-                    <li class="ui-corner-all">
+                    <li class="ui-corner-all" id="sighting-{{ update.id }}">
                         {% thumbnail update.image '150x150' crop='center' as thmb %}
                         <img src="{{ thmb.url }}" />
                         {% empty %} {# no image means this is a comment or something. #}
@@ -52,12 +53,12 @@
                         <a data-role="button" data-inline="true" data-icon="alert"
                             class="report-button" data-rel="popup"
                             data-position-to="window" data-transition="pop"
-                            href="#popupDialog" data-mini="true">
+                            href="#popupDialog" data-mini="true" data-flag-type="sighting"
+                            data-flag-id="{{ update.id }}">
                             Report this sighting
                         </a>
-                        {% else %}
-                        <span class="flagged">This update has been flagged as inappropriate.</span>
                         {% endif %}
+                        <div class="flagged{% if not update.flagged %} hidden{% endif %}">This update has been flagged as inappropriate.</div>
                     </li>
                     {% endfor %}
                 </ul>
@@ -77,10 +78,10 @@
             data-shadow="true" data-corners="true" data-transition="none"
             data-position-to="origin">
             <div data-role="header" data-theme="a" class="ui-corner-top ui-header ui-bar-a" role="banner">
-                <h1 class="ui-title" role="heading" aria-level="1">Report</h1>
+                <h1 class="ui-title" role="heading" aria-level="1">Report<span class="dialog-flag-type"></span></h1>
             </div>
             <div data-role="content" data-theme="d" class="ui-corner-bottom ui-content ui-body-d" role="main">
-                <h3 class="ui-title">Are you sure you want to report this?</h3>
+                <h3 class="ui-title">Are you sure you want to report this<span class="dialog-flag-type"></span>?</h3>
                 <p>After reporting, the request may be reviewed before removing content.</p>
                 <a href="#" data-role="button" data-inline="true"
                     data-rel="back" data-theme="c" data-corners="true" data-shadow="true"
@@ -91,7 +92,7 @@
                         </span>
                     </span>
                 </a>
-                <a href="#" data-role="button" data-inline="true" id="btnFlagReport"
+                <a href="#" data-role="button" data-inline="true" id="send-report"
                     data-rel="back" data-transition="flow" data-theme="b" data-corners="true"
                     data-shadow="true" data-iconshadow="true" data-wrapperels="span" class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-b">
                     <span class="ui-btn-inner ui-btn-corner-all">
