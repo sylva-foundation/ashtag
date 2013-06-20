@@ -17,7 +17,6 @@
       }
       this.db = this.getDb();
       this.initialiseDb();
-      this.allToServer();
     }
 
     FileStore.prototype._supported = function() {
@@ -153,6 +152,15 @@
           }
           return deferred.resolve(rows);
         });
+      });
+      return deferred.promise();
+    };
+
+    FileStore.prototype.totalPendingFiles = function() {
+      var deferred;
+      deferred = $.Deferred();
+      this.query('SELECT COUNT(*) AS count FROM [files]').then(function(rows) {
+        return deferred.resolve(rows[0].count);
       });
       return deferred.promise();
     };

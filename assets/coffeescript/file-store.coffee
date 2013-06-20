@@ -12,7 +12,6 @@ class ashtag.FileStore
         
         @db = @getDb()
         @initialiseDb()
-        @allToServer() # send any pending files
 
     _supported: ->
         return !!window.openDatabase
@@ -128,6 +127,12 @@ class ashtag.FileStore
                 while rows.length < res.rows.length
                     rows.push res.rows.item(rows.length)
                 deferred.resolve rows
+        return deferred.promise()
+
+    totalPendingFiles: ->
+        deferred = $.Deferred()
+        @query('SELECT COUNT(*) AS count FROM [files]').then (rows) ->
+            deferred.resolve rows[0].count
         return deferred.promise()
 
 
