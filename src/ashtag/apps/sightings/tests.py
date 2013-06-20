@@ -63,8 +63,8 @@ class SightingTestCase(WebTest):
         self.assertContains(response, str(self.bad_sighting.notes))
 
         response = self.app.post(
-            reverse('sightings:tree', args=[1234]),
-            {'flag_update': self.bad_sighting.id},
+            reverse('sightings:flag', args=[1234]),
+            {'sighting': self.bad_sighting.id},
             user=self.tagger)
         self.assertContains(response, 'remove')
         self.assertEqual(True, self._get_thing(self.bad_sighting).hidden)
@@ -79,8 +79,8 @@ class SightingTestCase(WebTest):
         self.assertContains(response, str(self.bad_sighting.notes))
 
         response = self.app.post(
-            reverse('sightings:tree', args=[1234]),
-            {'flag_update': self.bad_sighting.id})
+            reverse('sightings:flag', args=[1234]),
+            {'sighting': self.bad_sighting.id})
         self.assertContains(response, 'flag')
         self.assertEqual(False, self._get_thing(self.bad_sighting).hidden)
         self.assertEqual(True, self._get_thing(self.bad_sighting).flagged)
@@ -95,8 +95,8 @@ class SightingTestCase(WebTest):
         """If anyone flags a whole tree, then we should email the managers."""
         response = self.app.get(reverse('sightings:tree', args=[1234]))
         response = self.app.post(
-            reverse('sightings:tree', args=[1234]),
-            {'flag_tree': self.tagged_tree})
+            reverse('sightings:flag', args=[1234]),
+            {'tree': self.tagged_tree})
         self.assertContains(response, 'flag')
         self.assertEqual(True, self._get_thing(self.tagged_tree).flagged)
         self.assertEqual(False, self._get_thing(self.tagged_tree).hidden)
