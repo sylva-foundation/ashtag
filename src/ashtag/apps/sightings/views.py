@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.core.mail import mail_managers
+from django.db.models import Q
 
 from ashtag.apps.core.models import Tree, Sighting
 
@@ -145,16 +146,19 @@ class TreeView(DetailView):
 
     def get_object(self):
         try:
-            return self.queryset.get(tag_number=self.kwargs['identifier'])
-        except Tree.DoesNotExist:
-            pass
-
-        try:
-            return self.queryset.get(pk=self.kwargs['identifier'])
+            return self.queryset.get(
+                Q(tag_number=self.kwargs['identifier']) |
+                Q(id=self.kwargs['identifier']))
         except Tree.DoesNotExist:
             raise Http404
+        except Tree.MultipleObjectsReturned:
+            # TODO: are we sure that a tag number will never be same as id?
+            mail_managers(
+                "Clashing Tree Tag number/IDs!",
+                "ID/Tag was: {0}...".format(self.kwargs['identifier']))
+            raise Http404
 
-    def post(self, request, tag_number):
+    def post(self, request, identifier):
         """Allow the creator to send updates, make changes etc."""
         tree = self.get_object()
 
