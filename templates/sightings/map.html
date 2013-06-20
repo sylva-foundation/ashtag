@@ -13,6 +13,7 @@
 
 {% block title %}Sightings{% endblock %}
 {% block class %}sightings-page sightings-map-view-page{% endblock %}
+{% block id %}map-page{% endblock %}
 
 {% block page %}
             
@@ -30,70 +31,6 @@
         </div><!--//sightings-wrapper-->
     </div><!--//at-content-->
 
-    <script type="text/javascript">
-        var defaultZoom = 5;
-        // centroid of UK ish.
-        var defaultLat = 54.03;
-        var defaultLng = -3.67;
-
-        $(document).bind('pageinit', function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function(position){
-                        initialize(8, position.coords.latitude, position.coords.longitude);
-                    },
-                    function() {
-                        initialize(defaultZoom, defaultLat, defaultLng);
-                    },
-                    {timeout:5000});
-            } else {
-                initialize(defaultZoom, defaultLat, defaultLng);
-            }
-        });
-        
-        function initialize(zoom, lat, lng) {
-            // create map and set marker
-            var latLng = new google.maps.LatLng(lat, lng);
-            var mapOpts = {
-                center: latLng,
-                zoom: zoom,
-                mapTypeId: google.maps.MapTypeId.HYBRID
-            };
-            $('#map_canvas').gmap(mapOpts).bind('init', function(event, map) {getLocations()});
-        }
-
-
-        function getLocations() {
-            $.getJSON("{% url 'api:api_dispatch_list' resource_name='tree' api_name='v1' %}", function (json) {
-                $.each(json["objects"], function(i, entry){
-                    addTree(entry);
-                });
-            });
-        }
-
-        function addTree(tree) {
-            var latLng = new google.maps.LatLng(tree.latlng[0], tree.latlng[1]);
-            var iconBase = 'https://maps.google.com/mapfiles/kml/';
-            var icon, scaledSize, click;
-            if (tree.tag_number){
-                icon = iconBase + 'shapes/parks.png';
-                scaledSize = {width: 24, height: 24};
-                click = function(event){ location = tree.view_url };
-            } else {
-                icon = iconBase + 'paddle/red-circle-lv.png';
-                scaledSize = {width: 10, height: 10};
-                click = function(event){ /* nothing to do for now */ };
-            }
-            $('#map_canvas').gmap('addMarker', {
-                'position': latLng, 
-                icon: {
-                    url: icon,
-                    scaledSize: scaledSize
-                }
-            }).click(click);
-        }
-
-</script>
 {% endblock page %}
 
 

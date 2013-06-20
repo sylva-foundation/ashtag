@@ -30,10 +30,21 @@ class CreatorMixin(object):
 class Tree(CreatorMixin, models.Model):
     """A tree, complete with tag number."""
     id = models.CharField(max_length=6, primary_key=True, default=pk_generator)
+    created = AutoCreatedField('created')
     creator_email = models.EmailField(max_length=254)
+
     tag_number = models.CharField(
         max_length=10, db_index=True, null=True, blank=True)
     location = models.PointField()
+
+    exemplar = models.ForeignKey(
+        'Sighting',
+        blank=True, null=True,
+        related_name='exemplary_of',
+        help_text="Which sighting is to be shown on the tree page big image?")
+
+    flagged = models.BooleanField(default=False)
+    hidden = models.BooleanField(default=False)
 
     objects = models.GeoManager()
 
@@ -45,6 +56,12 @@ class Tree(CreatorMixin, models.Model):
             return u"Claimed Tree #{0}".format(self.tag_number)
         else:
             return u"Unclaimed Tree {0}".format(self.id)
+
+    def get_absolute_url(self):
+        if self.tag_number:
+            return reverse('sightings:tree', args=[self.tag_number])
+        else:
+            return reverse('sightings:map')
 
 
 class Sighting(CreatorMixin, models.Model):
@@ -66,17 +83,21 @@ class Sighting(CreatorMixin, models.Model):
     location = models.PointField()
     notes = models.TextField(blank=True, null=True)
 
+    flagged = models.BooleanField(default=False)
+    hidden = models.BooleanField(default=False)
+
     objects = models.GeoManager()
 
     class Meta:
         ordering = ('-created',)
+        get_latest_by = ('created',)
 
     def __unicode__(self):
         return u"{0} @ {1}".format(self.tree, self.created)
 
     def get_absolute_url(self):
         if self.tree.tag_number:
-            return reverse('sightings:view', args=[self.tree.tag_number])
+            return reverse('sightings:tree', args=[self.tree.tag_number])
         else:
             return reverse('sightings:map')
 
