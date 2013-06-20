@@ -258,6 +258,9 @@ PAYPAL_API_SIGNATURE = os.environ.get('PAYPAL_API_SIGNATURE', 'not-set')
 PAYPAL_CURRENCY = "GBP"
 PAYPAL_ALLOW_NOTE = False
 
+# Manifesto
+MANIFESTO_VERSIONER = 'manifesto.versioners.LastModifiedVersioner'
+
 # File storage configuration
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
