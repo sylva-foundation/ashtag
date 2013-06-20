@@ -22,6 +22,7 @@ PIPELINE_JS = {
 
             'compiled-js/lib/panes.js',
             'compiled-js/lib/*.js',
+            'compiled-js/panes/map-base.js',
             'compiled-js/panes/*.js',
             'compiled-js/*.js',
         ),
