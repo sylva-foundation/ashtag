@@ -67,7 +67,10 @@ class Tree(CreatorMixin, models.Model):
 
         We assume this should be the lastest sighting by the tree's creator
         """
-        qs = self.sighting_set.filter(creator_email=self.creator_email)
+        qs = self.sighting_set.filter(
+            creator_email=self.creator_email,
+            hidden=False
+        )
         return qs.latest()
 
 
