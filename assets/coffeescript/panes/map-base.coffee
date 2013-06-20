@@ -35,3 +35,4 @@ class ashtag.panes.MapBasePane extends ashtag.lib.panes.BasePane
     setMapLocation: (lat, lng) ->
         @map.setCenter new google.maps.LatLng(lat, lng)
         @map.setZoom 8
+    
