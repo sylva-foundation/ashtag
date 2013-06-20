@@ -5,12 +5,14 @@ admin.autodiscover()
 
 from ashtag.apps.core.views import AshTagRegistrationView
 from oscar.app import application as oscar_application
+from manifesto.views import ManifestView
 
 urlpatterns = patterns('',
     # We extend the default RegistrationView
     url(r'^accounts/register/$', AshTagRegistrationView.as_view(), name='registration_register'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^tz-detect/', include('tz_detect.urls')),
+    url(r'^manifest\.appcache$', ManifestView.as_view(), name="cache_manifest"),
 
     url(r'^accounts/', include('registration.backends.simple.urls', app_name='registration')),
     url(r'^api/', include('ashtag.apps.api.urls', namespace='api', app_name='api')),

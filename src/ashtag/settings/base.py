@@ -185,6 +185,7 @@ INSTALLED_APPS = [
     'storages',
     'tastypie',
     'tz_detect',
+    'manifesto',
 
     # oscar
     'compressor',
