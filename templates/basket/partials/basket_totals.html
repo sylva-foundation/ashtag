@@ -1,11 +1,11 @@
 {% load url from future %}
 {% load currency_filters %}
 
-<div id="basket_totals">
+<div id="basket_totals" class="basket-totals">
     <table class="table table-condensed">
         <tbody>
         <tr>
-            <th colspan="2"><h4>Basket</h4></th>
+            <th class="heading" class="heading" colspan="2"><h4>Basket</h4></th>
         </tr>
         {% with offer_discounts=basket.offer_discounts voucher_discounts=basket.grouped_voucher_discounts %}
         {% if offer_discounts or voucher_discounts %}
@@ -30,7 +30,7 @@
 
             {% if voucher_discounts %}
                 <tr>
-                    <th colspan="2"><h4>Vouchers</h4></th>
+                    <th class="heading" colspan="2"><h4>Vouchers</h4></th>
                 </tr>
                 {% for discount in voucher_discounts %}
                 <tr>
@@ -67,7 +67,7 @@
         </tr>
 
         <tr>
-            <th colspan="2">
+            <th class="heading" colspan="2">
                 <h4>Shipping</h4>
                 {% if shipping_methods|length > 1 and editable %}
                 <small>Alternative shipping methods can be chosen during checkout</small>
@@ -77,7 +77,7 @@
         {% if not shipping_method.is_discounted %}
             <tr>
                 <th class="total">
-                    Shipping - {{ shipping_method.name }}
+                    {{ shipping_method.name }}
                 </th>
                 <th class="total align-right">{{ shipping_method.basket_charge_incl_tax|currency }}</th>
             </tr>
@@ -116,19 +116,18 @@
             </tr>
             {% for discount in basket.post_order_actions %}
             <tr>
-                <td class="total" colspan="2">
+                <td class="total" class="heading" colspan="2">
                     <span class="label label-success">{{ discount.name }}</span><br/>
                     <p>{{ discount.description }}</p>
                 </td>
             </tr>
             {% endfor %}
         {% endif %}
-
         <tr>
             <th>&nbsp;</th>
             <td></td>
         </tr>
-        <tr>
+        <tr class="order-total-row">
             <th class="total"><h4>Order total</h4></th>
             <td class="total align-right"><h4 class="price_color">{{ order_total_incl_tax|currency }}</h4></td>
         </tr>

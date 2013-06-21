@@ -559,6 +559,133 @@ textarea.ui-input-text {
     
 }
 
+/* Basket */
+.basket-wrapper {
+    .basket-empty-text {
+        text-align: center;
+    }
+    .buy-tags {
+        position: relative;
+        max-width: 300px;
+        margin: 0 auto;
+        &:before {
+            font-family: "FontAwesome";
+            content: "\f02c";
+            display: inline-block;
+            color: #fff;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);
+            font-weight: normal;
+            font-size: 20px;
+            position: absolute;
+            left: 30px;
+            top: 12px;
+        }  
+    }
+    .basket-item {
+        background: #f5f5f5;
+        border-top: 1px solid #d8d8d8;
+        padding: 10px;
+        overflow: hidden;
+        &:last-of-type {
+            border-bottom: 1px solid #d8d8d8;
+        }
+        .item-info {
+            float: left;
+            .item-title {
+                margin: 0;
+                margin-bottom: 5px;
+            }
+            .item-price {
+                margin: 0;
+                font-size: 13px;
+            }
+        }    
+        .quantity-box {
+             float: right;
+             display: block;
+            .quantity-label {
+                display:block;
+                font-size: 13px;
+                text-align: center;
+            }
+        }   
+        
+        .basket-actions {
+            display: block;
+            clear:both;
+            text-align:right;
+        } 
+
+        .ui-input-text {
+            display: inline-block;
+            max-width:60px;
+            text-align: center;
+        }
+    }
+    
+    .totals {
+        margin-top: 20px;
+        .totals-label {
+            margin: 0;
+            font-size: 22px;   
+            padding: 5px;
+            text-align:right;               
+        }
+        .basket-totals {
+
+            table{
+                padding: 0;
+                width: 100%;
+                margin-bottom: 20px;
+                border-collapse:collapse;
+                .total {
+                    text-align:right;
+                }
+                td, th {
+                    padding: 5px 10px;
+                    font-weight: normal;
+                    font-size:13px;
+                }
+                th.heading {
+                    text-align: right;
+                    border-bottom: 1px dashed #ccc;
+                    color: @green;
+                }
+                h4 {
+                    margin: 0;
+                }
+                .align-right {
+                    text-align: right;
+                }
+                .order-total-row {
+                    td, th {
+                        font-size: 22px;
+                        color: darken(@green, 20%);
+                    }
+                    th {
+                        border-top: 5px solid @green-secondary;
+                    }
+                    td {
+                        border-top: 5px solid @green;
+                    }
+                }
+            }
+        }
+        
+        
+    }
+    
+    
+    .form-actions {
+        text-align: right;
+        .paypal-button {
+            
+        }
+    }
+    
+}
+
+
 /* Sightings Pages */
 .sightings-view-wrapper {
     iframe {
