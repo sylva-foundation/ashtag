@@ -80,7 +80,7 @@
       SubmitSightingMapPane.__super__.handleMapLoad.apply(this, arguments);
       google.maps.event.addDomListener(this.map, 'click', this.handleMapClick);
       if (this.doLocateUser) {
-        return this.centerOnUser(this.createMarker);
+        return this.centerOnUser().then(this.createMarker);
       } else {
         return this.createMarker(this.defaultLat, this.defaultLng);
       }

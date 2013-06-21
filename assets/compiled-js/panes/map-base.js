@@ -42,26 +42,25 @@
       return google.maps.event.addListenerOnce(this.map, 'idle', this.handleMapLoad);
     };
 
-    MapBasePane.prototype.centerOnUser = function(callback) {
-      var _this = this;
+    MapBasePane.prototype.centerOnUser = function() {
+      var deferred,
+        _this = this;
+      deferred = $.Deferred();
       if (!navigator.geolocation) {
-        if (callback) {
-          callback(this.defaultLat, this.defaultLng);
-        }
-        return;
+        deferred.resolve(this.defaultLat, this.defaultLng);
+      } else {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          return deferred.resolve(position.coords.latitude, position.coords.longitude);
+        }, function(error) {
+          return deferred.resolve(_this.defaultLat, _this.defaultLng);
+        }, {
+          timeout: 10000
+        });
       }
-      return navigator.geolocation.getCurrentPosition(function(position) {
-        if (callback) {
-          callback(position.coords.latitude, position.coords.longitude);
-        }
-        return _this.setMapLocation(position.coords.latitude, position.coords.longitude, _this.zoomedInZoomLevel);
-      }, function(error) {
-        if (callback) {
-          return callback(_this.defaultLat, _this.defaultLng);
-        }
-      }, {
-        timeout: 10000
+      deferred.then(function(lat, lng) {
+        return _this.setMapLocation(lat, lng, _this.zoomedInZoomLevel);
       });
+      return deferred.promise();
     };
 
     MapBasePane.prototype.handleMapLoad = function(e, map) {};
