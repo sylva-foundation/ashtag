@@ -223,7 +223,7 @@ LOGGING = {
             'propagate': True,
         },
         'django.db': {
-            'handlers': ['console'],
+            # 'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
         }

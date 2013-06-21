@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load manifesto %}
-<html>
-    <head manifest="{% manifest_url request.user.id %}">
+<html manifest="{% manifest_url request.user.id %}?a=1">
+    <head>
         <title>{% block title %}{% endblock %} - AshTag</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
