@@ -7,7 +7,7 @@ class ashtag.panes.FlaggingPane extends ashtag.lib.panes.BasePane
         @$flagButtons = @$('.report-button')
         @$sendReportButton = @$('#send-report')
         @$dialogFlagType = @$('.dialog-flag-type')
-    
+
     setupEvents: ->
         @$flagButtons.unbind().bind 'click', @handleFlagClick
         @$sendReportButton.unbind().bind 'click', @handleReportClick
@@ -24,25 +24,27 @@ class ashtag.panes.FlaggingPane extends ashtag.lib.panes.BasePane
     handleReportClick: (event) =>
         args = {}
         args[@flag_type] = @flag_id
-        $.post "#{location.pathname}flag/",
+        switch @flag_type
+            when 'tree'
+                url = "/sightings/tree/#{@flag_id}/flag/"
+            when 'sighting'
+                url = "#{location.pathname}flag/"
+        $.post url,
             args,
             @handleResponse
 
     handleResponse: (data, textStatus, jqXHR) =>
-        console.log data
         switch @flag_type
             when 'sighting'
                 if 'remove' of data.sighting
                     $("#sighting-#{data.sighting.remove}").fadeOut()
                 else
                     @handled_button.hide()
-                    @handled_button.siblings('.flagged').removeClass('hidden')
+                    @handled_button.hide().after('<div class="reported">Reported.</div>')
             when 'tree'
-                @handled_button.hide()
-                @handled_button.siblings('.flagged').removeClass('hidden')
-        
+                @handled_button.hide().after('<div class="reported">Reported.</div>')
+
 $(window).on 'pagechange', (event, obj) =>
-    if obj.toPage.attr('id') == 'tree-page'
-        new ashtag.panes.FlaggingPane obj.toPage
-    
+    new ashtag.panes.FlaggingPane obj.toPage
+
 

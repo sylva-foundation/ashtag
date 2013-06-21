@@ -1,62 +1,55 @@
 {% extends "core/jqm-page.html" %}
+{% load thumbnail %}
 
 {% block title %}Sightings{% endblock %}
 {% block class %}sightings-page{% endblock %}
 
 {% block page %}
-            
+
     <div data-role="content" class="at-content" role="main">
         <div data-role="navbar">
-            <ul>                       
-                <li><a  href="sightings.html">Map view</a></li>
-                <li><a  class="ui-btn-active ui-state-persist" href="sightings-list-view.html">List View</a></li>                     
+            <ul>
+                <li><a  href="{% url 'sightings:map' %}">Map view</a></li>
+                <li><a  class="ui-btn-active ui-state-persist" href="{% url 'sightings:list' %}">List View</a></li>
             </ul>
         </div><!-- /navbar -->
-        <div class="sightings-wrapper"> 
+        <div class="sightings-wrapper">
             <div class="list-view-wrapper sightings-view-wrapper">
                 <ul data-role="listview" data-inset="true" class="sightings-list" >
-                    <li>
-                        <a href="sighting.html">
-                            <img src="http://static.ias-ess.org/media/sightings/107.JPG.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
-                            <h2>Tag: <span class="tag-number">#12345</span></h2>
-                            <p>Last updated: 14th June, 2013, 3:45 PM</p>                           
+                    {% for tree in object_list|slice:":20" %}
+                    <li {% if not tree.tag_number %}class="untagged"{% endif %}>
+                        <a href="{{ tree.get_absolute_url }}">
+                            {% thumbnail tree.display_sighting.image '150x150' crop='center' as thmb %}
+                            <img src="{{ thmb.url }}" class="ui-li-thumb" />
+                            {% endthumbnail %}
+                            <h2>Tag: {% if tree.tag_number %}<span class="tag-number">#{{ tree.tag_number }}</span>{% else %}Untagged!{% endif %}</h2>
+                            <p>Last updated: {{ tree.sighting_set.latest.created }}</p>
                         </a>
-                    </li>
-                    <li class="untagged">
-                        <a href="#auth" data-rel="popup" data-position-to="window" data-transition="pop">
-                            <img src="http://static.ias-ess.org/media/sightings/20130613_164312.jpg.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
-                            <h2>Tag: <span class="tag-number">(untagged)</span></h2>
-                            <p>Last updated: 14th June, 2013, 3:45 PM</p>
+                        {% if not tree.flagged %}
+                        <a data-role="button" data-inline="true" data-icon="alert"
+                            class="report-button" data-rel="popup"
+                            data-position-to="window" data-transition="pop"
+                            href="#popupDialog" data-mini="true" data-flag-type="tree"
+                            data-flag-id="{{ tree.id }}">
+                            Report this tree
                         </a>
+                        {% endif %}
                     </li>
-                    <li>
-                        <a href="sighting.html">
-                            <img src="http://static.ias-ess.org/media/sightings/107.JPG.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
-                            <h2>Tag: <span class="tag-number">#12345</span></h2>
-                            <p>Last updated: 14th June, 2013, 3:45 PM</p>
-                            <span class="ui-li-aside my-sighting-label">My Tree</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="sighting.html">
-                            <img src="http://static.ias-ess.org/media/sightings/ashdieback_002.jpg.456x272_q85_crop-smart.jpg" class="ui-li-thumb" />
-                            <h2>Tag: #12345</h2>
-                            <p>Last updated: 14th June, 2013, 3:45 PM</p>
-                        </a>
-                    </li>
+                    {% endfor %}
                 </ul><!--//sightings-list-->
-                
+
                 <div data-role="popup" id="auth" class="ui-content">
                     <p>You need to log in to view the untagged tree.</p>
                     <div class="cta-btn-wrapper">
                         <a href="login.html" data-role="button" data-inline="true" data-mini="true">Log in</a>
                     </div><!--//cta-btn-wrapper-->
-                    <a href="#" class="cancel-button" data-role="button" data-rel="back" data-inline="true" data-mini="true">Cancel</a> 
+                    <a href="#" class="cancel-button" data-role="button" data-rel="back" data-inline="true" data-mini="true">Cancel</a>
                </div><!--//#auth-->
-                                    
-            </div><!--//list-view-wrapper-->                 
-        </div><!--//sightings-wrapper-->               
+
+            </div><!--//list-view-wrapper-->
+        </div><!--//sightings-wrapper-->
     </div><!--//at-content-->
+    {% include 'sightings/report.html' %}
 
 {% endblock page %}
 

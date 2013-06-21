@@ -1,15 +1,5 @@
 {% extends "core/jqm-page.html" %}
 
-{% block extra_head %}
-{{ block.super }}
-<style>
-    .map {
-        width: 100%;
-        height: 400px;
-    }
-</style>
-{% endblock %}
-
 {% block title %}Sightings{% endblock %}
 {% block class %}sightings-page sightings-map-view-page{% endblock %}
 {% block id %}map-page{% endblock %}
@@ -20,7 +10,7 @@
         <div data-role="navbar">
             <ul>
                 <li><a  class="ui-btn-active ui-state-persist" href="{% url 'sightings:map' %}">Map view</a></li>
-                <li><a  href="sightings-list-view.html">List View</a></li>
+                <li><a  href="{% url 'sightings:list' %}">List View</a></li>
             </ul>
         </div><!-- /navbar -->
         <div class="sightings-wrapper ui-texture-wrapper">
