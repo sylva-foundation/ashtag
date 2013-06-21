@@ -2,6 +2,10 @@
 
 {% load tz_detect %}
 
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript" src="//maps.google.com/maps/api/js?sensor=true"></script>
+{% endblock %}
 
 {% block content %}
 <div data-role="page" data-theme="{% block theme %}a{% endblock %}" id="{% block id %}{% endblock %}"  class="{% block class %}{% endblock %}">

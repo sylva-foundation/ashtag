@@ -10,6 +10,9 @@ class ashtag.panes.SubmitSightingMapPane extends ashtag.panes.MapBasePane
             @defaultLat = loc.lat
             @defaultLng = loc.lng
             @defaultZoom = 19
+        else
+            @doLocateUser = true
+            @zoomedInZoomLevel = 19
 
     parseLocation: ->
         text = @$locationInput.val()
@@ -20,17 +23,24 @@ class ashtag.panes.SubmitSightingMapPane extends ashtag.panes.MapBasePane
             lat: parseFloat(match[2], 10)
             lng: parseFloat(match[1], 10)
 
-    createMarker: ->
-        marker = new google.maps.Marker
-            position: new google.maps.LatLng(@defaultLat, @defaultLng)
-            draggable: true
-            bounds: false
-            map: @map
+    createMarker: (lat, lng) =>
+        if not @marker
+            @marker = new google.maps.Marker
+                position: new google.maps.LatLng(lat, lng)
+                draggable: true
+                bounds: false
+                map: @map
+        else
+            @marker.setPosition(new google.maps.LatLng(lat, lng))
 
-        google.maps.event.addDomListener marker, 'dragend', @handleDragEnd
-        @updateLocation(@defaultLat, @defaultLng)
+        google.maps.event.addDomListener @marker, 'dragend', @handleDragEnd
+        @updateLocation(lat, lng)
 
     handleDragEnd: (e) =>
+        @updateLocation e.latLng.lat(), e.latLng.lng()
+
+    handleMapClick: (e) =>
+        @createMarker(e.latLng.lat(), e.latLng.lng())
         @updateLocation e.latLng.lat(), e.latLng.lng()
 
     updateLocation: (lat, lng) ->
@@ -38,6 +48,8 @@ class ashtag.panes.SubmitSightingMapPane extends ashtag.panes.MapBasePane
 
     handleMapLoad: =>
         super
-        @createMarker()
-
-
+        google.maps.event.addDomListener @map, 'click', @handleMapClick
+        if @doLocateUser
+            @centerOnUser().then(@createMarker)
+        else
+            @createMarker(@defaultLat, @defaultLng)

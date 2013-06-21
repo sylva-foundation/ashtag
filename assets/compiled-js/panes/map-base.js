@@ -20,6 +20,7 @@
       this.defaultLat = 54.03;
       this.defaultLng = -3.67;
       this.defaultZoom = 5;
+      this.zoomedInZoomLevel = 8;
       this.map = null;
       return this.$map = this.$('#map_canvas');
     };
@@ -38,24 +39,35 @@
         mapTypeId: google.maps.MapTypeId.HYBRID
       };
       this.map = new google.maps.Map(this.$map.get(0), mapOptions);
-      return google.maps.event.addDomListener(window, 'load', this.handleMapLoad);
+      return google.maps.event.addListenerOnce(this.map, 'idle', this.handleMapLoad);
     };
 
     MapBasePane.prototype.centerOnUser = function() {
-      var _this = this;
+      var deferred,
+        _this = this;
+      deferred = $.Deferred();
       if (!navigator.geolocation) {
-        return;
+        deferred.resolve(this.defaultLat, this.defaultLng);
+      } else {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          return deferred.resolve(position.coords.latitude, position.coords.longitude);
+        }, function(error) {
+          return deferred.resolve(_this.defaultLat, _this.defaultLng);
+        }, {
+          timeout: 10000
+        });
       }
-      return navigator.geolocation.getCurrentPosition(function(position) {
-        return _this.setMapLocation(position.coords.latitude, position.coords.longitude);
+      deferred.then(function(lat, lng) {
+        return _this.setMapLocation(lat, lng, _this.zoomedInZoomLevel);
       });
+      return deferred.promise();
     };
 
     MapBasePane.prototype.handleMapLoad = function(e, map) {};
 
-    MapBasePane.prototype.setMapLocation = function(lat, lng) {
+    MapBasePane.prototype.setMapLocation = function(lat, lng, zoom) {
       this.map.setCenter(new google.maps.LatLng(lat, lng));
-      return this.map.setZoom(8);
+      return this.map.setZoom(zoom);
     };
 
     return MapBasePane;
