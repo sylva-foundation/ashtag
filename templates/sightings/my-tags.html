@@ -25,7 +25,7 @@
                                     Tagging a tree will allow other people to monitor it's health.
                                     <a href="{% url 'store:tagpacks' %}">Get a tagging pack</a>
                                     and then
-                                    <a href="{{ tree.get_absolute_url }}">tag this tree</a>.
+                                    <a href="{% url 'sightings:claim' tree.id %}">claim this tree</a>.
                                 </p>
                                 {% endif %}
 

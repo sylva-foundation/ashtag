@@ -14,6 +14,7 @@ urlpatterns = patterns('ashtag.apps.sightings.views',
     url('^submit/$', SubmitView.as_view(), name='submit'),
     url('^sent/$', SentView.as_view(), name='sent'),
     url('^tree/(?P<identifier>[a-z0-9]+)/$', TreeView.as_view(), name='tree'),
+    url('^tree/(?P<id>[a-z0-9]+)/claim/$', login_required(ClaimView.as_view()), name='claim'),
     url('^tree/(?P<identifier>[a-z0-9]+)/flag/$', FlagView.as_view(), name='flag'),
 
 )
