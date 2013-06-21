@@ -9,6 +9,9 @@
 
 {% block content %}
 <div data-role="page" data-theme="{% block theme %}a{% endblock %}" id="{% block id %}{% endblock %}"  class="{% block class %}{% endblock %}">
+    <div id="updatesready">
+        Updates are available. Please <a href="javascript:window.location.reload();">refresh this page</a>.
+    </div>
 
     <div data-role="panel" id="menu-panel" data-display="reveal">
          <ul data-role="listview" data-icon="false" class="menu-list">

@@ -13,7 +13,8 @@ class ashtag.panes.MapBasePane extends ashtag.lib.panes.BasePane
     setupEvents: ->
 
     start: ->
-        @setupMap()
+        ashtag.extra.whenOnline().then =>
+            @setupMap()
 
     setupMap: ->
         mapOptions =
@@ -48,4 +49,4 @@ class ashtag.panes.MapBasePane extends ashtag.lib.panes.BasePane
     setMapLocation: (lat, lng, zoom) ->
         @map.setCenter new google.maps.LatLng(lat, lng)
         @map.setZoom zoom
-    
+
