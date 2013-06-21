@@ -23,52 +23,29 @@ class SightingForm(forms.ModelForm):
         self.user = user
 
     def clean(self):
-        """Do some work to get EXIF, locations etc."""
+        """Sort out the tag number"""
         c_data = self.cleaned_data
-        exif = None
-        try:
-            f = c_data['image'].file
-            f.seek(0)
-            exif = EXIF.process_file(f)
-            # weird little hack for some vals are malformatted...
-            for i in exif.items():
-                try:
-                    str(i)
-                except:
-                    exif[i[0]] = i[1].printable
-        except Exception, e:
-            logging.error(e)
-            exif = None
-
-        if not c_data.get('location') and exif:
-            # there's exif and no location given
-            lat, lon = get_lat_lon(exif)
-            if lat and lon:
-                location = "SRID=4326;POINT(%s %s)"
-                c_data['location'] = location % (
-                    Decimal(str(lon)), Decimal(str(lat)))
-            else:
-                msg = (
-                    "Couldn't get location from photo. "
-                    "Please add the point on the map."
-                )
-                self._errors["location"] = self.error_class([msg])
-        elif not c_data.get('location') and not exif:
-            # User has not supplied location and there is no EXIF
-            msg = "Please add a location for this sighting!"
-            self._errors["location"] = self.error_class([msg])
 
         c_data['tree'] = None
-        if c_data.get('tag_number'):
+        tag_number = c_data.get('tag_number')
+        if tag_number:
             try:
                 c_data['tree'] = Tree.objects.get(
-                    tag_number=c_data.get('tag_number'))
+                    tag_number=tag_number)
             except Tree.DoesNotExist:
-                # Either this is mis-typed, or it is new.
-                # for now, let's raise... I want a 'Claim a tree' page...
-                # TODO: redirect to claim a tree or something... nicer.
-                self._errors["tag_number"] = self.error_class(
-                    ["This tag number hasn't been claimed yet! Go to 'Claim a tree'"])
+                if self.user.is_authenticated():
+                    # Then we can make a new tagged tree and attribute it to
+                    # this user. ADAPT will verify.
+                    c_data['tree'] = Tree.objects.create(
+                        location=c_data.get('location'),
+                        creator_email=self.user.email,
+                        tag_number=tag_number
+                    )
+                else:
+                    self._errors["tag_number"] = self.error_class([(
+                        "Hey! It looks like we haven't seen this tag number "
+                        "yet. If you are trying to claim it, please log in "
+                        "first!")])
         else:
             c_data['tree'] = Tree.objects.create(
                 location=c_data.get('location'),
