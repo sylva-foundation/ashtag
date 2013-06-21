@@ -185,6 +185,7 @@ INSTALLED_APPS = [
     'storages',
     'tastypie',
     'tz_detect',
+    'manifesto',
 
     # oscar
     'compressor',
@@ -222,7 +223,7 @@ LOGGING = {
             'propagate': True,
         },
         'django.db': {
-            'handlers': ['console'],
+            # 'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
         }
@@ -256,6 +257,9 @@ PAYPAL_API_PASSWORD = os.environ.get('PAYPAL_API_PASSWORD', 'not-set')
 PAYPAL_API_SIGNATURE = os.environ.get('PAYPAL_API_SIGNATURE', 'not-set')
 PAYPAL_CURRENCY = "GBP"
 PAYPAL_ALLOW_NOTE = False
+
+# Manifesto
+MANIFESTO_VERSIONER = 'manifesto.versioners.LastModifiedVersioner'
 
 # File storage configuration
 

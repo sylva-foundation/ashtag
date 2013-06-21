@@ -28,7 +28,10 @@
     MapBasePane.prototype.setupEvents = function() {};
 
     MapBasePane.prototype.start = function() {
-      return this.setupMap();
+      var _this = this;
+      return ashtag.extra.whenOnline().then(function() {
+        return _this.setupMap();
+      });
     };
 
     MapBasePane.prototype.setupMap = function() {

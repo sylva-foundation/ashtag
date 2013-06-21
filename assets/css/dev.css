@@ -1,0 +1,29 @@
+body.online .map-wrapper .offline-msg {
+    display: none;
+}
+body.online .map-wrapper #map_canvas {
+    display: block;
+}
+
+body.offline .map-wrapper .offline-msg {
+    display: block;
+}
+body.offline .map-wrapper #map_canvas {
+    display: none;
+}
+
+.map-wrapper .offline-msg {
+    height: 400px;
+    text-align: center;
+    background-color: red;
+}
+
+/* 
+Used in templates/core/jqm-page.html to shown when 
+the app needs to be reloaded due to pending updates
+*/
+#updatesready {
+    display: none; /* remove this to see how it looks */
+    
+    /*style the notice here*/
+}

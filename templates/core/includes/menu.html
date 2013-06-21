@@ -1,0 +1,10 @@
+<li class="buy-tags"><a href="{% url 'store:tagpacks' %}">Buy Tags</a></li>
+<li class="submit-sighting"><a href="{% url 'sightings:submit' %}">Submit Sighting</a></li>
+<li class="sightings"><a href="{% url 'sightings:map' %}">Sightings</a></li>
+{% if request.user.is_anonymous %}
+<li class="login"><a href="{% url 'auth_login' %}">Log in</a></li>
+<li class="signup"><a href="{% url 'registration_register' %}">Sign up</a></li>
+{% else %}
+<li class="my-tags"><a href="{% url 'sightings:my-tags' %}">My tags</a></li>
+<li class="logout"><a href="{% url 'auth_logout' %}">Logout</a></li>
+{% endif %}

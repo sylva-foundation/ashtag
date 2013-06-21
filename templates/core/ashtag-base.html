@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+{% load manifesto %}
+<html manifest="{% manifest_url request.user.id %}">
     <head>
         <title>{% block title %}{% endblock %} - AshTag</title>
         <meta charset="utf-8" />

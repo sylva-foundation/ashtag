@@ -65,8 +65,12 @@ class MyTagsView(ListView):
         return trees
 
 
-class ListView(TemplateView):
+class ListView(ListView):
     template_name = 'sightings/list.html'
+
+    def get_queryset(self):
+        trees = Tree.objects.filter(hidden=False)
+        return trees
 
     def get_context_data(self, **kwargs):
         context = super(ListView, self).get_context_data(**kwargs)

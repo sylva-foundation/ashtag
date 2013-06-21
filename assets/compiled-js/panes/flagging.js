@@ -42,26 +42,31 @@
     };
 
     FlaggingPane.prototype.handleReportClick = function(event) {
-      var args;
+      var args, url;
       args = {};
       args[this.flag_type] = this.flag_id;
-      return $.post("" + location.pathname + "flag/", args, this.handleResponse);
+      switch (this.flag_type) {
+        case 'tree':
+          url = "/sightings/tree/" + this.flag_id + "/flag/";
+          break;
+        case 'sighting':
+          url = "" + location.pathname + "flag/";
+      }
+      return $.post(url, args, this.handleResponse);
     };
 
     FlaggingPane.prototype.handleResponse = function(data, textStatus, jqXHR) {
-      console.log(data);
       switch (this.flag_type) {
         case 'sighting':
           if ('remove' in data.sighting) {
             return $("#sighting-" + data.sighting.remove).fadeOut();
           } else {
             this.handled_button.hide();
-            return this.handled_button.siblings('.flagged').removeClass('hidden');
+            return this.handled_button.hide().after('<div class="reported">Reported.</div>');
           }
           break;
         case 'tree':
-          this.handled_button.hide();
-          return this.handled_button.siblings('.flagged').removeClass('hidden');
+          return this.handled_button.hide().after('<div class="reported">Reported.</div>');
       }
     };
 
@@ -70,9 +75,7 @@
   })(ashtag.lib.panes.BasePane);
 
   $(window).on('pagechange', function(event, obj) {
-    if (obj.toPage.attr('id') === 'tree-page') {
-      return new ashtag.panes.FlaggingPane(obj.toPage);
-    }
+    return new ashtag.panes.FlaggingPane(obj.toPage);
   });
 
 }).call(this);

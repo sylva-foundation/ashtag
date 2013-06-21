@@ -26,3 +26,14 @@ ashtag.extra.callAfter = (count, callback) ->
         callCount += 1
         if callCount == count
             callback args...
+
+ashtag.extra.online = ->
+    return window.navigator.onLine == true or window.navigator.onLine == undefined
+
+ashtag.extra.whenOnline = ->
+    def = $.Deferred()
+    window.addEventListener 'online', =>
+        def.resolve()
+    if ashtag.extra.online
+        def.resolve()
+    return def
