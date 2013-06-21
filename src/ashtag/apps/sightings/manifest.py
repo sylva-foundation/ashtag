@@ -19,9 +19,6 @@ class SightingsManifest(Manifest):
             reverse('sightings:gallery'),
             reverse('sightings:map'),
             reverse('sightings:submit'),
-            reverse('sightings:sent'),
-
-
         ]
 
         if self.key:
