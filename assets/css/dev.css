@@ -1,0 +1,19 @@
+body.online .map-wrapper .offline-msg {
+    display: none;
+}
+body.online .map-wrapper #map_canvas {
+    display: block;
+}
+
+body.offline .map-wrapper .offline-msg {
+    display: block;
+}
+body.offline .map-wrapper #map_canvas {
+    display: none;
+}
+
+.map-wrapper .offline-msg {
+    height: 400px;
+    text-align: center;
+    background-color: red;
+}

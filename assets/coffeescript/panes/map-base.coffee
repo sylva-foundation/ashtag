@@ -13,10 +13,8 @@ class ashtag.panes.MapBasePane extends ashtag.lib.panes.BasePane
     setupEvents: ->
 
     start: ->
-        if window.google
+        ashtag.extra.whenOnline().then =>
             @setupMap()
-        else
-            @$map.addClass('unavailable-offline').html('<div class="msg">Map unavailable when offline</div>')
 
     setupMap: ->
         mapOptions =
@@ -51,4 +49,4 @@ class ashtag.panes.MapBasePane extends ashtag.lib.panes.BasePane
     setMapLocation: (lat, lng, zoom) ->
         @map.setCenter new google.maps.LatLng(lat, lng)
         @map.setZoom zoom
-    
+

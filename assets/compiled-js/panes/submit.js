@@ -45,7 +45,7 @@
     };
 
     SubmitSightingPane.prototype.handleSubmit = function(e) {
-      if (this.online()) {
+      if (ashtag.extra.online()) {
         return this.submitOnline(e);
       } else {
         return this.submitOffline(e);
@@ -87,14 +87,10 @@
 
     SubmitSightingPane.prototype.submitOnline = function(e) {};
 
-    SubmitSightingPane.prototype.online = function() {
-      return window.navigator.onLine === true || window.navigator.onLine === void 0;
-    };
-
     SubmitSightingPane.prototype.sync = function() {
       var _this = this;
       console.log('syncing');
-      if (this.online()) {
+      if (ashtag.extra.online()) {
         return this.fileStore.totalPendingFiles().then(function(total) {
           if (total) {
             _this.handleSyncStart();

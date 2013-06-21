@@ -28,11 +28,10 @@
     MapBasePane.prototype.setupEvents = function() {};
 
     MapBasePane.prototype.start = function() {
-      if (window.google) {
-        return this.setupMap();
-      } else {
-        return this.$map.addClass('unavailable-offline').html('<div class="msg">Map unavailable when offline</div>');
-      }
+      var _this = this;
+      return ashtag.extra.whenOnline().then(function() {
+        return _this.setupMap();
+      });
     };
 
     MapBasePane.prototype.setupMap = function() {

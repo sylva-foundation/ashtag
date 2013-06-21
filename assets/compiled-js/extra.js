@@ -32,4 +32,21 @@
     };
   };
 
+  ashtag.extra.online = function() {
+    return window.navigator.onLine === true || window.navigator.onLine === void 0;
+  };
+
+  ashtag.extra.whenOnline = function() {
+    var def,
+      _this = this;
+    def = $.Deferred();
+    window.addEventListener('online', function() {
+      return def.resolve();
+    });
+    if (ashtag.extra.online) {
+      def.resolve();
+    }
+    return def;
+  };
+
 }).call(this);
