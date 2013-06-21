@@ -11,19 +11,11 @@
 <div data-role="page" data-theme="{% block theme %}a{% endblock %}" id="{% block id %}{% endblock %}"  class="{% block class %}{% endblock %}">
 
     <div data-role="panel" id="menu-panel" data-display="reveal">
-         <ul data-role="listview" data-icon="false" class="menu-list">   
+         <ul data-role="listview" data-icon="false" class="menu-list">
              <li><a href="{% url 'public:home' %}">Home</a></li>
-             <li><a href="{% url 'store:tagpacks' %}">Buy Tags</a></li>
-             <li><a href="{% url 'sightings:submit' %}">Submit Sightings</a></li>
-             <li><a href="{% url 'sightings:list' %}">All Sightings</a></li>
-             {% if request.user.is_anonymous %}
-             <li><a href="{% url 'auth_login' %}">Log in</a></li>
-             <li><a href="{% url 'registration_register' %}">Sign up</a></li>
-             {% else %}
-             <li><a href="{% url 'auth_logout' %}">Logout</a></li>
-             {% endif %}
+             {% include 'core/includes/menu.html' %}
          </ul>
-    </div><!-- /panel -->     
+    </div><!-- /panel -->
 
     <div data-role="header" class="at-header">
         <h1 class="logo"><a href="#"><img src="{{ STATIC_URL }}images/ashtaglogo.png" /></a></h1>
@@ -32,7 +24,7 @@
         {% endblock %}
         <a href="#menu-panel" class="menu-button">Menu</a>
         <a href="{% url 'sightings:my-tags' %}" class="mytags-button">My Tags</a>
-    </div><!--//at-header-->    
+    </div><!--//at-header-->
 
     {% block page %}{% endblock %}
 
