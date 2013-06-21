@@ -22,3 +22,8 @@ jQuery ->
     if window.applicationCache
         applicationCache.addEventListener 'updateready', =>
             $('#updatesready').show();
+
+# A hack to change the lable on the login form
+$(window).on 'pagechange', (event, obj) =>
+    if obj.toPage.attr('id') == 'login-page'
+        $('.login-page label[for=id_username]').text('Email')
