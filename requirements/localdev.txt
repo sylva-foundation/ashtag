@@ -11,3 +11,4 @@ fabric
 ipython
 django-webtest==1.7.1
 WebTest==2.0.6
+django-inmemorystorage==0.1.1

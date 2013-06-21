@@ -1,7 +1,11 @@
 import json
+import base64
 
+from StringIO import StringIO
+
+from django.utils.datastructures import MultiValueDict
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.views.generic import TemplateView, DetailView, ListView
-from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
@@ -104,13 +108,37 @@ class SubmitView(TemplateView):
         else:
             return SightingForm
 
+    def get_FILES(self, data, filename):
+        """Returns a MultiValueDict with the file image."""
+        result = MultiValueDict()
+        _data = data[5:]
+        _content_type, _b64 = _data.split(';')
+        _b64_prefix, _b64 = _b64.split(',')
+        _image = base64.b64decode(_b64)
+        file_size = len(_image)
+        result['image'] = InMemoryUploadedFile(
+            file=StringIO(_image),
+            field_name='image',
+            name=filename,
+            content_type=_content_type,
+            size=file_size,
+            charset=None,
+        )
+        return result
+
     def get(self, request, *args, **kwargs):
         form = self._get_form_class(request)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
         form_class = self._get_form_class(request)
-        form = form_class(request.user, request.POST, request.FILES)
+        files = None
+        if not request.FILES and request.POST.get('image_name', False):
+            files = self.get_FILES(request.POST.get('image'), request.POST.get('image_name'))
+        else:
+            files = request.FILES
+
+        form = form_class(request.user, request.POST, files)
         if form.is_valid():
             sighting = form.save(commit=False)
             if request.user.is_authenticated():
