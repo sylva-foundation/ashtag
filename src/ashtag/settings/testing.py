@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from ashtag.settings.localdev import *
+
+
+INSTALLED_APPS += (
+    'inmemorystorage',
+)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -40,3 +46,4 @@ LOGGING = {
 }
 
 SECRET_KEY = '123'
+DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
