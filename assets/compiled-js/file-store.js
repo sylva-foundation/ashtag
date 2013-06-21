@@ -126,11 +126,12 @@
 
     FileStore.prototype.sendRequest = function(name, file, meta) {
       var data;
-      data = ["" + this.imageFieldName + "_name=" + name, "" + this.imageFieldName + "=" + file];
+      data = [("" + this.imageFieldName + "_name=") + encodeURIComponent(name), ("" + this.imageFieldName + "=") + encodeURIComponent(file)];
       if (meta) {
         data.push(meta);
       }
       return $.ajax({
+        url: window.location.pathname,
         data: data.join('&'),
         type: 'POST'
       });

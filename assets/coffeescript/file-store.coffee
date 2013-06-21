@@ -108,13 +108,14 @@ class ashtag.FileStore
         # Do the file request to the server
         # For now we assume that 'meta' is url encoded already
         data = [
-            "#{@imageFieldName}_name=#{name}"
-            "#{@imageFieldName}=#{file}"
+            "#{@imageFieldName}_name=" + encodeURIComponent(name)
+            "#{@imageFieldName}=" + encodeURIComponent(file)
         ]
         if meta
             data.push(meta)
 
         return $.ajax
+            url: window.location.pathname
             data: data.join '&'
             type: 'POST'
 
