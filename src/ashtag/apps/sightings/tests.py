@@ -11,6 +11,8 @@ from django.core import mail
 
 from ..core.models import Sighting, Tree
 
+X_IMAGE = """data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD//gATQ3JlYXRlZCB3aXRoIEdJTVD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAABAAEDAREAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACP/EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhADEAAAAVSf/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABBQJ//8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAgBAwEBPwF//8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAgBAgEBPwF//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQAGPwJ//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPyF//9oADAMBAAIAAwAAABCf/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAgBAwEBPxB//8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAgBAgEBPxB//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxB//9k="""
+
 
 class SightingTestCase(WebTest):
     """Test that a tree tagger and spotter can do certain things."""
@@ -109,3 +111,17 @@ class SightingTestCase(WebTest):
         self.tagged_tree.flagged = True
         self.tagged_tree.save()
         response = self.app.get(reverse('sightings:tree', args=[1234]), status=404)
+
+    def test_offline_submission(self):
+        """Check that offline-style submission still works (302, redirect)."""
+        response = self.app.post(
+            reverse('sightings:submit'),
+            {
+                'tag_number': '1234',
+                'image': X_IMAGE,
+                'image_name': 'xxx.jpg',
+                'disease_state': 'True',
+                'location': 'POINT (0 0)',
+                'notes': 'test offline',
+            }, user=self.tagger, status=302)
+        self.assertTrue(response.location.endswith(reverse('sightings:sent')))
