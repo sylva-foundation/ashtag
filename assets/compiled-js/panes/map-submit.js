@@ -12,7 +12,9 @@
 
     function SubmitSightingMapPane() {
       this.handleMapLoad = __bind(this.handleMapLoad, this);
+      this.handleMapClick = __bind(this.handleMapClick, this);
       this.handleDragEnd = __bind(this.handleDragEnd, this);
+      this.createMarker = __bind(this.createMarker, this);
       _ref = SubmitSightingMapPane.__super__.constructor.apply(this, arguments);
       return _ref;
     }
@@ -26,6 +28,9 @@
         this.defaultLat = loc.lat;
         this.defaultLng = loc.lng;
         return this.defaultZoom = 19;
+      } else {
+        this.doLocateUser = true;
+        return this.zoomedInZoomLevel = 19;
       }
     };
 
@@ -43,19 +48,27 @@
       };
     };
 
-    SubmitSightingMapPane.prototype.createMarker = function() {
-      var marker;
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(this.defaultLat, this.defaultLng),
-        draggable: true,
-        bounds: false,
-        map: this.map
-      });
-      google.maps.event.addDomListener(marker, 'dragend', this.handleDragEnd);
-      return this.updateLocation(this.defaultLat, this.defaultLng);
+    SubmitSightingMapPane.prototype.createMarker = function(lat, lng) {
+      if (!this.marker) {
+        this.marker = new google.maps.Marker({
+          position: new google.maps.LatLng(lat, lng),
+          draggable: true,
+          bounds: false,
+          map: this.map
+        });
+      } else {
+        this.marker.setPosition(new google.maps.LatLng(lat, lng));
+      }
+      google.maps.event.addDomListener(this.marker, 'dragend', this.handleDragEnd);
+      return this.updateLocation(lat, lng);
     };
 
     SubmitSightingMapPane.prototype.handleDragEnd = function(e) {
+      return this.updateLocation(e.latLng.lat(), e.latLng.lng());
+    };
+
+    SubmitSightingMapPane.prototype.handleMapClick = function(e) {
+      this.createMarker(e.latLng.lat(), e.latLng.lng());
       return this.updateLocation(e.latLng.lat(), e.latLng.lng());
     };
 
@@ -65,7 +78,12 @@
 
     SubmitSightingMapPane.prototype.handleMapLoad = function() {
       SubmitSightingMapPane.__super__.handleMapLoad.apply(this, arguments);
-      return this.createMarker();
+      google.maps.event.addDomListener(this.map, 'click', this.handleMapClick);
+      if (this.doLocateUser) {
+        return this.centerOnUser().then(this.createMarker);
+      } else {
+        return this.createMarker(this.defaultLat, this.defaultLng);
+      }
     };
 
     return SubmitSightingMapPane;
