@@ -16,9 +16,14 @@
     window.addEventListener('online', goOnline);
     window.addEventListener('offline', goOffline);
     if (ashtag.extra.online) {
-      return goOnline();
+      goOnline();
     } else {
-      return goOffline();
+      goOffline();
+    }
+    if (window.applicationCache) {
+      return applicationCache.addEventListener('updateready', function() {
+        return $('#updatesready').show();
+      });
     }
   });
 

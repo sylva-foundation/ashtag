@@ -11,7 +11,12 @@ class PublicManifest(Manifest):
         cache_urls = []
         for url in urls.urlpatterns:
             try:
-                cache_urls.append(reverse('public:%s' % url.name))
+                # Dont cache the home page, as the user
+                # presumably already has it in the appcache
+                # as the user will have been there. This will
+                # also make cache updates easier
+                if url.name != 'home':
+                    cache_urls.append(reverse('public:%s' % url.name))
             except NoReverseMatch:
                 # Probably requires a parameter, in which case move on
                 pass

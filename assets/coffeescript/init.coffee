@@ -17,3 +17,8 @@ jQuery ->
         goOnline()
     else
         goOffline()
+
+    # If there is an appcache update ready
+    if window.applicationCache
+        applicationCache.addEventListener 'updateready', =>
+            $('#updatesready').show();

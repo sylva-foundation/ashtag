@@ -17,3 +17,13 @@ body.offline .map-wrapper #map_canvas {
     text-align: center;
     background-color: red;
 }
+
+/* 
+Used in templates/core/jqm-page.html to shown when 
+the app needs to be reloaded due to pending updates
+*/
+#updatesready {
+    display: none; /* remove this to see how it looks */
+    
+    /*style the notice here*/
+}
