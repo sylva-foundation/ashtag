@@ -10,13 +10,15 @@
         <div class="single-sighting-wrapper ui-texture-wrapper ui-shadow clearfix">
             <h2 class="heading">Tag: #{{ object.tag_number }}</h2>
             {% if not object.flagged %}
-            <a data-role="button" data-inline="true" data-icon="alert"
-                class="report-button" data-rel="popup"
-                data-position-to="window" data-transition="pop"
-                href="#popupDialog" data-mini="true" data-flag-type="tree"
-                data-flag-id="{{ object.id }}">
-                Report this tree
-            </a>
+            <div class="report-button-wrapper">
+                <a data-role="button" data-inline="true" data-icon="alert"
+                    class="report-button" data-rel="popup"
+                    data-position-to="window" data-transition="pop"
+                    href="#popupDialog"  data-flag-type="tree"
+                    data-flag-id="{{ object.id }}">
+                    Report this tree
+                </a>
+            </div>
             {% else %}
             <div class="flagged">This sighting has been reported as inappropriate.</div>
             {% endif %}
@@ -41,23 +43,28 @@
                 <ul class="comments-list">
                     {% for update in updates %}
                     <li class="ui-corner-all" id="sighting-{{ update.id }}">
-                        {% thumbnail update.image '150x150' crop='center' as thmb %}
-                        <img src="{{ thmb.url }}" />
-                        {% empty %} {# no image means this is a comment or something. #}
-                        <img src="{{ STATIC_URL }}/picture_of_a_person.png" alt="Person face" />
-                        {% endthumbnail %}
+                        
                         <span class="info">Spotted on {{ update.created }} by {{ update.creator|default:"a spotter" }}</span>
+                        <span class="image-holder">
+                            {% thumbnail update.image '150x150' crop='center' as thmb %}
+                            <img src="{{ thmb.url }}" />
+                            {% empty %} {# no image means this is a comment or something. #}
+                            <img src="{{ STATIC_URL }}/picture_of_a_person.png" alt="Person face" />
+                            {% endthumbnail %}
+                        </span><!--//image-holder-->
+                        
                         <span class="details{% if not update.notes %} empty{% endif %}">
                             {{ update.notes|default:"No note was left with this update." }}</span>
-                        <div class="disease_state disease_{{ update.disease_state }}">{{ update.get_disease_state_display }}</div>
+                        <span class="disease_state disease_{{ update.disease_state }}">{{ update.get_disease_state_display }}</span>
                         {% if not update.flagged %}
-                        <a data-role="button" data-inline="true" data-icon="alert"
-                            class="report-button" data-rel="popup"
-                            data-position-to="window" data-transition="pop"
-                            href="#popupDialog" data-mini="true" data-flag-type="sighting"
-                            data-flag-id="{{ update.id }}">
-                            Report this sighting
-                        </a>
+                        <div class="flagging">
+                            <a  href="#popupDialog"  class="report-link" data-rel="popup"
+                                data-position-to="window" data-transition="pop"
+                                data-flag-type="sighting"
+                                data-flag-id="{{ update.id }}">
+                                Report this sighting
+                            </a>
+                        </div>
                         {% else %}
                         <div class="flagged">This update has been reported as inappropriate.</div>
                         {% endif %}

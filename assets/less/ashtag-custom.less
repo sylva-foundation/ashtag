@@ -456,7 +456,6 @@ body.offline .map-wrapper #map_canvas {
 }
 
 .ui-popup {
-    padding: 20px;
     .cta-btn-wrapper {
         display: inline-block;
         float: left;
@@ -468,12 +467,28 @@ body.offline .map-wrapper #map_canvas {
     }
     .ui-btn {
         font-family: 'BebasRegular','Open Sans', Helvetica, Arial, sans-serif;
+        margin-left: 0;
         .ui-btn-text {
             text-shadow: 0  1px 0px #fff;      
             font-weight: 300;  
             letter-spacing: 0.1em;    
         }
+        + .ui-btn {
+            margin-left: 10px;
+        }
 
+    }
+    h2 {
+        margin-bottom: 20px;
+        font-size: 1.1em;
+        background-color:@green;
+        color: #fff;
+        text-shadow: 0  -1px 1px rgba(0, 0, 0, 0.2);
+        padding: 5px 10px;
+        .border-radius;        
+    }
+    .content-wrapper {
+        padding: 10px;
     }
 }
 
@@ -810,6 +825,23 @@ body.offline .map-wrapper #map_canvas {
             padding: 9px 15px;
             padding-left: 100px;
         } 
+        
+        .listview-report-link {
+            .ui-shadow {
+                box-shadow: none;
+                -moz-box-shadow: none;
+                -webkit-box-shadow: none;
+            }
+            .ui-btn-inner .ui-btn-inner {
+                -moz-box-shadow: none;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                .ui-icon {
+                    background-color: @orange;
+                }
+            }
+        }
+        
     }
     .my-sighting-label {
         background: @green-secondary;
@@ -858,11 +890,14 @@ body.offline .map-wrapper #map_canvas {
             
         }
     }
+    p.thank-you-message {
+        text-align: center;
+    }
+    .report-button-wrapper {
+        text-align: center;
+    }
     .report-button {
-            /* position: absolute; */
-            right: 5px;
-            top: 5px;
-            margin:0;
+            margin:0 auto;
             .ui-icon {
                 background-color: @orange;
             }
@@ -877,6 +912,20 @@ body.offline .map-wrapper #map_canvas {
                     color: @orange;
                 }
             }
+     }
+     
+     .reported, .flagged {
+         background: @orange;
+         padding: 10px;
+         text-align: center;
+         color: #fff;
+         text-shadow: 0  -1px 1px rgba(0, 0, 0, 0.2);
+         .border-radius;
+         &:before {
+             font-family: "FontAwesome";
+             content:"\f071";
+             margin-right: 5px;
+         }
      }
      
      .meta {
@@ -918,7 +967,13 @@ body.offline .map-wrapper #map_canvas {
             
             span {
                 display: block;
+                &.image-holder {
+                    float: left;
+                    width: 60px;
+                    height: 60px;
+                }
                 &.info {
+                    
                     font-size: 11px;
                     background: lighten(@green, 50%);
                     padding: 5px 10px;
@@ -927,10 +982,49 @@ body.offline .map-wrapper #map_canvas {
                 }
                 &.details {
                     font-size: 13px;
+                    margin-bottom: 20px;
                 }
             }
         }
+        
+        .disease_state {
+            display: inline-block;
+            padding: 3px 6px;
+            color: #fff;
+            font-size:12px;
+            .border-radius;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+            
+            &.disease_False {
+                background:#3788C0;                
+            }
+        }
+        .flagging {
+            margin-top: 10px;
+            text-align: right;
+        }
+        .report-link {
+            color: #fff;
+            font-size:12px;
+            display: inline-block;
+            background: @orange;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            text-decoration: none;
+            .border-radius;
+            &:before {
+                font-family: "FontAwesome";
+                content: "\f071";
+                margin-right: 5px;
+            }
+            &:hover {
+                background: darken(@orange, 10%);
+            }
+        }
+        
+        
     }
+    
     
 }
 
@@ -1009,7 +1103,7 @@ body.offline .map-wrapper #map_canvas {
 	.at-footer {
     	background: none; /* Hide illustration when it's mobile */
 	}
-	
+	/*
 	.report-button {
             width: 24px;
             height: 24px;
@@ -1033,7 +1127,7 @@ body.offline .map-wrapper #map_canvas {
                 -webkit-border-radisu:none;
                 border:none;
             }
-     }
+     }*/
 	
 }
 
