@@ -334,6 +334,7 @@ textarea.ui-input-text {
 
 /* Uodates ready block */
 #updatesready {
+    display:none;
     background: @orange;
     color: #fff;
     font-size: 13px;
@@ -342,13 +343,55 @@ textarea.ui-input-text {
     padding: 10px;
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     text-align: center;
+    a.refresh-link {
+        color: #fff;
+        display: inline-block;
+        background: darken(@orange, 10%);
+        padding: 5px 10px;
+        font-weight: bold;
+        text-decoration: none;
+        .border-radius;
+        &:hover {
+            background: darken(@orange, 20%);
+        }
+    }
 }
 
 /* Offline */
-.map-wrapper .offline-msg {
-    height: 400px;
+body.online .map-wrapper .offline-msg {
+    display: none;
+}
+body.online .map-wrapper #map_canvas {
+    display: block;
+}
+
+body.offline .map-wrapper .offline-msg {
+    display: block;
+}
+body.offline .map-wrapper #map_canvas {
+    display: none;
+}
+
+.map-wrapper {
+    background: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-shadow: none;
+    .map {
+        width: 100%;
+        height: 400px;
+    }
+    .offline-msg {
+        text-align: center;
+        background-color: @orange;
+        color: #fff;
+        padding: 10px;
+    }
+}
+
+.saved-for-later {
     text-align: center;
-    background-color: @orange;
+    margin-bottom: 10px;
 }
 
 
@@ -710,6 +753,42 @@ textarea.ui-input-text {
     
 }
 
+/* Order preview */
+.order-preview-wrapper {
+    .cta-btn-wrapper-place-order {
+        .ui-btn {
+        max-width: 300px;
+        margin: 0 auto;
+        position: relative;
+            &:before {
+                font-family: "FontAwesome";
+                content: "\f0a9";
+                display: inline-block;
+                color: #fff;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);
+                font-weight: normal;
+                font-size: 20px;
+                position: absolute;
+                left: 30px;
+                top: 12px;
+            }    
+        }
+    }
+    .order-info-wrapper {
+        background: #fff;
+        padding: 10px;
+        h4 {
+            background: @green-third;
+            padding: 5px;
+            margin: 0;
+        }
+    }
+    .instruction {
+        text-align: center;
+    }
+    
+}
+
 
 /* Sightings Pages */
 .sightings-view-wrapper {
@@ -770,7 +849,15 @@ textarea.ui-input-text {
         margin-top: 0;   
         letter-spacing: 0.1em;     
     }
-    
+    .thank-you-heading {
+        &:before {
+            font-family: "FontAwesome";
+            font-size: 32px;
+            margin-right: 10px;
+            content: "\f118";
+            
+        }
+    }
     .report-button {
             /* position: absolute; */
             right: 5px;
@@ -844,6 +931,7 @@ textarea.ui-input-text {
             }
         }
     }
+    
 }
 
 /* Sighting Gallery */
@@ -892,6 +980,12 @@ textarea.ui-input-text {
     div.errors {
         color: red;
     }
+    .help-text {
+        padding: 5px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
 }
 
 /* My Tags */
@@ -945,7 +1039,3 @@ textarea.ui-input-text {
 
 /* map page */
 
-.sightings-map-view-page .map {
-    width: 100%;
-    height: 400px;
-}

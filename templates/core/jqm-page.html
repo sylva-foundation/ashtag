@@ -10,7 +10,7 @@
 {% block content %}
 <div data-role="page" data-theme="{% block theme %}a{% endblock %}" id="{% block id %}{% endblock %}"  class="{% block class %}{% endblock %}">
     <div id="updatesready">
-        Updates are available. Please <a data-role="button" data-mini="true" data-inline="true" data-icon="refresh" href="javascript:window.location.reload();">refresh this page</a>
+        <p>Updates are available. Please <a class="refresh-link" href="javascript:window.location.reload();">refresh this page</a></p>
     </div>
 
     <div data-role="panel" id="menu-panel" data-display="reveal">
