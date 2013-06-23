@@ -19,7 +19,6 @@ from .utils import email_owner
 from .messages import NEW_TAG_MESSAGE, SIGHTING_MESSAGE, FLAGGED_MESSAGE
 
 
-
 class MyTagsView(ListView):
     """Shows all my trees, that haven't been hidden by admin."""
     template_name = 'sightings/my-tags.html'
