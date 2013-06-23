@@ -934,8 +934,10 @@ body.offline .map-wrapper #map_canvas {
         margin-bottom: 20px;
         img {
             max-width:100%;
+            height: auto;
             margin: 0 auto;
-            border: 5px solid #fff;
+            background: #fff;
+            border: 1px solid #ccc;
             display: block;
             .box-sizing;
         }
@@ -1104,15 +1106,26 @@ body.offline .map-wrapper #map_canvas {
     .info {
         margin-bottom: 20px;
     }
-    .image-thumb {
-        background: #fff;
-        border: 1px solid #ccc;
-        padding: 5px;
-        float: left;
-        margin-right: 10px;
+    .gallery-thumb {
+        margin-bottom: 20px;
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+            background: #fff;
+            padding:5px;
+            border: 1px solid #ccc;
+            display: block;
+            .box-sizing;
+        }
     }
     p {
         margin-top: 0;
+    }
+    .form {
+        padding: 0;
+        border: none;
+        background: none;
     }
 }
 .cta-btn-wrapper-claim .ui-submit {
