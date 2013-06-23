@@ -966,7 +966,14 @@ body.offline .map-wrapper #map_canvas {
             margin-bottom: 20px;
             position:relative;
             padding-bottom: 20px;
-            
+            .info {
+                
+                font-size: 11px;
+                background: lighten(@green, 50%);
+                padding: 5px 10px;
+                margin-bottom: 10px;
+                font-weight: 600;
+            }
             span {
                 display: block;
                 &.image-holder {
@@ -981,14 +988,7 @@ body.offline .map-wrapper #map_canvas {
                         height: auto;
                     }
                 }
-                &.info {
-                    
-                    font-size: 11px;
-                    background: lighten(@green, 50%);
-                    padding: 5px 10px;
-                    margin-bottom: 10px;
-                    font-weight: 600;
-                }
+                
                 &.details {
                     font-size: 13px;
                     margin-bottom: 20px;
@@ -1004,7 +1004,6 @@ body.offline .map-wrapper #map_canvas {
         
         .disease_state {
             display: inline-block;
-            margin-bottom: 10px;
             padding: 3px 6px;
             color: #fff;
             font-size:12px;
