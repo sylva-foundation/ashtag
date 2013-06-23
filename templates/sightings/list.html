@@ -23,21 +23,14 @@
                             <img src="{{ thmb.url }}" class="ui-li-thumb" />
                             {% endthumbnail %}
                             
-                            <h2>Tag: {% if tree.tag_number %}<span class="tag-number">#{{ tree.tag_number }}</span>{% else %}Untagged!{% endif %}</h2>
+                            <h2>Tag: {% if tree.tag_number %}<span class="tag-number">#{{ tree.tag_number }}</span>{% else %}Untagged!{% endif %}
+                            
+                            </h2>
                             <p>Last updated: {{ tree.sighting_set.latest.created }}</p>
-                        </a>
-                        {% if not tree.flagged %}
-                        <a class="listview-report-link report-button" href="#popupDialog"
-                            data-mini="true" data-iconshadow="false"
-                            data-rel="popup" data-position-to="window"
-                            data-transition="pop" data-flag-type="tree" 
-                            data-flag-id="{{ tree.id }}"  >
-                            Report this tree
-                        </a>
-                        {% else %}
-                        <div class="STYLEME">This sighting has been reported.</div>
-                        {% endif %}
-                        
+                            {% if tree.flagged %}
+                            <p class="flagged-tree-label">This sighting has been reported.</p>
+                            {% endif %}
+                        </a>                        
                     </li>
                     {% endfor %}
                 </ul><!--//sightings-list-->
