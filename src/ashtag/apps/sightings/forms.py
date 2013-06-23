@@ -4,15 +4,16 @@ import logging
 from decimal import Decimal
 
 from django import forms
-
-from exifpy import EXIF
+from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
+from django.core.mail import mail_managers
 
 from ashtag.apps.core.models import Sighting, Tree
-from .exif_utils import get_lat_lon
+from .messages import NEW_TAG_MESSAGE
 
 
 class SightingForm(forms.ModelForm):
-    tag_number = forms.CharField(max_length=10, required=False)
+    tag_number = forms.CharField(max_length=5, required=False)
 
     class Meta:
         model = Sighting
@@ -23,52 +24,38 @@ class SightingForm(forms.ModelForm):
         self.user = user
 
     def clean(self):
-        """Do some work to get EXIF, locations etc."""
+        """Sort out the tag number"""
         c_data = self.cleaned_data
-        exif = None
-        try:
-            f = c_data['image'].file
-            f.seek(0)
-            exif = EXIF.process_file(f)
-            # weird little hack for some vals are malformatted...
-            for i in exif.items():
-                try:
-                    str(i)
-                except:
-                    exif[i[0]] = i[1].printable
-        except Exception, e:
-            logging.error(e)
-            exif = None
-
-        if not c_data.get('location') and exif:
-            # there's exif and no location given
-            lat, lon = get_lat_lon(exif)
-            if lat and lon:
-                location = "SRID=4326;POINT(%s %s)"
-                c_data['location'] = location % (
-                    Decimal(str(lon)), Decimal(str(lat)))
-            else:
-                msg = (
-                    "Couldn't get location from photo. "
-                    "Please add the point on the map."
-                )
-                self._errors["location"] = self.error_class([msg])
-        elif not c_data.get('location') and not exif:
-            # User has not supplied location and there is no EXIF
-            msg = "Please add a location for this sighting!"
-            self._errors["location"] = self.error_class([msg])
 
         c_data['tree'] = None
-        if c_data.get('tag_number'):
+        tag_number = c_data.get('tag_number')
+        if tag_number:
             try:
                 c_data['tree'] = Tree.objects.get(
-                    tag_number=c_data.get('tag_number'))
+                    tag_number=tag_number)
             except Tree.DoesNotExist:
-                # Either this is mis-typed, or it is new.
-                # for now, let's raise... I want a 'Claim a tree' page...
-                # TODO: redirect to claim a tree or something... nicer.
-                self._errors["tag_number"] = self.error_class(
-                    ["This tag number hasn't been claimed yet! Go to 'Claim a tree'"])
+                if self.user.is_authenticated():
+                    # Then we can make a new tagged tree and attribute it to
+                    # this user. ADAPT will verify.
+                    tree = Tree.objects.create(
+                        location=c_data.get('location'),
+                        creator_email=self.user.email,
+                        tag_number=tag_number
+                    )
+                    c_data['tree'] = tree
+                    mail_managers(
+                        "Tree was claimed!",
+                        NEW_TAG_MESSAGE.format(
+                            tree.get_absolute_url(),
+                            reverse('admin:core_tree_changelist'),
+                            "tagged from a new sighting."
+                        )
+                    )
+                else:
+                    self._errors["tag_number"] = self.error_class([(
+                        "Hey! It looks like we haven't seen this tag number "
+                        "yet. If you are trying to claim it, please log in "
+                        "first!")])
         else:
             c_data['tree'] = Tree.objects.create(
                 location=c_data.get('location'),
@@ -86,3 +73,21 @@ class AnonSightingForm(SightingForm):
     class Meta:
         model = Sighting
         exclude = ('id', 'tree', 'created', 'modified')
+
+
+class ClaimForm(forms.Form):
+    tag_number = forms.CharField(max_length=5)
+    image = forms.ImageField()
+
+    def __init__(self, user, tree, *args, **kwargs):
+        super(ClaimForm, self).__init__(*args, **kwargs)
+        self.user = user
+        self.tree = tree
+
+    def clean(self):
+        """Make sure this is the same user that tagged it...."""
+        if self.tree.creator_email != self.user.email:
+            raise ValidationError(
+                "It looks like you didn't tag this tree originally. "
+                "Are you using the same email address?")
+        return self.cleaned_data

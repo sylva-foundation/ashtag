@@ -5,52 +5,18 @@ from StringIO import StringIO
 
 from django.utils.datastructures import MultiValueDict
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic import TemplateView, DetailView, ListView, FormView
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import mail_managers
 from django.db.models import Q
 
 from ashtag.apps.core.models import Tree, Sighting
 
-from .forms import SightingForm, AnonSightingForm
+from .forms import SightingForm, AnonSightingForm, ClaimForm
 from .utils import email_owner
-
-
-FLAGGED_MESSAGE = """
-Dear ADAPT,
-
-Someone has flagged {3}:
-
-    {0}
-
-You can hide it or un-flag it here:
-
-    {1}
-
-The flagger's email address is: {2}
-
-Have a good day!
-
-"""
-
-
-SIGHTING_MESSAGE = """
-Dear AshTag Tagger,
-
-An update was posted to your Tagged Tree #{0}!
-
-You can see the update here:
-
-    {1}
-
-Please note, if the update is not for your tree, you can flag the update and it
-will be removed.
-
-Have a good day!
-
-"""
+from .messages import NEW_TAG_MESSAGE, SIGHTING_MESSAGE, FLAGGED_MESSAGE
 
 
 class MyTagsView(ListView):
@@ -163,10 +129,44 @@ class SubmitView(TemplateView):
         else:
             return render(request, self.template_name, {'form': form})
 
-    def get_context_data(self, **kwargs):
-        context = super(SubmitView, self).get_context_data(**kwargs)
 
-        # set template context here
+class ClaimView(FormView):
+    template_name = 'sightings/claim.html'
+    form_class = ClaimForm
+
+    def get_success_url(self):
+        return reverse('sightings:tree', args=[self.kwargs['id']])
+
+    def get_form_kwargs(self):
+        kwargs = super(ClaimView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        kwargs['tree'] = get_object_or_404(Tree, id=self.kwargs['id'])
+        return kwargs
+
+    def form_valid(self, form):
+        tree = get_object_or_404(Tree, id=self.kwargs['id'])
+        Sighting.objects.create(
+            tree=tree,
+            creator_email=form.user.email,
+            notes="I claimed this tree!",
+            image=form.files['image'],
+            location=tree.location,
+        )
+        tree.tag_number = form.data['tag_number']
+        tree.save()
+        mail_managers(
+            "Tree was claimed!",
+            NEW_TAG_MESSAGE.format(
+                tree.get_absolute_url(),
+                reverse('admin:core_tree_changelist'),
+                "claimed from a previous sighting"
+            )
+        )
+        return super(ClaimView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(ClaimView, self).get_context_data(**kwargs)
+        context['tree'] = get_object_or_404(Tree, id=self.kwargs['id'])
 
         return context
 

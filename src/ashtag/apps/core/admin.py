@@ -48,7 +48,40 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
     reject.short_description = "Mark as rejected"
 
 
+class TreeAdmin(gis_admin.GeoModelAdmin):
+    search_fields = ('tag_number',)
+    list_display = ('tag_number', 'id', 'link', 'tag_checked_by', 'creator_email', 'thumbnail')
+    actions = ('verify_tag', 'reject_tag')
+    list_display_links = ('tag_number', 'id')
+
+    def link(self, obj):
+        return """
+        <a href="{0}">
+        See
+        </a>""".format(obj.get_absolute_url())
+    link.allow_tags = True
+
+    def thumbnail(self, obj):
+        im = get_thumbnail(obj.display_sighting.image, '450x270')
+        return """
+        <a href="{0}">
+        <img src="{1}" width="228px" height="135px"/>
+        </a>""".format(obj.display_sighting.image.url, im.url)
+    thumbnail.allow_tags = True
+
+    def verify_tag(self, request, queryset):
+        for tree in queryset:
+            tree.tag_checked_by = request.user
+            tree.save()
+    verify_tag.short_description = "Verify this tag number"
+
+    def reject_tag(self, request, queryset):
+        for tree in queryset:
+            tree.tag_checked_by = request.user
+            tree.tag_number = None
+            tree.save()
+    reject_tag.short_description = "Reject this tag number"
+
+
 admin.site.register(Sighting, SightingAdmin)
-admin.site.register(
-    Tree, gis_admin.GeoModelAdmin,
-    search_fields=('tag_number',), list_display=('id', 'tag_number', 'creator_email'))
+admin.site.register(Tree, TreeAdmin)

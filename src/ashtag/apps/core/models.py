@@ -33,6 +33,7 @@ class Tree(CreatorMixin, models.Model):
     created = AutoCreatedField('created')
     creator_email = models.EmailField(max_length=254)
 
+    tag_checked_by = models.ForeignKey(User, blank=True, null=True)
     tag_number = models.CharField(
         max_length=10, db_index=True, null=True, blank=True)
     location = models.PointField()
