@@ -124,7 +124,7 @@ class SightingTestCase(WebTest):
                 'location': 'POINT (0 0)',
                 'notes': 'test offline',
             }, user=self.tagger, status=302)
-        self.assertTrue(response.location.endswith(reverse('sightings:sent')))
+        self.assertTrue(reverse('sightings:sent') in response.location)
 
     def test_submit_anon(self):
         """User should be able to submit with email only."""
@@ -139,7 +139,7 @@ class SightingTestCase(WebTest):
                 'location': 'POINT (0 0)',
                 'notes': 'test anon',
             }, status=302)
-        self.assertTrue(response.location.endswith(reverse('sightings:sent')))
+        self.assertTrue(reverse('sightings:sent') in response.location)
 
     def test_tagger_emailed_on_update(self):
         """Tagger should get an email when a tree is updated by a spotter."""
