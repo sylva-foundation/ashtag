@@ -9,6 +9,7 @@
         <div data-role="content" class="at-content" role="main">
             <div class="sightings-wrapper ">
                 <div class="my-tags-wrapper sightings-view-wrapper ui-texture-wrapper">
+                    {% if object_list %}
                     <ul data-role="listview" data-inset="true" class="my-tags-list" >
                         {% for tree in object_list %}
                         {% with tree.display_sighting as sighting %}
@@ -38,8 +39,11 @@
                         {% endwith %}
                         {% endfor %}
                     </ul><!--//sightings-list-->
+                    {% else %}
+                    <p>You haven't tagged any trees yet!</p>
+                    {% endif %}
                     <div class="cta-btn-wrapper">
-                        <a class="add-tree-button" href="submit-sighting.html" data-role="button" data-icon="plus" >Tag another tree</a>
+                        <a class="add-tree-button" href="{% url 'sightings:submit' %}" data-role="button" data-icon="plus" >Tag a{% if object_list %}nother{% endif %} tree</a>
                     </div>
 
                     <div data-role="popup" id="auth" class="ui-content">
