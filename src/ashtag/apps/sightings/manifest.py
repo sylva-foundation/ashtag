@@ -14,11 +14,11 @@ class SightingsManifest(Manifest):
 
     def cache(self):
         urls = [
-            reverse('sightings:my-tags'),
-            reverse('sightings:list'),
-            reverse('sightings:gallery'),
-            reverse('sightings:map'),
             reverse('sightings:submit'),
+#            reverse('sightings:my-tags'),
+#            reverse('sightings:list'),
+#            reverse('sightings:gallery'),
+#            reverse('sightings:map'),
         ]
 
         if self.key:
