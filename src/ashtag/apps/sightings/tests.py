@@ -110,7 +110,7 @@ class SightingTestCase(WebTest):
         self.tagged_tree.hidden = True
         self.tagged_tree.flagged = True
         self.tagged_tree.save()
-        response = self.app.get(reverse('sightings:tree', args=[1234]), status=404)
+        self.app.get(reverse('sightings:tree', args=[1234]), status=404)
 
     def test_offline_submission(self):
         """Check that offline-style submission still works (302, redirect)."""
@@ -125,3 +125,33 @@ class SightingTestCase(WebTest):
                 'notes': 'test offline',
             }, user=self.tagger, status=302)
         self.assertTrue(response.location.endswith(reverse('sightings:sent')))
+
+    def test_submit_anon(self):
+        """User should be able to submit with email only."""
+        response = self.app.post(
+            reverse('sightings:submit'),
+            {
+                'creator_email': 'test@example.com',
+                'tag_number': '',
+                'image': X_IMAGE,
+                'image_name': 'xxx.jpg',
+                'disease_state': 'True',
+                'location': 'POINT (0 0)',
+                'notes': 'test anon',
+            }, status=302)
+        self.assertTrue(response.location.endswith(reverse('sightings:sent')))
+
+    def test_tagger_emailed_on_update(self):
+        """Tagger should get an email when a tree is updated by a spotter."""
+        self.app.post(
+            reverse('sightings:submit'),
+            {
+                'creator_email': 'test@example.com',
+                'tag_number': '1234',
+                'image': X_IMAGE,
+                'image_name': 'xxx.jpg',
+                'disease_state': 'True',
+                'location': 'POINT (0 0)',
+                'notes': 'test anon',
+            }, status=302)
+        self.assertEqual(1, len(mail.outbox))

@@ -116,7 +116,7 @@ class SubmitView(TemplateView):
                 sighting.creator_email = request.user.email
             sighting.tree = form.cleaned_data['tree']
             sighting.save()
-            if sighting.tree.creator_email != request.user.email:
+            if sighting.tree.creator_email != sighting.creator_email:
                 email_owner(
                     sighting.tree,
                     "Update on your Tree!",
