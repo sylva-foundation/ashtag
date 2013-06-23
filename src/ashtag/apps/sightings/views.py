@@ -175,6 +175,7 @@ class ClaimView(FormView):
 
 class SentView(TemplateView):
     template_name = 'sightings/thanks.html'
+
     def get_context_data(self, **kwargs):
         context = super(SentView, self).get_context_data(**kwargs)
         tree = get_object_or_404(Tree, id=self.request.GET.get('tree'))
