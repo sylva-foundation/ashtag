@@ -8,21 +8,25 @@
 {% block page %}
             
     <div data-role="content" class="at-content" role="main">
-        <div class="info clearfix">
-            {% thumbnail tree.display_sighting.image '150x150' crop='center' as thmb %}
-            <img class="image-thumb" src="{{ thmb.url }}" />
-            {% endthumbnail %}
-            <p class="desc">To claim this tree, just attach the tag to it, take a photo and send
-            the number and photo to us here. Make sure the picture shows the number
-            clearly!</p>
-        </div>
-        <form class="form submit-sighting-form ui-shadow" action="" method="post" data-ajax="false" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="cta-btn-wrapper cta-btn-wrapper-claim">
-            <input type="submit" value="Claim it!" />
+        <div class="claim-wrapper ui-texture-wrapper ui-shadow">
+            <div class="info clearfix">
+                <div class="gallery-thumb">
+                    {% thumbnail tree.display_sighting.image '750x600' crop='center' as thmb %}
+                    <img src="{{ thmb.url }}" />
+                    {% endthumbnail %}
+                </div>
+                <p class="desc">To claim this tree, just attach the tag to it, take a photo and send
+                the number and photo to us here. Make sure the picture shows the number
+                clearly!</p>
             </div>
-        </form>
+            <form class="form submit-sighting-form" action="" method="post" data-ajax="false" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="cta-btn-wrapper cta-btn-wrapper-claim">
+                <input type="submit" value="Claim it!" />
+                </div>
+            </form>
+        </div><!--//ui-texture-wrapper-->
     </div>
 
 {% endblock page %}

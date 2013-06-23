@@ -895,6 +895,7 @@ body.offline .map-wrapper #map_canvas {
     }
     .report-button {
             margin:0 auto;
+            margin-bottom: 1em;
             .ui-icon {
                 background-color: @orange;
             }
@@ -934,8 +935,10 @@ body.offline .map-wrapper #map_canvas {
         margin-bottom: 20px;
         img {
             max-width:100%;
+            height: auto;
             margin: 0 auto;
-            border: 5px solid #fff;
+            background: #fff;
+            border: 1px solid #ccc;
             display: block;
             .box-sizing;
         }
@@ -961,13 +964,22 @@ body.offline .map-wrapper #map_canvas {
             padding: 10px;
             display: block;
             margin-bottom: 20px;
-            
+            position:relative;
+            padding-bottom: 20px;
+            .info {
+                
+                font-size: 11px;
+                background: lighten(@green, 50%);
+                padding: 5px 10px;
+                margin-bottom: 10px;
+                font-weight: 600;
+            }
             span {
                 display: block;
                 &.image-holder {
                     float: left;
-                    width: 60px;
-                    height: 60px;
+                    width: 100px;
+                    height: 100px;
                     margin-right: 10px;
                     border: 1px solid #ccc;
                     padding: 2px;
@@ -976,14 +988,7 @@ body.offline .map-wrapper #map_canvas {
                         height: auto;
                     }
                 }
-                &.info {
-                    
-                    font-size: 11px;
-                    background: lighten(@green, 50%);
-                    padding: 5px 10px;
-                    margin-bottom: 10px;
-                    font-weight: 600;
-                }
+                
                 &.details {
                     font-size: 13px;
                     margin-bottom: 20px;
@@ -1016,8 +1021,7 @@ body.offline .map-wrapper #map_canvas {
             }
         }
         .flagging {
-            margin-top: 10px;
-            text-align: right;
+
         }
         .report-link {
             color: #fff;
@@ -1104,15 +1108,26 @@ body.offline .map-wrapper #map_canvas {
     .info {
         margin-bottom: 20px;
     }
-    .image-thumb {
-        background: #fff;
-        border: 1px solid #ccc;
-        padding: 5px;
-        float: left;
-        margin-right: 10px;
+    .gallery-thumb {
+        margin-bottom: 20px;
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+            background: #fff;
+            padding:5px;
+            border: 1px solid #ccc;
+            display: block;
+            .box-sizing;
+        }
     }
     p {
         margin-top: 0;
+    }
+    .form {
+        padding: 0;
+        border: none;
+        background: none;
     }
 }
 .cta-btn-wrapper-claim .ui-submit {
@@ -1141,32 +1156,6 @@ body.offline .map-wrapper #map_canvas {
 	.at-footer {
     	background: none; /* Hide illustration when it's mobile */
 	}
-	/*
-	.report-button {
-            width: 24px;
-            height: 24px;
-            .border-radius(50%);
-            background: @orange !important;
-            .ui-btn-inner {
-                height: 100%;
-                padding: 0;
-                border:none;
-            }
-            .ui-btn-text {
-                left:-9999px;
-                position: absolute;
-            }
-            .ui-icon {
-                width: 18px;
-                height: 18px;
-                margin: 2px 1px 2px -2px;
-                box-shadow:none;
-                -moz-border-shadow:none;
-                -webkit-border-radisu:none;
-                border:none;
-            }
-     }*/
-	
 }
 
 /* map page */

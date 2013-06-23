@@ -8,20 +8,9 @@
 {% block page %}
     <div data-role="content" class="at-content" role="main">
         <div class="single-sighting-wrapper ui-texture-wrapper ui-shadow clearfix">
+            
             <h2 class="heading">Tag: #{{ object.tag_number }}</h2>
-            {% if not object.flagged %}
-            <div class="report-button-wrapper">
-                <a data-role="button" data-inline="true" data-icon="alert"
-                    class="report-button" data-rel="popup"
-                    data-position-to="window" data-transition="pop"
-                    href="#popupDialog"  data-flag-type="tree"
-                    data-flag-id="{{ object.id }}">
-                    Report this tree
-                </a>
-            </div>
-            {% else %}
-            <div class="flagged">This sighting has been reported as inappropriate.</div>
-            {% endif %}
+            
             <div class="meta">
                 <p>Last update on: {{ updates.latest.created }}</p>
                 <p>Submitted on: {{ object.created }} {% if tagged %} by {{ object.creator|default:"a spotter" }}{% endif %}</p>
@@ -37,12 +26,25 @@
             <div class="location-map">
                 {% csrf_token %}
             </div>
+            {% if not object.flagged %}
+            <div class="report-button-wrapper">
+                <a data-role="button" data-inline="true" data-icon="alert"
+                    class="report-button" data-rel="popup" data-mini="true"
+                    data-position-to="window" data-transition="pop"
+                    href="#popupDialog"  data-flag-type="tree"
+                    data-flag-id="{{ object.id }}">
+                    Report this tree
+                </a>
+            </div>
+            {% else %}
+            <div class="flagged">This sighting has been reported as inappropriate.</div>
+            {% endif %}
             <div class="comments">
                 <h3>Comments and Updates</h3>
                 <p>Intro blurb goes here lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris consectetur imperdiet lacus, sed fringilla tellus luctus sed. In vitae congue arcu.</p>
                 <ul class="comments-list">
                     {% for update in updates %}
-                    <li class="ui-corner-all" id="sighting-{{ update.id }}">
+                    <li class="ui-corner-all clearfix" id="sighting-{{ update.id }}">
                         
                         <div class="info">Spotted on {{ update.created }} by {{ update.creator|default:"a spotter" }}
                             {% if update.disease_state != None %}
