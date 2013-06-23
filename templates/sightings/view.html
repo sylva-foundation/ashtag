@@ -58,7 +58,7 @@
                         <span class="disease_state disease_{{ update.disease_state }}">{{ update.get_disease_state_display }}</span>
                         {% if not update.flagged %}
                         <div class="flagging">
-                            <a  href="#popupDialog"  class="report-link" data-rel="popup"
+                            <a  href="#popupDialog"  class="report-link report-button" data-rel="popup"
                                 data-position-to="window" data-transition="pop"
                                 data-flag-type="sighting"
                                 data-flag-id="{{ update.id }}">
