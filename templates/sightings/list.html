@@ -27,10 +27,15 @@
                             <p>Last updated: {{ tree.sighting_set.latest.created }}</p>
                         </a>
                         {% if not tree.flagged %}
-                        <a class="listview-report-link" href="#popupDialog" data-mini="true" data-iconshadow="false" data-rel="popup" data-position-to="window" data-transition="pop" data-flag-type="tree" 
-                            data-flag-id="{{ tree.id }} "  >
+                        <a class="listview-report-link report-button" href="#popupDialog"
+                            data-mini="true" data-iconshadow="false"
+                            data-rel="popup" data-position-to="window"
+                            data-transition="pop" data-flag-type="tree" 
+                            data-flag-id="{{ tree.id }}"  >
                             Report this tree
                         </a>
+                        {% else %}
+                        <div class="STYLEME">This sighting has been reported.</div>
                         {% endif %}
                         
                     </li>
