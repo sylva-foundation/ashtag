@@ -74,12 +74,15 @@
                     </li>
                     {% endfor %}
                 </ul>
+                {% comment %}
+                {# removed for now #}
                 {% if request.user.is_authenticated and request.user == object.creator %}
                 <form class="comments-form">
                     <label for="sighting-comment">Leave a comment/update:</label>
                     <textarea cols="40" rows="8" name="comment" id="sighting-comment"></textarea>
                 </form>
                 {% endif %}
+                {% endcomment %}
             </div><!--//comments-->
         </div><!--//single-sighting-wrapper-->
     </div><!-- //at-content -->
