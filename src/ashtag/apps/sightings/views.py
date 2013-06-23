@@ -125,7 +125,9 @@ class SubmitView(TemplateView):
                         sighting.get_absolute_url()
                     )
                 )
-            return redirect('sightings:sent')
+            return redirect(
+                "{0}?tree={1}".format(
+                    reverse('sightings:sent'), sighting.tree.id))
         else:
             return render(request, self.template_name, {'form': form})
 
@@ -173,6 +175,12 @@ class ClaimView(FormView):
 
 class SentView(TemplateView):
     template_name = 'sightings/thanks.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SentView, self).get_context_data(**kwargs)
+        tree = get_object_or_404(Tree, id=self.request.GET.get('tree'))
+        context['tree'] = tree
+        return context
 
 
 class TreeGetterMixin(object):
