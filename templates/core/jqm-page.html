@@ -15,6 +15,9 @@
 
     <div data-role="panel" id="menu-panel" data-display="reveal">
          <ul data-role="listview" data-icon="false" class="menu-list">
+             {% if request.user.is_authenticated %}
+             <li>Hi, {{ request.user }}!</li>
+             {% endif %}
              <li><a href="{% url 'public:home' %}">Home</a></li>
              {% include 'core/includes/menu.html' %}
          </ul>
