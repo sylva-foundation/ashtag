@@ -44,7 +44,11 @@
                     {% for update in updates %}
                     <li class="ui-corner-all" id="sighting-{{ update.id }}">
                         
-                        <span class="info">Spotted on {{ update.created }} by {{ update.creator|default:"a spotter" }}</span>
+                        <div class="info">Spotted on {{ update.created }} by {{ update.creator|default:"a spotter" }}
+                            {% if update.disease_state != None %}
+                            <span class="disease_state disease_{{ update.disease_state }}">{{ update.get_disease_state_display }}</span>
+                            {% endif %}
+                        </div>
                         <span class="image-holder">
                             {% thumbnail update.image '150x150' crop='center' as thmb %}
                             <img src="{{ thmb.url }}" />
@@ -55,7 +59,6 @@
                         
                         <span class="details{% if not update.notes %} empty{% endif %}">
                             {{ update.notes|default:"No note was left with this update." }}</span>
-                        <span class="disease_state disease_{{ update.disease_state }}">{{ update.get_disease_state_display }}</span>
                         {% if not update.flagged %}
                         <div class="flagging">
                             <a  href="#popupDialog"  class="report-link report-button" data-rel="popup"
