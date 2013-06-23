@@ -9,9 +9,11 @@
             
     <div data-role="content" class="at-content" role="main">
         <div class="info clearfix">
-            {% thumbnail tree.display_sighting.image '150x150' crop='center' as thmb %}
-            <img class="image-thumb" src="{{ thmb.url }}" />
-            {% endthumbnail %}
+            <div class="gallery-thumb">
+                {% thumbnail tree.display_sighting.image '750x600' crop='center' as thmb %}
+                <img src="{{ thmb.url }}" />
+                {% endthumbnail %}
+            </div>
             <p class="desc">To claim this tree, just attach the tag to it, take a photo and send
             the number and photo to us here. Make sure the picture shows the number
             clearly!</p>
