@@ -69,7 +69,8 @@ class ListView(ListView):
     template_name = 'sightings/list.html'
 
     def get_queryset(self):
-        trees = Tree.objects.filter(hidden=False)
+        trees = Tree.objects.filter(hidden=False).exclude(sighting=None).select_related()
+        trees = sorted(trees, key=lambda t: t.sighting_set.latest().created, reverse=True)
         return trees
 
     def get_context_data(self, **kwargs):
