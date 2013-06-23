@@ -41,7 +41,10 @@
                 {{ form.errors.location }}
                 <label for="id_location" class="ui-input-text">Tree location</label>
                 <span class="help-text">Drag the pin (or click elsewhere) to move the location.</span>
-                <div id="map_canvas" class="map"></div>
+                <div class="map-wrapper">
+                    <div id="map_canvas" class="map"></div>
+                    <div class="offline-msg">Map not available when offline</div>
+                </div>
                 <input type="text" name="location" id="id_location" value="{{ form.location.value }}" />
             </div>
             

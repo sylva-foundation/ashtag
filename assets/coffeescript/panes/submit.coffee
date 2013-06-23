@@ -21,7 +21,7 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         @sync()
 
     handleSubmit: (e) =>
-        if @online()
+        if ashtag.extra.online()
             @submitOnline(e)
         else
             @submitOffline(e)
@@ -59,12 +59,9 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
     submitOnline: (e) ->
         # Don't do anything, just do it the old-fashioned way
 
-    online: ->
-        return window.navigator.onLine == true or window.navigator.onLine == undefined
-
     sync: =>
         console.log('syncing')
-        if @online()
+        if ashtag.extra.online()
             @fileStore.totalPendingFiles().then (total) =>
                 if total
                     @handleSyncStart()

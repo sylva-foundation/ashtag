@@ -332,6 +332,68 @@ textarea.ui-input-text {
     }
 }
 
+/* Uodates ready block */
+#updatesready {
+    display:none;
+    background: @orange;
+    color: #fff;
+    font-size: 13px;
+    text-shadow: none;
+    position: relative;
+    padding: 10px;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    text-align: center;
+    a.refresh-link {
+        color: #fff;
+        display: inline-block;
+        background: darken(@orange, 10%);
+        padding: 5px 10px;
+        font-weight: bold;
+        text-decoration: none;
+        .border-radius;
+        &:hover {
+            background: darken(@orange, 20%);
+        }
+    }
+}
+
+/* Offline */
+body.online .map-wrapper .offline-msg {
+    display: none;
+}
+body.online .map-wrapper #map_canvas {
+    display: block;
+}
+
+body.offline .map-wrapper .offline-msg {
+    display: block;
+}
+body.offline .map-wrapper #map_canvas {
+    display: none;
+}
+
+.map-wrapper {
+    background: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-shadow: none;
+    .map {
+        width: 100%;
+        height: 400px;
+    }
+    .offline-msg {
+        text-align: center;
+        background-color: @orange;
+        color: #fff;
+        padding: 10px;
+    }
+}
+
+.saved-for-later {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
 
 /* Panel */
 .ui-panel {
@@ -394,7 +456,6 @@ textarea.ui-input-text {
 }
 
 .ui-popup {
-    padding: 20px;
     .cta-btn-wrapper {
         display: inline-block;
         float: left;
@@ -406,12 +467,28 @@ textarea.ui-input-text {
     }
     .ui-btn {
         font-family: 'BebasRegular','Open Sans', Helvetica, Arial, sans-serif;
+        margin-left: 0;
         .ui-btn-text {
             text-shadow: 0  1px 0px #fff;      
             font-weight: 300;  
             letter-spacing: 0.1em;    
         }
+        + .ui-btn {
+            margin-left: 10px;
+        }
 
+    }
+    h2 {
+        margin-bottom: 20px;
+        font-size: 1.1em;
+        background-color:@green;
+        color: #fff;
+        text-shadow: 0  -1px 1px rgba(0, 0, 0, 0.2);
+        padding: 5px 10px;
+        .border-radius;        
+    }
+    .content-wrapper {
+        padding: 10px;
     }
 }
 
@@ -460,6 +537,12 @@ textarea.ui-input-text {
             font-size: 24px;
             top:10px;
             left:22px;
+        }
+        .my-tags:before {
+            content: "\f06c";
+        }
+        .logout:before {
+            content: "\f08b";
         }
     }
     
@@ -685,6 +768,42 @@ textarea.ui-input-text {
     
 }
 
+/* Order preview */
+.order-preview-wrapper {
+    .cta-btn-wrapper-place-order {
+        .ui-btn {
+        max-width: 300px;
+        margin: 0 auto;
+        position: relative;
+            &:before {
+                font-family: "FontAwesome";
+                content: "\f0a9";
+                display: inline-block;
+                color: #fff;
+                text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);
+                font-weight: normal;
+                font-size: 20px;
+                position: absolute;
+                left: 30px;
+                top: 12px;
+            }    
+        }
+    }
+    .order-info-wrapper {
+        background: #fff;
+        padding: 10px;
+        h4 {
+            background: @green-third;
+            padding: 5px;
+            margin: 0;
+        }
+    }
+    .instruction {
+        text-align: center;
+    }
+    
+}
+
 
 /* Sightings Pages */
 .sightings-view-wrapper {
@@ -706,6 +825,23 @@ textarea.ui-input-text {
             padding: 9px 15px;
             padding-left: 100px;
         } 
+        
+        .listview-report-link {
+            .ui-shadow {
+                box-shadow: none;
+                -moz-box-shadow: none;
+                -webkit-box-shadow: none;
+            }
+            .ui-btn-inner .ui-btn-inner {
+                -moz-box-shadow: none;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                .ui-icon {
+                    background-color: @orange;
+                }
+            }
+        }
+        
     }
     .my-sighting-label {
         background: @green-secondary;
@@ -745,12 +881,23 @@ textarea.ui-input-text {
         margin-top: 0;   
         letter-spacing: 0.1em;     
     }
-    
+    .thank-you-heading {
+        &:before {
+            font-family: "FontAwesome";
+            font-size: 32px;
+            margin-right: 10px;
+            content: "\f118";
+            
+        }
+    }
+    p.thank-you-message {
+        text-align: center;
+    }
+    .report-button-wrapper {
+        text-align: center;
+    }
     .report-button {
-            /* position: absolute; */
-            right: 5px;
-            top: 5px;
-            margin:0;
+            margin:0 auto;
             .ui-icon {
                 background-color: @orange;
             }
@@ -765,6 +912,20 @@ textarea.ui-input-text {
                     color: @orange;
                 }
             }
+     }
+     
+     .reported, .flagged {
+         background: @orange;
+         padding: 10px;
+         text-align: center;
+         color: #fff;
+         text-shadow: 0  -1px 1px rgba(0, 0, 0, 0.2);
+         .border-radius;
+         &:before {
+             font-family: "FontAwesome";
+             content:"\f071";
+             margin-right: 5px;
+         }
      }
      
      .meta {
@@ -806,7 +967,13 @@ textarea.ui-input-text {
             
             span {
                 display: block;
+                &.image-holder {
+                    float: left;
+                    width: 60px;
+                    height: 60px;
+                }
                 &.info {
+                    
                     font-size: 11px;
                     background: lighten(@green, 50%);
                     padding: 5px 10px;
@@ -815,10 +982,50 @@ textarea.ui-input-text {
                 }
                 &.details {
                     font-size: 13px;
+                    margin-bottom: 20px;
                 }
             }
         }
+        
+        .disease_state {
+            display: inline-block;
+            padding: 3px 6px;
+            color: #fff;
+            font-size:12px;
+            .border-radius;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+            
+            &.disease_False {
+                background:#3788C0;                
+            }
+        }
+        .flagging {
+            margin-top: 10px;
+            text-align: right;
+        }
+        .report-link {
+            color: #fff;
+            font-size:12px;
+            display: inline-block;
+            background: @orange;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            text-decoration: none;
+            .border-radius;
+            &:before {
+                font-family: "FontAwesome";
+                content: "\f071";
+                margin-right: 5px;
+            }
+            &:hover {
+                background: darken(@orange, 10%);
+            }
+        }
+        
+        
     }
+    
+    
 }
 
 /* Sighting Gallery */
@@ -867,6 +1074,12 @@ textarea.ui-input-text {
     div.errors {
         color: red;
     }
+    .help-text {
+        padding: 5px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
 }
 
 /* My Tags */
@@ -890,7 +1103,7 @@ textarea.ui-input-text {
 	.at-footer {
     	background: none; /* Hide illustration when it's mobile */
 	}
-	
+	/*
 	.report-button {
             width: 24px;
             height: 24px;
@@ -914,13 +1127,9 @@ textarea.ui-input-text {
                 -webkit-border-radisu:none;
                 border:none;
             }
-     }
+     }*/
 	
 }
 
 /* map page */
 
-.sightings-map-view-page .map {
-    width: 100%;
-    height: 400px;
-}

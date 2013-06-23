@@ -15,36 +15,27 @@
         </div><!-- /navbar -->
         <div class="sightings-wrapper">
             <div class="list-view-wrapper sightings-view-wrapper">
-                <ul data-role="listview" data-inset="true" class="sightings-list" >
+                <ul data-role="listview" data-inset="true" class="sightings-list" data-split-icon="alert">
                     {% for tree in object_list|slice:":20" %}
                     <li {% if not tree.tag_number %}class="untagged"{% endif %}>
                         <a href="{{ tree.get_absolute_url }}">
                             {% thumbnail tree.display_sighting.image '150x150' crop='center' as thmb %}
                             <img src="{{ thmb.url }}" class="ui-li-thumb" />
                             {% endthumbnail %}
+                            
                             <h2>Tag: {% if tree.tag_number %}<span class="tag-number">#{{ tree.tag_number }}</span>{% else %}Untagged!{% endif %}</h2>
                             <p>Last updated: {{ tree.sighting_set.latest.created }}</p>
                         </a>
                         {% if not tree.flagged %}
-                        <a data-role="button" data-inline="true" data-icon="alert"
-                            class="report-button" data-rel="popup"
-                            data-position-to="window" data-transition="pop"
-                            href="#popupDialog" data-mini="true" data-flag-type="tree"
-                            data-flag-id="{{ tree.id }}">
+                        <a class="listview-report-link" href="#popupDialog" data-mini="true" data-iconshadow="false" data-rel="popup" data-position-to="window" data-transition="pop" data-flag-type="tree" 
+                            data-flag-id="{{ tree.id }} "  >
                             Report this tree
                         </a>
                         {% endif %}
+                        
                     </li>
                     {% endfor %}
                 </ul><!--//sightings-list-->
-
-                <div data-role="popup" id="auth" class="ui-content">
-                    <p>You need to log in to view the untagged tree.</p>
-                    <div class="cta-btn-wrapper">
-                        <a href="login.html" data-role="button" data-inline="true" data-mini="true">Log in</a>
-                    </div><!--//cta-btn-wrapper-->
-                    <a href="#" class="cancel-button" data-role="button" data-rel="back" data-inline="true" data-mini="true">Cancel</a>
-               </div><!--//#auth-->
 
             </div><!--//list-view-wrapper-->
         </div><!--//sightings-wrapper-->

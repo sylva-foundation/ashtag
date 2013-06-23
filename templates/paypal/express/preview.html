@@ -10,56 +10,65 @@
 {% block page %}
     
     <div data-role="content" class="at-content" role="main">
-
-        {% if shipping_address %}
-            <h4>Shipping Address</h4>
-            <p>
-                {% for field in shipping_address.active_address_fields %}
-                {{ field }}<br/>
-                {% endfor %}
-            </p>
-            {% if shipping_address.phone_number %}
-                <p>Contact number: {{ shipping_address.phone_number }}</p>
-            {% endif %}
-
-            {% if shipping_address.notes %}
-                <p>Shipping notes</p>
-                <p>{{ shipping_address.notes|linebreaks }}</p>
-            {% endif %}
-
-            <h4>Shipping method</h4>
-            <p>{{ shipping_method.name }}
-                {% if shipping_method.description %}
-                - {{ shipping_method.description }}
+        <div class="order-preview-wrapper ui-texture-wrapper ui-shadow"> 
+            <div class="order-info-wrapper ui-corner-all">
+                {% if shipping_address %}
+                <div class="shipping-address-block block">
+                    <h4>Shipping Address</h4>
+                    <p>
+                        {% for field in shipping_address.active_address_fields %}
+                        {{ field }}<br/>
+                        {% endfor %}
+                    </p>
+                    {% if shipping_address.phone_number %}
+                        <p>Contact number: {{ shipping_address.phone_number }}</p>
+                    {% endif %}
+        
+                    {% if shipping_address.notes %}
+                        <p>Shipping notes</p>
+                        <p>{{ shipping_address.notes|linebreaks }}</p>
+                    {% endif %}
+                </div><!--//shipping-address-block-->
+                <div class="shipping-method-block block">
+                    <h4>Shipping Method</h4>
+                    <p>{{ shipping_method.name }}
+                        {% if shipping_method.description %}
+                        - {{ shipping_method.description }}
+                        {% endif %}
+                    </p>
+                </div><!--//shipping-method-block-->
+        
+                {% comment %}
+                <div class="alert-actions block">
+                    <a data-role="button" data-mini="true" data-inline="true" href="{% url 'checkout:shipping-address' %}" class="btn">Change shipping address</a>
+                </div>
+                {% endcomment %}
+        
+                {% else %}
+                <div class="no-shipping-block block">
+                    <p>No shipping is required for this order</p>
+                </div><!--//no-shipping-block-->
                 {% endif %}
-            </p>
-        </dl>
-
-        {% comment %}
-        <div class="alert-actions">
-            <a href="{% url 'checkout:shipping-address' %}" class="btn">Change shipping address</a>
-        </div>
-        {% endcomment %}
-
-        {% else %}
-            <p>No shipping is required for this order</p>
-        {% endif %}
-
-        <h2>Payment Method</h2>
-        <p>PayPal Express Checkout</p>
-        <p>PayPal user: {{ paypal_user_email }}</p>
-        <p>Amount: {{ paypal_amount|currency }}</p>
-
-        <h3>Please review the information above, then click "Place Order"</h3>
-
-        <form method="post" action="{% url 'paypal-place-order' %}" data-ajax="false">
-            {% csrf_token %}
-            <input type="hidden" name="payer_id" value="{{ payer_id }}" />
-            <input type="hidden" name="token" value="{{ token }}" />
-            <div class="form-actions">
-                <input id='place-order' type="submit" value="Place order" class="pull-right btn btn-primary btn-large js-disable-on-click" />
-            </div>
-        </form>
+                <div class="payment-method-block block">
+                    <h4>Payment Method</h4>
+                    <p>PayPal Express Checkout</p>
+                    <p>PayPal user: {{ paypal_user_email }}</p>
+                    <p>Amount: {{ paypal_amount|currency }}</p>
+                </div><!--//payment-method-->
+            </div><!--//order-info-wrapper-->
+            <h4 class="instruction">Please review the information above, then click "Place Order"</h4>
+         
+            <form method="post" action="{% url 'paypal-place-order' %}" data-ajax="false">
+                {% csrf_token %}
+                <input type="hidden" name="payer_id" value="{{ payer_id }}" />
+                <input type="hidden" name="token" value="{{ token }}" />
+                <div class="form-actions">
+                    <div class="cta-btn-wrapper cta-btn-wrapper-place-order">
+                        <input data-role="button" id='place-order' type="submit" value="Place order" class="js-disable-on-click" />
+                    </div>
+                </div>
+            </form>
+        </div><!--//order-preview-wrapper-->
     </div>
 
 {% endblock page %}
