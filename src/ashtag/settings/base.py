@@ -259,7 +259,7 @@ PAYPAL_CURRENCY = "GBP"
 PAYPAL_ALLOW_NOTE = False
 
 # Manifesto
-MANIFESTO_VERSIONER = 'manifesto.versioners.LastModifiedVersioner'
+MANIFESTO_VERSIONER = 'manifesto.versioners.FileContentsVersioner'
 MANIFESTO_FILTER = 'manifesto.filters.ExcludePatternFilter'
 MANIFESTO_FILTER_EXCLUDE_PATTERNS = [
     "^%soscar" % STATIC_URL,
