@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     url(r'^accounts/register/$', AshTagRegistrationView.as_view(), name='registration_register'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^tz-detect/', include('tz_detect.urls')),
-    url(r'^manifest/', include('manifesto.urls')),
+    url(r'^', include('manifesto.urls')),
 
     url(r'^accounts/', include('registration.backends.simple.urls', app_name='registration')),
     url(r'^api/', include('ashtag.apps.api.urls', namespace='api', app_name='api')),
