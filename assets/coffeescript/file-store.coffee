@@ -3,6 +3,8 @@ module "ashtag"
 class ashtag.FileStore
     constructor: () ->
         @imageFieldName = "image"
+        @imageMaxWidth = 800
+        @imageMaxHeight = 600
 
         @enabled = @_supported()
         ashtag.lib.mixins.Observable::augment @
@@ -28,7 +30,7 @@ class ashtag.FileStore
 
     getDb: ->
         # Get the db connection
-        return window.openDatabase('uploader', '', 'Pending uploads', 10 * 1024 * 1024)
+        return window.openDatabase('uploader', '', 'Pending uploads', 5 * 1024 * 1024)
 
     initialiseDb: ->
         # create the table if necessary
@@ -47,6 +49,7 @@ class ashtag.FileStore
             throw 'Offline uploading disabled'
 
         @_readFile(file, meta)
+            .then(@_resizeFile)
             .then(@_storeFile)
             .then(@_handleStoreSuccess, @_handleStoreFailure)
 
@@ -56,15 +59,56 @@ class ashtag.FileStore
         deferred = $.Deferred()
         reader = new FileReader()
         reader.onloadend = (e) =>
-            fileData = e.target.result
-            deferred.resolve(file.name, fileData, meta)
+            deferred.resolve(file, reader, meta)
         reader.readAsDataURL(file)
         return deferred.promise()
 
-    _storeFile: (fileName, fileData, meta) =>
+    _resizeFile: (file, reader, meta) =>
+        def = $.Deferred()
+
+        canvas = document.createElement "canvas"
+        img = new Image()
+
+        handleLoaded = =>
+            ctx = canvas.getContext "2d"
+            ctx.drawImage(img, 0, 0)
+
+            width = img.width
+            height = img.height
+            if width > height
+                if width > @imageMaxWidth
+                    height *= @imageMaxWidth / width
+                    width = @imageMaxWidth
+            else
+                if height > @imageMaxHeight
+                    width *= @imageMaxHeight / height
+                    height = @imageMaxHeight
+
+            canvas.width = width
+            canvas.height = height
+
+            ctx = canvas.getContext("2d")
+            ctx.drawImage(img, 0, 0, width, height)
+
+            resizedData = canvas.toDataURL("image/jpeg")
+
+            def.resolve(file, resizedData, meta)
+
+        img.src = reader.result
+
+        interval = setInterval =>
+                console.log img.width
+                if img.width > 0
+                    handleLoaded()
+                    clearInterval(interval)
+            , 100
+
+        return def
+
+    _storeFile: (file, fileData, meta) =>
         # store a file into the db. Returns a promise
         deferred = $.Deferred()
-        @query("INSERT INTO [files] ([name], [meta], [file]) VALUES (?, ?, ?)", [fileName, meta, fileData]).then(
+        @query("INSERT INTO [files] ([name], [meta], [file]) VALUES (?, ?, ?)", [file.name, meta, fileData]).then(
             -> deferred.resolve()
             -> deferred.reject()
         )
