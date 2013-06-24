@@ -15,7 +15,6 @@ class ashtag.FileStore
         @initialiseDb()
 
     _supported: ->
-        return false
         return !!window.openDatabase
 
     disable: ->

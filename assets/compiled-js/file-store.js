@@ -22,7 +22,6 @@
     }
 
     FileStore.prototype._supported = function() {
-      return false;
       return !!window.openDatabase;
     };
 
