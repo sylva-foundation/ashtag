@@ -125,9 +125,12 @@ class SubmitView(TemplateView):
                         sighting.get_absolute_url()
                     )
                 )
-            return redirect(
-                "{0}?tree={1}".format(
-                    reverse('sightings:sent'), sighting.tree.id))
+
+            if request.is_ajax():
+                return HttpResponse('OK')
+            else:
+                url = "%s?tree=%s" % (reverse('sightings:sent'), sighting.tree.id)
+                return redirect(url)
         else:
             return render(request, self.template_name, {'form': form})
 

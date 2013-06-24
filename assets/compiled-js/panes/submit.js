@@ -29,7 +29,7 @@
       this.$form = this.$('form');
       this.$imageField = this.$('form #id_image');
       this.$submitButton = this.$form.find('.submit-sighting');
-      this.$offlineMessage = this.$form.find('.offline-msg');
+      this.$submitDoneMessages = this.$form.find('.submit-done-msgs');
       this.$savedForLater = this.$form.find('.saved-for-later');
       this.fileStore = new ashtag.FileStore();
       return this.updateSavedForLater();
@@ -45,33 +45,39 @@
     };
 
     SubmitSightingPane.prototype.handleSubmit = function(e) {
-      if (ashtag.extra.online()) {
-        return this.submitOnline(e);
+      if (this.fileStore.enabled) {
+        return this.submitViaFileStore(e);
       } else {
-        return this.submitOffline(e);
+        return this.submitTraditional(e);
       }
     };
 
-    SubmitSightingPane.prototype.submitOffline = function(e) {
-      var file, hide, meta, storePromise;
+    SubmitSightingPane.prototype.submitViaFileStore = function(e) {
+      var file, hide, meta, storePromise,
+        _this = this;
       e.preventDefault();
       meta = this.$form.serialize();
       file = this.$imageField.get(0).files[0];
       storePromise = this.fileStore.storeFile(file, meta);
       this.showOfflineStorageMessage();
       hide = ashtag.extra.callAfter(2, this.hideOfflineStorageMessage);
-      storePromise.then(hide);
-      return setTimeout(hide, 4000);
+      setTimeout(hide, 4000);
+      return storePromise.then(hide, function() {
+        _this.fileStore.disable();
+        return _this.$form.submit();
+      });
     };
+
+    SubmitSightingPane.prototype.submitTraditional = function(e) {};
 
     SubmitSightingPane.prototype.showOfflineStorageMessage = function() {
       this.$submitButton.parent().hide();
-      this.$offlineMessage.show();
+      this.$submitDoneMessages.show();
       return this.$savedForLater.hide();
     };
 
     SubmitSightingPane.prototype.hideOfflineStorageMessage = function() {
-      this.$offlineMessage.hide();
+      this.$submitDoneMessages.hide();
       this.$submitButton.parent().show();
       this.$savedForLater.show();
       return this.updateSavedForLater();
@@ -84,8 +90,6 @@
         return _this.$savedForLater.toggle(!!total);
       });
     };
-
-    SubmitSightingPane.prototype.submitOnline = function(e) {};
 
     SubmitSightingPane.prototype.sync = function() {
       var _this = this;

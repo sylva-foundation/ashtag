@@ -8,7 +8,7 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         @$form = @$('form')
         @$imageField = @$('form #id_image')
         @$submitButton = @$form.find('.submit-sighting')
-        @$offlineMessage = @$form.find('.offline-msg')
+        @$submitDoneMessages = @$form.find('.submit-done-msgs')
         @$savedForLater = @$form.find('.saved-for-later')
         @fileStore = new ashtag.FileStore()
         @updateSavedForLater()
@@ -21,12 +21,16 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         @sync()
 
     handleSubmit: (e) =>
-        if ashtag.extra.online()
-            @submitOnline(e)
+        # Use the filestore if it is available, even if 
+        # we are online (the process is more robust and 
+        # will resize images)
+        if @fileStore.enabled
+            @submitViaFileStore(e)
         else
-            @submitOffline(e)
+            @submitTraditional(e)
 
-    submitOffline: (e) ->
+    submitViaFileStore: (e) ->
+        # Do the form submission using the FileStore
         e.preventDefault()
         meta = @$form.serialize()
         file = @$imageField.get(0).files[0]
@@ -37,16 +41,22 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         # Hide the message after storing is complete 
         # and a few seconds have elapsed
         hide = ashtag.extra.callAfter(2, @hideOfflineStorageMessage)
-        storePromise.then hide
         setTimeout hide, 4000
+        storePromise.then hide, =>
+            # Failed, so disable the filestore and try the old-school way
+            @fileStore.disable()
+            @$form.submit()
+
+    submitTraditional: (e) ->
+        # Don't do anything, just do it the old-fashioned way
 
     showOfflineStorageMessage: =>
         @$submitButton.parent().hide()
-        @$offlineMessage.show()
+        @$submitDoneMessages.show()
         @$savedForLater.hide()
 
     hideOfflineStorageMessage: =>
-        @$offlineMessage.hide()
+        @$submitDoneMessages.hide()
         @$submitButton.parent().show()
         @$savedForLater.show()
         @updateSavedForLater()
@@ -55,9 +65,6 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         @fileStore.totalPendingFiles().then (total) =>
             @$savedForLater.find('.total').text total
             @$savedForLater.toggle(!!total)
-
-    submitOnline: (e) ->
-        # Don't do anything, just do it the old-fashioned way
 
     sync: =>
         if ashtag.extra.online()
