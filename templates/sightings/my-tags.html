@@ -40,7 +40,7 @@
                         {% endfor %}
                     </ul><!--//sightings-list-->
                     {% else %}
-                    <p>You haven't tagged any trees yet!</p>
+                    <p class="no-trees">You haven't tagged any trees yet!</p>
                     {% endif %}
                     <div class="cta-btn-wrapper">
                         <a class="add-tree-button" href="{% url 'sightings:submit' %}" data-role="button" data-icon="plus" >Tag a{% if object_list %}nother{% endif %} tree</a>
