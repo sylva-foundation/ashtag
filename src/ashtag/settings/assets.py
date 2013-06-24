@@ -29,3 +29,5 @@ PIPELINE_JS = {
         'output_filename': 'js/common.js',
     }
 }
+
+# Checkout apps/core/__init__.py for some pipeline monkeypatching
