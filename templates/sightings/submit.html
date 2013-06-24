@@ -53,23 +53,23 @@
             <div class="form-row{% if form.errors.disease_state %} errors{% endif %}">
             <fieldset data-role="controlgroup">
                 {{ form.errors.disease_state }}
-                <legend>Does this tree appear to have the Ash Dieback Disease?</legend>
+                <legend>In your opinion, how likely is this tree to have Ash Dieback Disease?</legend>
                 <input type="radio" name="disease_state"
                 id="id_disease_state_1" value=""
                 {% if form.disease_state.value == "" or form.disease_state.value == None %}checked="checked"{% endif %} />
-                    <label for="id_disease_state_1">I don't know</label>
+                    <label for="id_disease_state_1">Uncertain / I don't know</label>
         
                     <input type="radio" name="disease_state"
                     id="id_disease_state_2" value="True"
                     {% if form.disease_state.value == 'True' %}checked="checked"{% endif %}
                     />
-                    <label for="id_disease_state_2">Yes</label>
+                    <label for="id_disease_state_2">Likely</label>
         
                     <input type="radio" name="disease_state"
                     id="id_disease_state_3" value="False"
                     {% if form.disease_state.value == 'False' %}checked="checked"{% endif %}
                     />
-                    <label for="id_disease_state_3">No</label>
+                    <label for="id_disease_state_3">Unlikely</label>
             </fieldset>
             </div><!--//form-row-->
             <div class="form-row">
