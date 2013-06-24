@@ -235,6 +235,9 @@ STATICFILES_STORAGE = 'ashtag.apps.core.storages.PipelineForgivingStorage'
 PIPELINE_CSS_COMPRESSOR = None
 PIPELINE_JS_COMPRESSOR = None
 
+# Compressor (used for Oscar's UIs, which are not public, so disable it)
+COMPRESS_ENABLED = False
+
 # Django registration etc
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_OPEN = True
