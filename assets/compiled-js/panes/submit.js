@@ -89,7 +89,6 @@
 
     SubmitSightingPane.prototype.sync = function() {
       var _this = this;
-      console.log('syncing');
       if (ashtag.extra.online()) {
         return this.fileStore.totalPendingFiles().then(function(total) {
           if (total) {

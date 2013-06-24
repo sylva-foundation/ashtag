@@ -60,7 +60,6 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         # Don't do anything, just do it the old-fashioned way
 
     sync: =>
-        console.log('syncing')
         if ashtag.extra.online()
             @fileStore.totalPendingFiles().then (total) =>
                 if total
