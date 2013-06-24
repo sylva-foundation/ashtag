@@ -1,5 +1,7 @@
 {% extends "core/jqm-page.html" %}
 
+{% load manifesto %}
+{% block manifest %}manifest="{% manifest_url request.user.id %}"{% endblock %}
 {% block title %}Submit a Sighting{% endblock %}
 {% block class %}submit-sighting-page{% endblock %}
 {% block id %}submit-sighting-page{% endblock %}
