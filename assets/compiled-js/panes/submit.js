@@ -20,28 +20,44 @@
       this.hideOfflineStorageMessage = __bind(this.hideOfflineStorageMessage, this);
       this.showOfflineStorageMessage = __bind(this.showOfflineStorageMessage, this);
       this.handleSubmit = __bind(this.handleSubmit, this);
+      this.updateLocation = __bind(this.updateLocation, this);
       _ref = SubmitSightingPane.__super__.constructor.apply(this, arguments);
       return _ref;
     }
 
     SubmitSightingPane.prototype.initialise = function() {
-      this.mapPane = new ashtag.panes.SubmitSightingMapPane(this.$el);
       this.$form = this.$('form');
       this.$imageField = this.$('form #id_image');
       this.$submitButton = this.$form.find('.submit-sighting');
       this.$submitDoneMessages = this.$form.find('.submit-done-msgs');
       this.$savedForLater = this.$form.find('.saved-for-later');
+      this.$locationInput = this.$form.find('#id_location');
+      this.mapPane = new ashtag.panes.SubmitSightingMapPane(this.$el, this.parseLocation());
       this.fileStore = new ashtag.FileStore();
       return this.updateSavedForLater();
     };
 
     SubmitSightingPane.prototype.setupEvents = function() {
+      var _this = this;
       this.$form.on('submit', this.handleSubmit);
-      return window.addEventListener('online', this.sync);
+      window.addEventListener('online', this.sync);
+      return this.mapPane.observe('locationChange', function(e, lat, lng) {
+        return _this.updateLocation(lat, lng);
+      });
+    };
+
+    SubmitSightingPane.prototype.updateLocation = function(lat, lng) {
+      return this.$locationInput.val("POINT (" + lng + " " + lat + ")");
     };
 
     SubmitSightingPane.prototype.start = function() {
-      return this.sync();
+      var _this = this;
+      this.sync();
+      return ashtag.extra.geoLocate().then(this.updateLocation, function() {
+        if (!ashtag.extra.online()) {
+          return alert('Could not get your location. Find an Internet connection and try again');
+        }
+      });
     };
 
     SubmitSightingPane.prototype.handleSubmit = function(e) {
@@ -127,6 +143,20 @@
       return this.fileStore.totalPendingFiles().then(function(total) {
         return $('.ui-loader h1').text("Syncing sightings, " + total + " remaining");
       });
+    };
+
+    SubmitSightingPane.prototype.parseLocation = function() {
+      var match, re, text;
+      text = this.$locationInput.val();
+      if (!text) {
+        return;
+      }
+      re = /^POINT\s*\(([-\.\d]+) ([-\.\d]+)\)$/g;
+      match = re.exec(text);
+      return {
+        lat: parseFloat(match[2], 10),
+        lng: parseFloat(match[1], 10)
+      };
     };
 
     return SubmitSightingPane;

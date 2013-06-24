@@ -4,21 +4,33 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
 
     initialise: ->
         # Create the map pane
-        @mapPane = new ashtag.panes.SubmitSightingMapPane @$el
         @$form = @$('form')
         @$imageField = @$('form #id_image')
         @$submitButton = @$form.find('.submit-sighting')
         @$submitDoneMessages = @$form.find('.submit-done-msgs')
         @$savedForLater = @$form.find('.saved-for-later')
+        @$locationInput = @$form.find('#id_location')
+
+        @mapPane = new ashtag.panes.SubmitSightingMapPane @$el, @parseLocation()
         @fileStore = new ashtag.FileStore()
         @updateSavedForLater()
 
     setupEvents: ->
         @$form.on 'submit', @handleSubmit
         window.addEventListener 'online', @sync
+        @mapPane.observe 'locationChange', (e, lat, lng) => @updateLocation(lat, lng)
+
+    updateLocation: (lat, lng) =>
+        @$locationInput.val "POINT (#{lng} #{lat})"
 
     start: ->
         @sync()
+
+        return ashtag.extra.geoLocate().then @updateLocation, =>
+            # Failed. If we are offline then show the user an error
+            # (as we cannot show them the map if they are offline)
+            if not ashtag.extra.online()
+                alert 'Could not get your location. Find an Internet connection and try again'
 
     handleSubmit: (e) =>
         # Use the filestore if it is available, even if 
@@ -90,6 +102,16 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         @updateSavedForLater()
         @fileStore.totalPendingFiles().then (total) =>
             $('.ui-loader h1').text "Syncing sightings, #{total} remaining"
+
+    parseLocation: ->
+        # Parse the lat/lng out of the location input
+        text = @$locationInput.val()
+        return if not text
+        re = /^POINT\s*\(([-\.\d]+) ([-\.\d]+)\)$/g
+        match = re.exec(text)
+        return {} =
+            lat: parseFloat(match[2], 10)
+            lng: parseFloat(match[1], 10)
 
 
 $(window).on 'pagechange', (event, obj) =>
