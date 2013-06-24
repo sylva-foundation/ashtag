@@ -15,14 +15,14 @@
       this.imageMaxHeight = 600;
       this.enabled = this._supported();
       ashtag.lib.mixins.Observable.prototype.augment(this);
-      if (!this._supported) {
+      if (!this.enabled) {
         return;
       }
-      this.db = this.getDb();
       this.initialiseDb();
     }
 
     FileStore.prototype._supported = function() {
+      return false;
       return !!window.openDatabase;
     };
 
@@ -33,6 +33,7 @@
 
     FileStore.prototype.enable = function() {
       this.enabled = true;
+      this.initialiseDb();
       return this.fire('enable');
     };
 
@@ -42,6 +43,7 @@
 
     FileStore.prototype.initialiseDb = function() {
       var _this = this;
+      this.db = this.getDb();
       return this.query("CREATE TABLE IF NOT EXISTS [files] (                     [id] INTEGER PRIMARY KEY AUTOINCREMENT,                    [name], [meta], [file]                )").then(function() {
         return _this.enable();
       }, function() {
@@ -123,7 +125,9 @@
       return deferred.promise();
     };
 
-    FileStore.prototype._handleStoreSuccess = function() {};
+    FileStore.prototype._handleStoreSuccess = function() {
+      return this.allToServer();
+    };
 
     FileStore.prototype._handleStoreFailure = function() {};
 

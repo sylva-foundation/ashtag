@@ -10,12 +10,12 @@ class ashtag.FileStore
         ashtag.lib.mixins.Observable::augment @
         
         # Stop now if the browser doesn't have support
-        return if not @_supported
+        return if not @enabled
         
-        @db = @getDb()
         @initialiseDb()
 
     _supported: ->
+        return false
         return !!window.openDatabase
 
     disable: ->
@@ -26,6 +26,7 @@ class ashtag.FileStore
     enable: ->
         # Disable offline uploading through the FileStore
         @enabled = true
+        @initialiseDb()
         @fire 'enable'
 
     getDb: ->
@@ -34,6 +35,7 @@ class ashtag.FileStore
 
     initialiseDb: ->
         # create the table if necessary
+        @db = @getDb()
         @query("CREATE TABLE IF NOT EXISTS [files] ( 
                     [id] INTEGER PRIMARY KEY AUTOINCREMENT,
                     [name], [meta], [file]
@@ -48,7 +50,7 @@ class ashtag.FileStore
         if not @enabled
             throw 'Offline uploading disabled'
 
-        @_readFile(file, meta)
+        return @_readFile(file, meta)
             .then(@_resizeFile)
             .then(@_storeFile)
             .then(@_handleStoreSuccess, @_handleStoreFailure)
@@ -115,7 +117,9 @@ class ashtag.FileStore
         return deferred.promise()
 
     _handleStoreSuccess: =>
-        # image successfully stored locally
+        # image successfully stored locally, lets 
+        # sync if we are online
+        return @allToServer()
 
     _handleStoreFailure: =>
         # failed to store image locally
