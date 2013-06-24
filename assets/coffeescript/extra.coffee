@@ -37,3 +37,29 @@ ashtag.extra.whenOnline = ->
     if ashtag.extra.online
         def.resolve()
     return def
+
+ashtag.extra._locationPromise = null
+ashtag.extra.geoLocate = =>
+    # Geolocate the user and return a promise. 
+    # The result is cached.
+
+    if not navigator.geolocation
+        def.reject()
+
+    if ashtag.extra._locationPromise
+        return ashtag.extra._locationPromise
+
+    def = $.Deferred()
+    navigator.geolocation.getCurrentPosition(
+        (position) =>
+            def.resolve(position.coords.latitude, position.coords.longitude)
+        (error) =>
+            def.reject()
+        timeout: 20000
+    )
+
+    ashtag.extra._locationPromise = def
+    return def.promise()
+
+
+

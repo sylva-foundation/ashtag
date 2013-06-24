@@ -32,7 +32,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -235,6 +235,9 @@ STATICFILES_STORAGE = 'ashtag.apps.core.storages.PipelineForgivingStorage'
 PIPELINE_CSS_COMPRESSOR = None
 PIPELINE_JS_COMPRESSOR = None
 
+# Compressor (used for Oscar's UIs, which are not public, so disable it)
+COMPRESS_ENABLED = False
+
 # Django registration etc
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_OPEN = True
@@ -259,7 +262,15 @@ PAYPAL_CURRENCY = "GBP"
 PAYPAL_ALLOW_NOTE = False
 
 # Manifesto
-MANIFESTO_VERSIONER = 'manifesto.versioners.LastModifiedVersioner'
+MANIFESTO_VERSIONER = 'manifesto.versioners.FileContentsVersioner'
+MANIFESTO_FILTER = 'manifesto.filters.ExcludePatternFilter'
+MANIFESTO_FILTER_EXCLUDE_PATTERNS = [
+    "^%soscar" % STATIC_URL,
+    "^%sadmin" % STATIC_URL,
+    "\.less$",
+    "\.coffee$",
+    "/errors/.*\.html$",
+]
 
 # File storage configuration
 

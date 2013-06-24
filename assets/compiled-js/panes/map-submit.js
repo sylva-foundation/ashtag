@@ -20,32 +20,15 @@
     }
 
     SubmitSightingMapPane.prototype.initialise = function() {
-      var loc;
       SubmitSightingMapPane.__super__.initialise.apply(this, arguments);
-      this.$locationInput = $('#id_location');
-      loc = this.parseLocation();
-      if (loc) {
-        this.defaultLat = loc.lat;
-        this.defaultLng = loc.lng;
+      if (this.spec.lat && this.spec.lng) {
+        this.defaultLat = this.spec.lat;
+        this.defaultLng = this.spec.lng;
         return this.defaultZoom = 19;
       } else {
         this.doLocateUser = true;
         return this.zoomedInZoomLevel = 19;
       }
-    };
-
-    SubmitSightingMapPane.prototype.parseLocation = function() {
-      var match, re, text;
-      text = this.$locationInput.val();
-      if (!text) {
-        return;
-      }
-      re = /^POINT\s*\(([-\.\d]+) ([-\.\d]+)\)$/g;
-      match = re.exec(text);
-      return {
-        lat: parseFloat(match[2], 10),
-        lng: parseFloat(match[1], 10)
-      };
     };
 
     SubmitSightingMapPane.prototype.createMarker = function(lat, lng) {
@@ -60,20 +43,20 @@
         this.marker.setPosition(new google.maps.LatLng(lat, lng));
       }
       google.maps.event.addDomListener(this.marker, 'dragend', this.handleDragEnd);
-      return this.updateLocation(lat, lng);
+      return this.locationChange(lat, lng);
     };
 
     SubmitSightingMapPane.prototype.handleDragEnd = function(e) {
-      return this.updateLocation(e.latLng.lat(), e.latLng.lng());
+      return this.locationChange(e.latLng.lat(), e.latLng.lng());
     };
 
     SubmitSightingMapPane.prototype.handleMapClick = function(e) {
       this.createMarker(e.latLng.lat(), e.latLng.lng());
-      return this.updateLocation(e.latLng.lat(), e.latLng.lng());
+      return this.locationChange(e.latLng.lat(), e.latLng.lng());
     };
 
-    SubmitSightingMapPane.prototype.updateLocation = function(lat, lng) {
-      return this.$locationInput.val("POINT (" + lng + " " + lat + ")");
+    SubmitSightingMapPane.prototype.locationChange = function(lat, lng) {
+      return this.fire('locationChange', lat, lng);
     };
 
     SubmitSightingMapPane.prototype.handleMapLoad = function() {

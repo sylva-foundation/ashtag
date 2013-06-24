@@ -46,24 +46,15 @@
     };
 
     MapBasePane.prototype.centerOnUser = function() {
-      var deferred,
+      var promise,
         _this = this;
-      deferred = $.Deferred();
-      if (!navigator.geolocation) {
-        deferred.resolve(this.defaultLat, this.defaultLng);
-      } else {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          return deferred.resolve(position.coords.latitude, position.coords.longitude);
-        }, function(error) {
-          return deferred.resolve(_this.defaultLat, _this.defaultLng);
-        }, {
-          timeout: 10000
-        });
-      }
-      deferred.then(function(lat, lng) {
+      promise = ashtag.extra.geoLocate();
+      promise.then(function(lat, lng) {
         return _this.setMapLocation(lat, lng, _this.zoomedInZoomLevel);
+      }, function() {
+        return _this.setMapLocation(_this.defaultLat, _this.defaultLat, _this.defaultZoom);
       });
-      return deferred.promise();
+      return promise;
     };
 
     MapBasePane.prototype.handleMapLoad = function(e, map) {};

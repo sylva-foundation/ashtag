@@ -3,11 +3,12 @@ module "ashtag.panes"
 class ashtag.panes.BuyTagsPane extends ashtag.lib.panes.BasePane
 
     initialise: ->
-        @includeShippingInPrice = true
+        @includeShippingInPrice = false
 
-        @$tagPackInput = @$('.select-tags select')
+        @$tagPackInput = @$('.select-tags select, input#product_id[type=hidden]')
         @$quantityInput = @$('.quantity select')
         @$price = @$('.price-placehodler')
+        @$postagePrice = @$('.postage-price')
 
     setupEvents: ->
         @$tagPackInput.on 'change', @updatePrice
@@ -27,14 +28,14 @@ class ashtag.panes.BuyTagsPane extends ashtag.lib.panes.BasePane
         return price
 
     getShipping: ->
-        return 3 # Revisit this later when shipping prices change
+        return parseFloat(@$postagePrice.text(), 10)
 
     getPackPrice: ->
-        packPrice = @$tagPackInput.find('option:selected').data('price')
-        return parseInt(packPrice, 10)
+        packPrice = @$tagPackInput.data('price') or @$tagPackInput.find('option:selected').data('price')
+        return parseFloat(packPrice, 10)
 
     getQuantity: ->
-        quantity = @$quantityInput.find('option:selected').val()
+        quantity = @$quantityInput.find('option:selected').val() or 1
         return parseInt(quantity, 10)
 
 

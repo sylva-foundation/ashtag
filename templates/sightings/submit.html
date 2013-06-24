@@ -1,5 +1,7 @@
 {% extends "core/jqm-page.html" %}
 
+{% load manifesto %}
+{% block manifest %}manifest="{% manifest_url %}"{% endblock %}
 {% block title %}Submit a Sighting{% endblock %}
 {% block class %}submit-sighting-page{% endblock %}
 {% block id %}submit-sighting-page{% endblock %}
@@ -51,23 +53,23 @@
             <div class="form-row{% if form.errors.disease_state %} errors{% endif %}">
             <fieldset data-role="controlgroup">
                 {{ form.errors.disease_state }}
-                <legend>Does this tree appear to have the Ash Dieback Disease?</legend>
+                <legend>In your opinion, how likely is this tree to have Ash Dieback Disease?</legend>
                 <input type="radio" name="disease_state"
                 id="id_disease_state_1" value=""
                 {% if form.disease_state.value == "" or form.disease_state.value == None %}checked="checked"{% endif %} />
-                    <label for="id_disease_state_1">I don't know</label>
+                    <label for="id_disease_state_1">Uncertain / I don't know</label>
         
                     <input type="radio" name="disease_state"
                     id="id_disease_state_2" value="True"
                     {% if form.disease_state.value == 'True' %}checked="checked"{% endif %}
                     />
-                    <label for="id_disease_state_2">Yes</label>
+                    <label for="id_disease_state_2">Likely</label>
         
                     <input type="radio" name="disease_state"
                     id="id_disease_state_3" value="False"
                     {% if form.disease_state.value == 'False' %}checked="checked"{% endif %}
                     />
-                    <label for="id_disease_state_3">No</label>
+                    <label for="id_disease_state_3">Unlikely</label>
             </fieldset>
             </div><!--//form-row-->
             <div class="form-row">
@@ -80,10 +82,16 @@
                 <div class="saved-for-later"><span class="total">1</span> sighting(s) will be uploaded when you are back online</div>
             </div>
 
-            <div class="offline-msg" style="display: none;">
-                <p><strong>Saved for later</strong></p>
-                <p>Come back here once you are online and your sighting will be uploaded automatically</p>
-            </div>
+            <div class="submit-done-msgs" style="display: none;">
+                <div class="online-msg">
+                    <p><strong>Uploading sighting, please wait...</strong></p>
+                    <p>Xiaoying - Perhaps put an ajax-spinner here?</p>
+                </div>
+                <div class="offline-msg">
+                    <p><strong>Saved for later</strong></p>
+                    <p>Come back here once you are online and your sighting will be uploaded automatically</p>
+                </div>
+        </div>
         </form><!--//submit-sighting-form-->                          
    
     </div><!--//at-content-->  

@@ -4,7 +4,7 @@ import json
 with open('/home/dotcloud/environment.json') as f:
     env = json.load(f)
 
-DEBUG = True
+DEBUG = bool(env.get('DEBUG', False))
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
@@ -34,3 +34,13 @@ EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD', None)
 DEFAULT_FROM_EMAIL = env.get('DEFAULT_FROM_EMAIL', None)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Raven / sentry
+if env.get('RAVEN_DSN', None):
+    RAVEN_CONFIG = {
+        'dsn': env.get('RAVEN_DSN')
+    }
+
+    INSTALLED_APPS = INSTALLED_APPS + [
+        'raven.contrib.django.raven_compat',
+    ]

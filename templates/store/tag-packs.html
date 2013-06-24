@@ -14,7 +14,15 @@
                     </div>
                     <p class="tags-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi cursus at risus ut tristique. Nulla ullamcorper quis quam vitae tristique. Sed non tempor metus. Sed porta, lectus ac imperdiet convallis, mi dolor pellentesque libero, eu auctor mauris urna ac massa. Nullam aliquam mollis bibendum. Integer et blandit enim. Maecenas eget ligula bibendum, fringilla mauris et, tempus enim. Morbi rutrum, sapien ut ullamcorper mattis, risus dolor imperdiet metus, vel aliquam nulla ante non sapien. Duis vel nisl nibh.</p>
                     <div class="tags-details">
+                        {% if products|length == 1 %}
+                        {% with products|first as product %}
+                        
+                        <p><strong>Each pack contains {{ product.num_tags }} tag{{ product.num_tags|pluralize }}</strong></p>
+                        
+                        <input type="hidden" name="product_id" id="product_id" value="{{ product.id }}" data-price="{{ product.stockrecord.price_incl_tax }}">
 
+                        {% endwith %}
+                        {% else %}
                         <div class="select-tags">
                             <label>Select tags</label>
                             <select class="tags-options" name="product_id">
@@ -23,8 +31,10 @@
                                 {% endfor %}
                             </select>
                         </div>
+                        {% endif %}
+
                         <div class="quantity">
-                             <label class="price-label">Quantity:</label> 
+                             <label class="price-label">Number of packs:</label> 
                              <select name="quantity" id="quantity">
                                 <option value="1" selected="">1</option>
                                 <option value="2">2</option>
@@ -44,7 +54,7 @@
                                  <span class="price-value">&#163;<span class="price-placehodler"></span></span>
                             </p>
                             <p class="postage">
-                                (Postage: &#163;3.00)
+                                (Plus &#163;<span class="postage-price">{{ shipping_price_per_order }}</span> postage)
                             </p>
                         </div>                        
                     </div><!--//tags-details-->

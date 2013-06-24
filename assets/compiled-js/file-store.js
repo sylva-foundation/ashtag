@@ -9,13 +9,15 @@
       this._handleStoreFailure = __bind(this._handleStoreFailure, this);
       this._handleStoreSuccess = __bind(this._handleStoreSuccess, this);
       this._storeFile = __bind(this._storeFile, this);
+      this._resizeFile = __bind(this._resizeFile, this);
       this.imageFieldName = "image";
+      this.imageMaxWidth = 800;
+      this.imageMaxHeight = 600;
       this.enabled = this._supported();
       ashtag.lib.mixins.Observable.prototype.augment(this);
-      if (!this._supported) {
+      if (!this.enabled) {
         return;
       }
-      this.db = this.getDb();
       this.initialiseDb();
     }
 
@@ -30,15 +32,17 @@
 
     FileStore.prototype.enable = function() {
       this.enabled = true;
+      this.initialiseDb();
       return this.fire('enable');
     };
 
     FileStore.prototype.getDb = function() {
-      return window.openDatabase('uploader', '', 'Pending uploads', 10 * 1024 * 1024);
+      return window.openDatabase('uploader', '', 'Pending uploads', 5 * 1024 * 1024);
     };
 
     FileStore.prototype.initialiseDb = function() {
       var _this = this;
+      this.db = this.getDb();
       return this.query("CREATE TABLE IF NOT EXISTS [files] (                     [id] INTEGER PRIMARY KEY AUTOINCREMENT,                    [name], [meta], [file]                )").then(function() {
         return _this.enable();
       }, function() {
@@ -53,7 +57,7 @@
       if (!this.enabled) {
         throw 'Offline uploading disabled';
       }
-      return this._readFile(file, meta).then(this._storeFile).then(this._handleStoreSuccess, this._handleStoreFailure);
+      return this._readFile(file, meta).then(this._resizeFile).then(this._storeFile).then(this._handleStoreSuccess, this._handleStoreFailure);
     };
 
     FileStore.prototype._readFile = function(file, meta) {
@@ -62,18 +66,57 @@
       deferred = $.Deferred();
       reader = new FileReader();
       reader.onloadend = function(e) {
-        var fileData;
-        fileData = e.target.result;
-        return deferred.resolve(file.name, fileData, meta);
+        return deferred.resolve(file, reader, meta);
       };
       reader.readAsDataURL(file);
       return deferred.promise();
     };
 
-    FileStore.prototype._storeFile = function(fileName, fileData, meta) {
+    FileStore.prototype._resizeFile = function(file, reader, meta) {
+      var canvas, def, handleLoaded, img, interval,
+        _this = this;
+      def = $.Deferred();
+      canvas = document.createElement("canvas");
+      img = new Image();
+      handleLoaded = function() {
+        var ctx, height, resizedData, width;
+        ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        width = img.width;
+        height = img.height;
+        if (width > height) {
+          if (width > _this.imageMaxWidth) {
+            height *= _this.imageMaxWidth / width;
+            width = _this.imageMaxWidth;
+          }
+        } else {
+          if (height > _this.imageMaxHeight) {
+            width *= _this.imageMaxHeight / height;
+            height = _this.imageMaxHeight;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        resizedData = canvas.toDataURL("image/jpeg");
+        return def.resolve(file, resizedData, meta);
+      };
+      img.src = reader.result;
+      interval = setInterval(function() {
+        console.log(img.width);
+        if (img.width > 0) {
+          handleLoaded();
+          return clearInterval(interval);
+        }
+      }, 100);
+      return def;
+    };
+
+    FileStore.prototype._storeFile = function(file, fileData, meta) {
       var deferred;
       deferred = $.Deferred();
-      this.query("INSERT INTO [files] ([name], [meta], [file]) VALUES (?, ?, ?)", [fileName, meta, fileData]).then(function() {
+      this.query("INSERT INTO [files] ([name], [meta], [file]) VALUES (?, ?, ?)", [file.name, meta, fileData]).then(function() {
         return deferred.resolve();
       }, function() {
         return deferred.reject();
@@ -81,7 +124,9 @@
       return deferred.promise();
     };
 
-    FileStore.prototype._handleStoreSuccess = function() {};
+    FileStore.prototype._handleStoreSuccess = function() {
+      return this.allToServer();
+    };
 
     FileStore.prototype._handleStoreFailure = function() {};
 
