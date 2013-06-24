@@ -18,10 +18,11 @@
     }
 
     BuyTagsPane.prototype.initialise = function() {
-      this.includeShippingInPrice = true;
-      this.$tagPackInput = this.$('.select-tags select');
+      this.includeShippingInPrice = false;
+      this.$tagPackInput = this.$('.select-tags select, input#product_id[type=hidden]');
       this.$quantityInput = this.$('.quantity select');
-      return this.$price = this.$('.price-placehodler');
+      this.$price = this.$('.price-placehodler');
+      return this.$postagePrice = this.$('.postage-price');
     };
 
     BuyTagsPane.prototype.setupEvents = function() {
@@ -49,18 +50,18 @@
     };
 
     BuyTagsPane.prototype.getShipping = function() {
-      return 3;
+      return parseFloat(this.$postagePrice.text(), 10);
     };
 
     BuyTagsPane.prototype.getPackPrice = function() {
       var packPrice;
-      packPrice = this.$tagPackInput.find('option:selected').data('price');
-      return parseInt(packPrice, 10);
+      packPrice = this.$tagPackInput.data('price') || this.$tagPackInput.find('option:selected').data('price');
+      return parseFloat(packPrice, 10);
     };
 
     BuyTagsPane.prototype.getQuantity = function() {
       var quantity;
-      quantity = this.$quantityInput.find('option:selected').val();
+      quantity = this.$quantityInput.find('option:selected').val() || 1;
       return parseInt(quantity, 10);
     };
 
