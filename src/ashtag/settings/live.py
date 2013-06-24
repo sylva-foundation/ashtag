@@ -34,3 +34,13 @@ EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD', None)
 DEFAULT_FROM_EMAIL = env.get('DEFAULT_FROM_EMAIL', None)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Raven / sentry
+if env.get('RAVEN_DSN', None):
+    RAVEN_CONFIG = {
+        'dsn': env.get('RAVEN_DSN')
+    }
+
+    INSTALLED_APPS = INSTALLED_APPS + [
+        'raven.contrib.django.raven_compat',
+    ]
