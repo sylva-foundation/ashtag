@@ -29,8 +29,10 @@
                 {{ form.errors.tag_number }}
                 <label for="id_tag_number">Tag Number (if present)</label>
                 <input class="tag-number" type="text" name="tag_number"
-                pattern="[\d]+"
-                id="id_tag_number" placeholder="eg. 12344" value="{{ form.tag_number.value }}" />
+                pattern="[\d]{5}"
+                title="Tag numbers are five digits"
+                x-moz-errormessage="Tag numbers are five digits"
+                id="id_tag_number" placeholder="eg. 12345" value="{{ form.tag_number.value }}" />
             </div><!--//form-row-->
             <div class="form-row{% if form.errors.image %} errors{% endif %}">
                 {{ form.errors.image }}

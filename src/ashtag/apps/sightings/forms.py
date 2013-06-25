@@ -23,6 +23,20 @@ class SightingForm(forms.ModelForm):
         super(SightingForm, self).__init__(*args, **kwargs)
         self.user = user
 
+    def clean_tag_number(self):
+        tag_number = self.cleaned_data['tag_number']
+        if not tag_number:
+            return tag_number
+        try:
+            int(tag_number)
+        except ValueError:
+            raise forms.ValidationError('Tag number must be numbers only')
+
+        if len(tag_number) != 5:
+            raise forms.ValidationError('Tag number must be five digits long')
+
+        return tag_number
+
     def clean(self):
         """Sort out the tag number"""
         c_data = self.cleaned_data

@@ -17,6 +17,7 @@
       this.handleSyncStart = __bind(this.handleSyncStart, this);
       this.sync = __bind(this.sync, this);
       this.updateSavedForLater = __bind(this.updateSavedForLater, this);
+      this.resetForm = __bind(this.resetForm, this);
       this.hideOfflineStorageMessage = __bind(this.hideOfflineStorageMessage, this);
       this.showOfflineStorageMessage = __bind(this.showOfflineStorageMessage, this);
       this.handleSubmit = __bind(this.handleSubmit, this);
@@ -78,7 +79,10 @@
       this.showOfflineStorageMessage();
       hide = ashtag.extra.callAfter(2, this.hideOfflineStorageMessage);
       setTimeout(hide, 4000);
-      return storePromise.then(hide, function() {
+      return storePromise.then(function() {
+        hide();
+        return _this.resetForm();
+      }, function() {
         _this.fileStore.disable();
         return _this.$form.submit();
       });
@@ -99,8 +103,18 @@
       return this.updateSavedForLater();
     };
 
+    SubmitSightingPane.prototype.resetForm = function() {
+      var location;
+      location = this.$locationInput.val();
+      this.$form.reset();
+      return this.$locationInput.val(location);
+    };
+
     SubmitSightingPane.prototype.updateSavedForLater = function() {
       var _this = this;
+      if (!this.fileStore.enabled) {
+        return;
+      }
       return this.fileStore.totalPendingFiles().then(function(total) {
         _this.$savedForLater.find('.total').text(total);
         return _this.$savedForLater.toggle(!!total);
@@ -109,7 +123,7 @@
 
     SubmitSightingPane.prototype.sync = function() {
       var _this = this;
-      if (ashtag.extra.online()) {
+      if (ashtag.extra.online() && this.fileStore.enabled) {
         return this.fileStore.totalPendingFiles().then(function(total) {
           if (total) {
             _this.handleSyncStart();

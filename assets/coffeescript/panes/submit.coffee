@@ -54,7 +54,11 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         # and a few seconds have elapsed
         hide = ashtag.extra.callAfter(2, @hideOfflineStorageMessage)
         setTimeout hide, 4000
-        storePromise.then hide, =>
+        storePromise.then =>
+            hide()
+            @resetForm()
+
+        , =>
             # Failed, so disable the filestore and try the old-school way
             @fileStore.disable()
             @$form.submit()
@@ -73,13 +77,19 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         @$savedForLater.show()
         @updateSavedForLater()
 
+    resetForm: =>
+        location = @$locationInput.val()
+        @$form.reset()
+        @$locationInput.val(location)
+
     updateSavedForLater: =>
+        return if not @fileStore.enabled
         @fileStore.totalPendingFiles().then (total) =>
             @$savedForLater.find('.total').text total
             @$savedForLater.toggle(!!total)
 
     sync: =>
-        if ashtag.extra.online()
+        if ashtag.extra.online() and @fileStore.enabled
             @fileStore.totalPendingFiles().then (total) =>
                 if total
                     @handleSyncStart()
