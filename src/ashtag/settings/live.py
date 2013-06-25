@@ -18,7 +18,7 @@ DATABASES = {
     }
 }
 
-PAYPAL_SANDBOX_MODE = False
+PAYPAL_SANDBOX_MODE = True
 
 HAYSTACK_CONNECTIONS = {
     'default': {
