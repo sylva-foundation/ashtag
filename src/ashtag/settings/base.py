@@ -270,6 +270,7 @@ MANIFESTO_FILTER_EXCLUDE_PATTERNS = [
     "\.less$",
     "\.coffee$",
     "/errors/.*\.html$",
+    "^\.DS_Store$",
 ]
 
 # File storage configuration
