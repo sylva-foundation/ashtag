@@ -262,6 +262,7 @@ PAYPAL_CURRENCY = "GBP"
 PAYPAL_ALLOW_NOTE = False
 
 # Manifesto
+MANIFESTO_EXCLUDED_MANIFESTS = 'pipeline.manifest.PipelineManifest'
 MANIFESTO_VERSIONER = 'manifesto.versioners.FileContentsVersioner'
 MANIFESTO_FILTER = 'manifesto.filters.ExcludePatternFilter'
 MANIFESTO_FILTER_EXCLUDE_PATTERNS = [
@@ -270,7 +271,7 @@ MANIFESTO_FILTER_EXCLUDE_PATTERNS = [
     "\.less$",
     "\.coffee$",
     "/errors/.*\.html$",
-    "^\.DS_Store$",
+    '/\.DS_Store$',
 ]
 
 # File storage configuration

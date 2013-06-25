@@ -7,6 +7,8 @@ from ashtag.apps.core.views import AshTagRegistrationView
 from oscar.app import application as oscar_application
 
 urlpatterns = patterns('',
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/Users/adam/Projects/ashtag/static'}),
+
     # We extend the default RegistrationView
     url(r'^accounts/register/$', AshTagRegistrationView.as_view(), name='registration_register'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
@@ -26,4 +28,5 @@ urlpatterns = patterns('',
 
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+
 )
