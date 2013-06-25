@@ -40,19 +40,11 @@
                         {% endfor %}
                     </ul><!--//sightings-list-->
                     {% else %}
-                    <p>You haven't tagged any trees yet!</p>
+                    <p class="no-trees">You haven't tagged any trees yet!</p>
                     {% endif %}
                     <div class="cta-btn-wrapper">
                         <a class="add-tree-button" href="{% url 'sightings:submit' %}" data-role="button" data-icon="plus" >Tag a{% if object_list %}nother{% endif %} tree</a>
                     </div>
-
-                    <div data-role="popup" id="auth" class="ui-content">
-                        <p>You need to log in to view the untagged tree.</p>
-                        <div class="cta-btn-wrapper">
-                            <a href="login.html" data-role="button" data-inline="true" data-mini="true">Log in</a>
-                        </div><!--//cta-btn-wrapper-->
-                        <a href="#" class="cancel-button" data-role="button" data-rel="back" data-inline="true" data-mini="true">Cancel</a>
-                    </div><!--//#auth-->
 
                 </div><!--//my-tags-wrapper-->
             </div><!--//sightings-wrapper-->

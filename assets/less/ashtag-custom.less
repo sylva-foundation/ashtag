@@ -804,6 +804,89 @@ body.offline .map-wrapper #map_canvas {
     
 }
 
+/* Order confirmation */
+.thankyou-wrapper {
+
+    dt {
+        font-weight: bold;
+    }
+    dd {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+    
+    .print-button {
+        .ui-btn-inner:before {
+            font-family: "FontAwesome";
+            content: "\f02f";
+            display: inline-block;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);
+            margin-right: 5px;
+            font-size: 16px;
+        }
+    }
+    
+    .home-button {
+        .ui-btn-inner:before {
+            font-family: "FontAwesome";
+            content: "\f015";
+            display: inline-block;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);
+            margin-right: 5px;
+            font-size: 16px;
+        }
+    }
+
+   .basket-totals {
+        padding: 0;
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse:collapse;
+        .total {
+            text-align:left;
+        }
+        td, th {
+            padding: 5px 0;
+            font-weight: normal;
+            font-size:13px;
+        }
+        th.heading {
+            text-align: right;
+            border-bottom: 1px dashed #ccc;
+            color: @green;
+        }
+        h4 {
+            margin: 0;
+        }
+        .align-left {
+            text-align: left;
+        }
+        .order-total-row {
+            td, th {
+                font-size: 22px;
+                color: darken(@green, 20%);
+            }
+            th {
+                border-top: 5px solid @green-secondary;
+            }
+            td {
+                border-top: 5px solid @green;
+            }
+        }
+        
+    }
+    
+    .order-details-wrapper {
+        padding: 10px;
+        background: #f5f5f5;
+        margin-bottom: 20px;
+        .border-radius;
+    }
+       
+
+    
+}
+
 
 /* Sightings Pages */
 .sightings-view-wrapper {
@@ -1142,6 +1225,10 @@ body.offline .map-wrapper #map_canvas {
         margin: 0 auto;
         margin-top: 20px;
     }
+    p.no-trees {
+        text-align: center;
+        margin-top:0;
+    }
 }
 
 
@@ -1157,6 +1244,4 @@ body.offline .map-wrapper #map_canvas {
     	background: none; /* Hide illustration when it's mobile */
 	}
 }
-
-/* map page */
 
