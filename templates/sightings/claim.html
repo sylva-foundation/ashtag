@@ -19,7 +19,7 @@
                 the number and photo to us here. Make sure the picture shows the number
                 clearly!</p>
             </div>
-            <form class="form submit-sighting-form" action="" method="post" data-ajax="false" enctype="multipart/form-data">
+            <form class="form submit-sighting-form" action="{% url 'sightings:claim' tree.id %}" method="post" data-ajax="false" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class="cta-btn-wrapper cta-btn-wrapper-claim">

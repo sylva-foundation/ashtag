@@ -7,7 +7,7 @@
 {% block page %}
 
     <div data-role="content" class="at-content" role="main"> 
-        <form class="form signup-form ui-shadow" name="signup-form" action="" method="post" data-ajax="false">
+        <form class="form signup-form ui-shadow" name="signup-form" action="{% url 'registration_register' %}" method="post" data-ajax="false">
             {% csrf_token %}
 
             {{ form }}

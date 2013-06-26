@@ -31,8 +31,15 @@
 
   $(window).on('pagechange', function(event, obj) {
     if (obj.toPage.attr('id') === 'login-page') {
-      return $('.login-page label[for=id_username]').text('Email');
+      $('.login-page label[for=id_username]').text('Email');
     }
+    return $('form').each(function(i, el) {
+      var $el;
+      $el = $(el);
+      if (!$el.attr('action')) {
+        return $el.attr('action', $.mobile.activePage.data('url'));
+      }
+    });
   });
 
 }).call(this);
