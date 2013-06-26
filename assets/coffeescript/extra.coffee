@@ -32,7 +32,7 @@ ashtag.extra.online = ->
 
 ashtag.extra.whenOnline = ->
     def = $.Deferred()
-    window.addEventListener 'online', =>
+    $(window).on 'online', =>
         def.resolve()
     if ashtag.extra.online
         def.resolve()

@@ -17,7 +17,7 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
 
     setupEvents: ->
         @$form.on 'submit', @handleSubmit
-        window.addEventListener 'online', @sync
+        $(window).on 'online', @sync
         @mapPane.observe 'locationChange', (e, lat, lng) => @updateLocation(lat, lng)
 
     updateLocation: (lat, lng) =>

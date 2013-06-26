@@ -11,8 +11,8 @@ jQuery ->
     goOffline = =>
         $('body').addClass('offline').removeClass('online')
 
-    window.addEventListener 'online', goOnline
-    window.addEventListener 'offline', goOffline
+    $(window).on 'online', goOnline
+    $(window).on 'offline', goOffline
     if ashtag.extra.online
         goOnline()
     else

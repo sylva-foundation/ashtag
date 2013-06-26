@@ -41,7 +41,7 @@
     var def,
       _this = this;
     def = $.Deferred();
-    window.addEventListener('online', function() {
+    $(window).on('online', function() {
       return def.resolve();
     });
     if (ashtag.extra.online) {

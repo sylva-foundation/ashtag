@@ -41,7 +41,7 @@
     SubmitSightingPane.prototype.setupEvents = function() {
       var _this = this;
       this.$form.on('submit', this.handleSubmit);
-      window.addEventListener('online', this.sync);
+      $(window).on('online', this.sync);
       return this.mapPane.observe('locationChange', function(e, lat, lng) {
         return _this.updateLocation(lat, lng);
       });
