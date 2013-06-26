@@ -26,7 +26,7 @@
       var _this = this;
       return this.$removes.on('click', function(e) {
         e.preventDefault();
-        return _this.remove($(e.target).data('id'));
+        return _this.remove($(e.target).closest('a').data('id'));
       });
     };
 

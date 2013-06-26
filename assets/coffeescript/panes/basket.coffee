@@ -9,7 +9,7 @@ class ashtag.panes.BasketPane extends ashtag.lib.panes.BasePane
     setupEvents: ->
         @$removes.on 'click', (e) =>
             e.preventDefault()
-            @remove $(e.target).data('id')
+            @remove $(e.target).closest('a').data('id')
 
     start: ->
 
