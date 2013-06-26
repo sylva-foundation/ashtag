@@ -104,7 +104,6 @@
       };
       img.src = reader.result;
       interval = setInterval(function() {
-        console.log(img.width);
         if (img.width > 0) {
           handleLoaded();
           return clearInterval(interval);

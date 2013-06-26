@@ -98,7 +98,6 @@ class ashtag.FileStore
         img.src = reader.result
 
         interval = setInterval =>
-                console.log img.width
                 if img.width > 0
                     handleLoaded()
                     clearInterval(interval)
