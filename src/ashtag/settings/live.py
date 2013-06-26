@@ -32,6 +32,7 @@ EMAIL_PORT = int(env.get('EMAIL_PORT', None))
 EMAIL_USE_TLS = bool(env.get('EMAIL_USE_TLS', None))
 EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD', None)
 DEFAULT_FROM_EMAIL = env.get('DEFAULT_FROM_EMAIL', None)
+OSCAR_FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
