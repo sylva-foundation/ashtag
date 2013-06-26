@@ -253,6 +253,12 @@ OSCAR_ORDER_STATUS_PIPELINE = {
 }
 # Check for a sensible flow before enabling this
 OSCAR_ALLOW_ANON_CHECKOUT = True
+OSCAR_PARTNER_WRAPPERS = {
+    'adapt': 'ashtag.apps.store.partnerwrappers.AdaptWrapper',
+}
+# Tax percentage as string (0.2 = 20%).
+# Used in ashtag.apps.store.partnerwrappers.AdaptWrapper, not by Oscar core code
+OSCAR_TAX = '0.2'
 
 # Oscar PayPal
 PAYPAL_API_USERNAME = os.environ.get('PAYPAL_API_USERNAME', 'not-set')

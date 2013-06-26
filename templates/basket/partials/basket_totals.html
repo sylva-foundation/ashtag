@@ -55,7 +55,7 @@
         {% else %}
             {# No discounts to basket #}
             <tr>
-                <th class="total">Basket total</th>
+                <th class="total">Basket total<br />(inc VAT)</th>
                 <th class="total align-right">{{ basket.total_incl_tax|currency }}</th>
             </tr>
         {% endif %}
