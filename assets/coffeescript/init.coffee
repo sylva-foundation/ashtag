@@ -26,6 +26,8 @@ jQuery ->
 
 
 $(window).on 'pagechange', (event, obj) =>
+    currentUrl = $.mobile.activePage.data('url')
+
     # A hack to change the lable on the login form
     if obj.toPage.attr('id') == 'login-page'
         $('.login-page label[for=id_username]').text('Email')
@@ -34,5 +36,7 @@ $(window).on 'pagechange', (event, obj) =>
     $('form').each (i, el) =>
         $el = $(el)
         if not $el.attr('action')
-            $el.attr 'action', $.mobile.activePage.data('url')
+            $el.attr 'action', currentUrl
 
+    # Google analytics page view tracking
+    _gaq.push(['_trackPageview', currentUrl]) if _gaq

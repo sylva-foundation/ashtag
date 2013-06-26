@@ -30,16 +30,21 @@
   });
 
   $(window).on('pagechange', function(event, obj) {
+    var currentUrl;
+    currentUrl = $.mobile.activePage.data('url');
     if (obj.toPage.attr('id') === 'login-page') {
       $('.login-page label[for=id_username]').text('Email');
     }
-    return $('form').each(function(i, el) {
+    $('form').each(function(i, el) {
       var $el;
       $el = $(el);
       if (!$el.attr('action')) {
-        return $el.attr('action', $.mobile.activePage.data('url'));
+        return $el.attr('action', currentUrl);
       }
     });
+    if (_gaq) {
+      return _gaq.push(['_trackPageview', currentUrl]);
+    }
   });
 
 }).call(this);
