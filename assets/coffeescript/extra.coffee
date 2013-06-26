@@ -45,6 +45,7 @@ ashtag.extra.geoLocate = =>
     def = $.Deferred()
     if not navigator.geolocation
         def.reject()
+        return def.promise()
 
     if ashtag.extra._locationPromise
         return ashtag.extra._locationPromise

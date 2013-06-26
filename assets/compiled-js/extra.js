@@ -57,6 +57,7 @@
     def = $.Deferred();
     if (!navigator.geolocation) {
       def.reject();
+      return def.promise();
     }
     if (ashtag.extra._locationPromise) {
       return ashtag.extra._locationPromise;
