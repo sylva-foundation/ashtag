@@ -42,14 +42,13 @@ ashtag.extra._locationPromise = null
 ashtag.extra.geoLocate = =>
     # Geolocate the user and return a promise. 
     # The result is cached.
-
+    def = $.Deferred()
     if not navigator.geolocation
         def.reject()
 
     if ashtag.extra._locationPromise
         return ashtag.extra._locationPromise
 
-    def = $.Deferred()
     navigator.geolocation.getCurrentPosition(
         (position) =>
             def.resolve(position.coords.latitude, position.coords.longitude)

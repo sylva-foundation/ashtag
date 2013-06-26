@@ -54,13 +54,13 @@
 
   ashtag.extra.geoLocate = function() {
     var def;
+    def = $.Deferred();
     if (!navigator.geolocation) {
       def.reject();
     }
     if (ashtag.extra._locationPromise) {
       return ashtag.extra._locationPromise;
     }
-    def = $.Deferred();
     navigator.geolocation.getCurrentPosition(function(position) {
       return def.resolve(position.coords.latitude, position.coords.longitude);
     }, function(error) {
