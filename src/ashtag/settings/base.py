@@ -127,6 +127,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'oscar.apps.checkout.context_processors.checkout',
     'oscar.apps.customer.notifications.context_processors.notifications',
     'oscar.core.context_processors.metadata',
+
+    'ashtag.apps.core.context_processors.enable_tracking',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -294,5 +296,8 @@ if os.environ.get('AWS_MEDIA_ENABLE', False):
 
 if os.environ.get('AWS_STATIC_ENABLE', False):
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+# Tracking switch
+ENABLE_TRACKING_CODE = bool(os.environ.get('ENABLE_TRACKING_CODE', False))
 
 from ashtag.settings.assets import *

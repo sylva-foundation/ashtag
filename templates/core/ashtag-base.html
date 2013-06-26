@@ -25,7 +25,7 @@
 
     <body>
         {% block content %}{% endblock %}
-
+        {% if ENABLE_TRACKING_CODE %}
         <script type="text/javascript">
           var _gaq = _gaq || [];
           _gaq.push(['_setAccount', 'UA-35878991-3']);
@@ -35,5 +35,6 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
           })();
         </script>
+        {% endif %}
     </body>
 </html>
