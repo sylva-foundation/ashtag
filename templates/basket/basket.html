@@ -17,7 +17,7 @@
         <a data-role="button" class="buy-tags" href="{% url 'store:tagpacks' %}">Buy tags</a>
         </div>
         {% else %}
-            <form action="" method="post" data-ajax="false">
+            <form action="{% url 'basket:summary' %}" method="post" data-ajax="false">
                 {% csrf_token %}
                 {{ formset.management_form }}
     

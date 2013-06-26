@@ -9,7 +9,7 @@
 {% block page %}
             
     <div data-role="content" class="at-content" role="main">
-        <form class="form submit-sighting-form ui-shadow" action="" method="post" data-ajax="false" enctype="multipart/form-data">
+        <form class="form submit-sighting-form ui-shadow" action="{% url 'sightings:submit' %}" method="post" data-ajax="false" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-intro">
                 <p>Intro blurb goes here lorem ipsum dolor sit amet,

@@ -23,7 +23,16 @@ jQuery ->
         applicationCache.addEventListener 'updateready', =>
             $('#updatesready').show();
 
-# A hack to change the lable on the login form
+
+
 $(window).on 'pagechange', (event, obj) =>
+    # A hack to change the lable on the login form
     if obj.toPage.attr('id') == 'login-page'
         $('.login-page label[for=id_username]').text('Email')
+
+    # Set the action of any forms correctly
+    $('form').each (i, el) =>
+        $el = $(el)
+        if not $el.attr('action')
+            $el.attr 'action', $.mobile.activePage.data('url')
+
