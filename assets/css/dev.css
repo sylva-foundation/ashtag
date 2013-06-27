@@ -1,6 +1,0 @@
-body.online #submit-sighting-page .submit-done-msgs .offline-msg {
-    display: none;
-}
-body.offline #submit-sighting-page .submit-done-msgs .online-msg {
-    display: none;
-}
