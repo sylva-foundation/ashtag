@@ -1,3 +1,5 @@
+window._gaq = window._gaq or []
+
 jQuery ->
     $ = jQuery
 
@@ -39,4 +41,4 @@ $(window).on 'pagechange', (event, obj) =>
             $el.attr 'action', currentUrl
 
     # Google analytics page view tracking
-    _gaq.push(['_trackPageview', currentUrl]) if _gaq
+    window._gaq.push(['_trackPageview', currentUrl])

@@ -2,6 +2,8 @@
 (function() {
   var _this = this;
 
+  window._gaq = window._gaq || [];
+
   jQuery(function() {
     var $, goOffline, goOnline,
       _this = this;
@@ -42,9 +44,7 @@
         return $el.attr('action', currentUrl);
       }
     });
-    if (_gaq) {
-      return _gaq.push(['_trackPageview', currentUrl]);
-    }
+    return window._gaq.push(['_trackPageview', currentUrl]);
   });
 
 }).call(this);
