@@ -117,7 +117,7 @@ class SightingTestCase(WebTest):
         response = self.app.post(
             reverse('sightings:submit'),
             {
-                'tag_number': '1234',
+                'tag_number': '12345',
                 'image': X_IMAGE,
                 'image_name': 'xxx.jpg',
                 'disease_state': 'True',
@@ -147,7 +147,7 @@ class SightingTestCase(WebTest):
             reverse('sightings:submit'),
             {
                 'creator_email': 'test@example.com',
-                'tag_number': '1234',
+                'tag_number': '12345',
                 'image': X_IMAGE,
                 'image_name': 'xxx.jpg',
                 'disease_state': 'True',
