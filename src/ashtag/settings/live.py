@@ -45,3 +45,8 @@ if env.get('RAVEN_DSN', None):
     INSTALLED_APPS = INSTALLED_APPS + [
         'raven.contrib.django.raven_compat',
     ]
+
+# SSL
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PORT', '443')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
