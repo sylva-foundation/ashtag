@@ -17,7 +17,7 @@
                         {% if products|length == 1 %}
                         {% with products|first as product %}
                         
-                        <p><strong>Each pack contains {{ product.num_tags }} tag{{ product.num_tags|pluralize }}</strong></p>
+                        <p class="pack-name">Each pack contains {{ product.num_tags }} tag{{ product.num_tags|pluralize }}</p>
                         
                         <input type="hidden" name="product_id" id="product_id" value="{{ product.id }}" data-price="{{ product.stockrecord.price_incl_tax }}">
 
