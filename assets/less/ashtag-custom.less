@@ -575,6 +575,9 @@ body.offline #submit-sighting-page .submit-done-msgs .online-msg {
             top:10px;
             left:22px;
         }
+        .guide:before {
+            content: "\f02d";
+        }
         .my-tags:before {
             content: "\f06c";
         }
@@ -689,6 +692,23 @@ body.offline #submit-sighting-page .submit-done-msgs .online-msg {
         }
     }
     
+}
+
+.video-wrapper {
+    text-align: center;
+    margin-bottom: 20px;
+
+    
+    iframe {
+        margin: 0 auto;
+        max-width: 100%;
+        border: 10px solid #fff;
+        .border-radius;
+        .box-sizing;
+    }
+    h4 {
+       margin-bottom: 1em; 
+    }
 }
 
 /* Basket */
@@ -1290,7 +1310,16 @@ body.offline #submit-sighting-page .submit-done-msgs .online-msg {
     }
 }
 
+/* Guide */
+.guide-figure {
+    text-align:center;
 
+    img {
+        margin: 0 auto;
+        max-width: 300px;
+        height: auto;
+    }
+}
 
 @media all and (max-width: 35em) {
     .cookies-block-inner {

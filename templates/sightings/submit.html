@@ -13,8 +13,8 @@
             {% csrf_token %}
             <div class="form-intro">
                 <p>Intro blurb goes here lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Maecenas cursus aliquam eros
-                luctus posuere. Cras tincidunt, eros ac sagittis dapibus.</p>
+                consectetur adipiscing elit. <a href="{% url 'public:guide' %}">Check out the ID guide.</a> Maecenas cursus aliquam eros
+                luctus posuere. Cras tincidunt, eros ac sagittis dapibus. <a href="{% url 'store:tagpacks' %}">Find out more about how to use the packs.</a></p>
             </div>
             {% if not request.user.is_authenticated %}
             <div class="form-row">
