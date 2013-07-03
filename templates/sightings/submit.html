@@ -12,9 +12,10 @@
         <form class="form submit-sighting-form ui-shadow" action="{% url 'sightings:submit' %}" method="post" data-ajax="false" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-intro">
-                <p>Intro blurb goes here lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. <a href="{% url 'public:guide' %}">Check out the ID guide.</a> Maecenas cursus aliquam eros
-                luctus posuere. Cras tincidunt, eros ac sagittis dapibus. <a href="{% url 'store:tagpacks' %}">Find out more about how to use the packs.</a></p>
+                <p>
+                    Need help tagging a tree for the first time? 
+                    <a href="{% url 'public:guide' %}">Watch our video</a> for a step-by-step guide.
+                </p>
             </div>
             {% if not request.user.is_authenticated %}
             <div class="form-row">
@@ -39,17 +40,19 @@
                 <label for="id_image">Select a photo</label>
                 <input id="id_image" type="file" name="image" single 
                     required aria-required="true" />
+                <span class="help-text">Need help identifying ash tress? See our <a href="{% url 'public:guide' %}">identification guide</a>.</span>
             </div><!--//form-row-->
             
             <div class="form-row{% if form.errors.location %} errors{% endif %}">
                 {{ form.errors.location }}
                 <label for="id_location" class="ui-input-text">Tree location</label>
-                <span class="help-text">Drag the pin (or click elsewhere) to move the location.</span>
+                <span class="help-text">Drag the pin (or click elsewhere) to move the location.
+                The more accurately you position the pin, the easier it will be for others to find the tree again later.</span>
                 <div class="map-wrapper">
                     <div id="map_canvas" class="map"></div>
                     <div class="offline-msg">Map not available when offline</div>
                 </div>
-                <input type="text" name="location" id="id_location" value="{{ form.location.value }}" />
+                <input type="hidden" name="location" id="id_location" value="{{ form.location.value }}" />
             </div>
             
             <div class="form-row{% if form.errors.disease_state %} errors{% endif %}">

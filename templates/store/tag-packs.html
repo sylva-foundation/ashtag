@@ -13,17 +13,21 @@
                         <img class="ui-shadow" src="http://www.elegantepress.com/wp-content/uploads/gallery/bambalyne/bambalyne_tag1.jpg" />
                     </div>
                     
-                    <p class="tags-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi cursus at risus ut tristique. Nulla ullamcorper quis quam vitae tristique. Sed non tempor metus. Sed porta, lectus ac imperdiet convallis, mi dolor pellentesque libero, eu auctor mauris urna ac massa. Nullam aliquam mollis bibendum. Integer et blandit enim. Maecenas eget ligula bibendum, fringilla mauris et, tempus enim. Morbi rutrum, sapien ut ullamcorper mattis, risus dolor imperdiet metus, vel aliquam nulla ante non sapien. Duis vel nisl nibh.</p>
+                    <p class="tags-desc">
+                        Buying a tagging pack will enable you to keep tabs on the health of your ash trees. It will also allow experts to check up on the health of individual trees. Remember, you can tag healthy as well as diseased trees.
+                    </p>
                     <div class="video-wrapper">
                         <h4>How to use the packs</h4>
                         <iframe width="560" height="315" src="//www.youtube.com/embed/8sI7hgFZ-4g?rel=0" frameborder="0" allowfullscreen></iframe>
                     </div>
+
+                    <p>
+                        Each AshTag pack includes five aluminium AshTags, ten nails to attach them to your trees, one cardboard nail holder, and a step-by-step guide to using AshTag.
+                    </p>
                     
                     <div class="tags-details">
                         {% if products|length == 1 %}
                         {% with products|first as product %}
-                        
-                        <p class="pack-name">Each pack contains {{ product.num_tags }} tag{{ product.num_tags|pluralize }}</p>
                         
                         <input type="hidden" name="product_id" id="product_id" value="{{ product.id }}" data-price="{{ product.stockrecord.price_incl_tax }}">
 
@@ -42,16 +46,11 @@
                         <div class="quantity">
                              <label class="price-label">Number of packs:</label> 
                              <select name="quantity" id="quantity">
-                                <option value="1" selected="">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
+                                {% with products|first as product %}
+                                {% for i in "1234567890" %}
+                                <option value="{{forloop.counter}}"{% if forloop.first %} selected="selected"{% endif %}>{{forloop.counter}} {% if products|length == 1 %} pack{{forloop.counter|pluralize}} ({% widthratio forloop.counter 1 product.num_tags %} tags){% endif %}</option>
+                                {% endfor %}
+                                {% endwith %}
                             </select>
                         </div>
                         <div class="price-postage-wrapper clearfix">
