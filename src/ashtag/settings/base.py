@@ -280,6 +280,11 @@ MANIFESTO_FILTER_EXCLUDE_PATTERNS = [
     "\.coffee$",
     "/errors/.*\.html$",
     '/\.DS_Store$',
+    'images/guide/',
+    '/treebeard/',
+    '/django_extensions/',
+    '/robots.txt$',
+    '/favicon.ico$',
 ]
 
 # File storage configuration
