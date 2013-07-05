@@ -41,3 +41,15 @@
     height: 16px;
     top: -1px;
 }
+
+/* Showing menu text on menu icon (you can probably remove the '!important' when you merge these changes in) */
+.menu-button {
+    text-indent: 0px !important;
+    background-position: 7px 7px !important;
+    text-shadow: none !important;
+    color: white  !important;
+    padding-left: 22px !important;
+}
+.menu-button .ui-btn-inner {
+    padding: 5px 9px 8px 10px !important;
+}
