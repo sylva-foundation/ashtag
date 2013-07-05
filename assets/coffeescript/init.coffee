@@ -25,6 +25,16 @@ jQuery ->
         applicationCache.addEventListener 'updateready', =>
             $('#updatesready').show();
 
+    # Are we logged in?
+    $.ajax
+        url: '/auth-status/'
+        type: 'get'
+        dataType: 'json'
+    .then (data) ->
+        $('body')
+            .toggleClass('authenticated', data.authenticated)
+            .toggleClass('anonymous', not data.authenticated)
+
 
 
 $(window).on 'pagechange', (event, obj) =>

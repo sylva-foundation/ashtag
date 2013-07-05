@@ -53,3 +53,11 @@
 .menu-button .ui-btn-inner {
     padding: 5px 9px 8px 10px !important;
 }
+
+/* We now alter the UI for anonymous/authenticated users using CSS */
+body.authenticated .if-anonymous {
+    display: none;
+}
+body.anonymous .if-authenticated {
+    display: none;
+}

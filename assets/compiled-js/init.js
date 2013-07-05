@@ -25,10 +25,17 @@
       goOffline();
     }
     if (window.applicationCache) {
-      return applicationCache.addEventListener('updateready', function() {
+      applicationCache.addEventListener('updateready', function() {
         return $('#updatesready').show();
       });
     }
+    return $.ajax({
+      url: '/auth-status/',
+      type: 'get',
+      dataType: 'json'
+    }).then(function(data) {
+      return $('body').toggleClass('authenticated', data.authenticated).toggleClass('anonymous', !data.authenticated);
+    });
   });
 
   $(window).on('pagechange', function(event, obj) {
