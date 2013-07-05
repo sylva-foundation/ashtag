@@ -1,0 +1,43 @@
+#map-page .map-key {
+    background: #f5f5f5;
+    border: 1px solid darken(#f5f5f5, 10%);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    max-width: 300px;
+    box-sizing: 300px; 
+    margin: 0 auto;
+    margin-top: 1em;
+}
+
+#map-page .map-key ul {
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+#map-page .map-key ul li {
+    list-style: none;
+}
+
+#map-page .map-key li.tagged {
+    float: left;
+}
+
+#map-page .map-key li.untagged {
+    float: right;
+}
+#map-page .map-key ul li img {
+    vertical-align: middle;
+    position: relative;
+}
+#map-page .map-key ul li.tagged img {
+    width: 24px;
+    height: 24px;
+    top: -1px;
+}
+#map-page .map-key ul li.untagged img {
+    width: 16px;
+    height: 16px;
+    top: -1px;
+}
