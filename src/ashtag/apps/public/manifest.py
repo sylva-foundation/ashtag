@@ -1,4 +1,7 @@
+from hashlib import sha1
+
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 from manifesto.manifest import Manifest
 
@@ -8,3 +11,15 @@ class PublicManifest(Manifest):
         return [
             reverse('public:home'),
         ]
+
+    def version_data(self):
+        templates = [
+            settings.PROJECT_ROOT / 'templates' / 'public' / 'home.html',
+            settings.PROJECT_ROOT / 'templates' / 'sightings' / 'submit.html',
+        ]
+        version_data = []
+        for path in templates:
+            with open(path) as t:
+                hash_ = sha1(t.read()).hexdigest()
+                version_data.append(hash_)
+        return version_data
