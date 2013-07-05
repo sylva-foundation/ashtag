@@ -8,4 +8,5 @@ urlpatterns = patterns('ashtag.apps.public.views',
     url('^privacy/$', TemplateView.as_view(template_name='public/privacy.html'), name='privacy'),
     url('^terms/$', TemplateView.as_view(template_name='public/terms.html'), name='terms'),
     url('^dieback-identification-guide/$', TemplateView.as_view(template_name='public/guide.html'), name='guide'),
+    url('^tagging-video-guide/$', TemplateView.as_view(template_name='public/tagging-video.html'), name='tagging-video'),
 )
