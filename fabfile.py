@@ -45,13 +45,14 @@ def get_sightings():
 
 @task
 def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json',
-                     skip_images=False, pks__gte=0):
+                     skip_images=False, pks__gte=0, pks__lte=None):
     """Put sightings from a fixture file into db.
 
     :param settings: change to change settings file inside ashtag.settings...
     :param json_file: change to use locally dumped json
     :param skip_images: set True to ignore images
     :param pks__gte: set > 0 to limit import (or do an update, etc.)
+    :param pks__lte: set not None to limit import (or do an update, etc.)
 
     """
     django.settings_module('ashtag.settings.%s' % settings)
@@ -67,6 +68,8 @@ def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json',
     only_pks = sorted(
         filter(lambda x: x['pk'] >= int(pks__gte), have_emails),
         key=lambda x: x['pk'])
+    if pks__lte is not None:
+        only_pks = filter(lambda x: x['pk'] <= int(pks__lte), only_pks)
 
     print red("%s sightings don't have emails" % (
         len(not_rejects) - len(have_emails)
@@ -74,8 +77,8 @@ def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json',
 
     unknown = Sighting.DISEASE_STATE.unknown
     diseased = Sighting.DISEASE_STATE.diseased
-    print green("Processing %s sightings with PK >= %s" % (
-        len(only_pks), pks__gte))
+    print green("Processing %s sightings with %s <= PK <= %s" % (
+        len(only_pks), pks__gte, pks__lte))
     for sighting in only_pks:
         fields = sighting['fields']
         tree = Tree.objects.create(
@@ -98,5 +101,8 @@ def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json',
                 File(open(image[0]))
             )
         s.save()
-    print green("Made %s Trees and Sightings, latest PK = %s" % (
-        len(pks__gte), only_pks[-1]['pk']))
+    if len(only_pks):
+        print green("Made %s Trees and Sightings, latest PK = %s" % (
+            len(only_pks), only_pks[-1]['pk']))
+    else:
+        print red("Nothing made!")
