@@ -8,7 +8,12 @@ source ~/.profile
 
 # Ensure DB is created an setup/migrated
 cd ~/current/scripts
-python createdb.py
-django-admin.py syncdb --noinput
-django-admin.py migrate
-django-admin.py collectstatic --noinput -i coffeescript
+if [ "$1" == "worker" ]; then
+    python createdb.py
+    django-admin.py syncdb --noinput
+    django-admin.py migrate
+fi
+
+if [ "$1" == "www" ]; then
+    django-admin.py collectstatic --noinput -i coffeescript
+fi
