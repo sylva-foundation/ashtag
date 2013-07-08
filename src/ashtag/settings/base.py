@@ -229,11 +229,6 @@ LOGGING = {
             'level': 'ERROR',
             'handlers': ['console'],
             'propagate': False,
-        },
-        'boto': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
         }
     },
 }
