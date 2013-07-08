@@ -11,8 +11,10 @@ class Command(BaseCommand):
         for sighting in Sighting.objects.all():
             print "Generating thumbnails for %d of %d ... " % (counter, total),
             if sighting.image:
-                create_thumbnails(sighting.image)
-                print "done"
+                if create_thumbnails(sighting.image):
+                    print "done"
+                else:
+                    print "ERRORS (logged)"
             else:
                 print "no image, skipping"
             counter += 1
