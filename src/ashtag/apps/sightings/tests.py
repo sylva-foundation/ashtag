@@ -143,7 +143,7 @@ class SightingTestCase(WebTest):
 
     def test_tagger_emailed_on_update(self):
         """Tagger should get an email when a tree is updated by a spotter."""
-        self.app.post(
+        response = self.app.post(
             reverse('sightings:submit'),
             {
                 'creator_email': 'test@example.com',
@@ -153,5 +153,5 @@ class SightingTestCase(WebTest):
                 'disease_state': 'True',
                 'location': 'POINT (0 0)',
                 'notes': 'test anon',
-            }, status=302)
+            }, status=302, user=self.tagger)
         self.assertEqual(1, len(mail.outbox))
