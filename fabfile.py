@@ -11,10 +11,6 @@ from fabric.contrib.console import confirm
 from fabric.colors import red, green
 from fabric.contrib import django
 
-
-SETTINGS = 'local'
-
-
 @task
 def ias_ess():
     """Env for ias-ess"""
@@ -23,9 +19,9 @@ def ias_ess():
 
 
 @task
-def erase_all_local(settings=SETTINGS):
+def erase_all_local():
     """Nuke the Tree/Sighting objects."""
-    django.settings_module('ashtag.settings.%s' % settings)
+    django.settings_module(os.environ.get('DJANGO_SETTINGS_MODULE'))
     from ashtag.apps.core.models import Sighting, Tree
     if confirm(red("Really delete all local Trees and Sightings?"), default=False):
         Tree.objects.all().delete()
@@ -44,7 +40,7 @@ def get_sightings():
 
 
 @task
-def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json',
+def import_sightings(json_file='ias_ess_dump.json',
                      skip_images=False, pks__gte=0, pks__lte=None):
     """Put sightings from a fixture file into db.
 
@@ -55,7 +51,7 @@ def import_sightings(settings=SETTINGS, json_file='ias_ess_dump.json',
     :param pks__lte: set not None to limit import (or do an update, etc.)
 
     """
-    django.settings_module('ashtag.settings.%s' % settings)
+    django.settings_module(os.environ.get('DJANGO_SETTINGS_MODULE'))
     from ashtag.apps.core.models import Sighting, Tree
     dumped_json = ""
     with open(json_file, 'r') as fp:
