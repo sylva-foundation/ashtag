@@ -195,42 +195,51 @@ INSTALLED_APPS = [
     'paypal',
 ] + oscar_get_core_apps(['ashtag.apps.oscar.shipping'])
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['sentry'],
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        },
-        'console': {
-            'class': 'logging.StreamHandler',
-            'level': 'DEBUG',
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
     },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
+    'handlers': {
+        'sentry': {
             'level': 'ERROR',
-            'propagate': True,
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
         },
-        'django.db': {
-            # 'handlers': ['console'],
+        'console': {
             'level': 'DEBUG',
-            'propagate': True,
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
         }
-    }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'raven': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    },
 }
 
 # Pipeline configuration
