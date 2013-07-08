@@ -22,11 +22,11 @@ def pk_generator(length=6):
     return long_pk[:length]
 
 
-def create_thumbnails(imageField):
+def create_thumbnails(image_field):
     errors = False
     for size in settings.IMAGE_SIZES.values():
         try:
-            get_thumbnail(imageField, size)
+            get_thumbnail(image_field, size)
         except (IOError, ThumbnailError):
             errors = True
             logger.exception("Failed to create thumbnail")
