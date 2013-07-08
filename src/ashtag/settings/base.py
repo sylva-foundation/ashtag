@@ -228,6 +228,11 @@ LOGGING = {
             # 'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
+        },
+        'boto': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
         }
     }
 }

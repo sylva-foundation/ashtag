@@ -29,3 +29,6 @@ HAYSTACK_CONNECTIONS = {
 
 # Django Nose
 TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
+
+import logging
+logging.getLogger('boto').setLevel(logging.DEBUG)
