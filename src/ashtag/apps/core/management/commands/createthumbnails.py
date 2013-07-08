@@ -1,7 +1,14 @@
-from django.core.management.base import BaseCommand, CommandError
+import sys
+
+from django.core.management.base import BaseCommand
 
 from ashtag.apps.core.models import Sighting
 from ashtag.apps.core.utils import create_thumbnails
+
+
+def _log(s):
+    sys.stdout.write(s)
+    sys.stdout.flush()
 
 
 class Command(BaseCommand):
@@ -9,12 +16,12 @@ class Command(BaseCommand):
         total = Sighting.objects.count()
         counter = 1
         for sighting in Sighting.objects.all():
-            print "Generating thumbnails for %d of %d ... " % (counter, total),
+            _log("Generating thumbnails for %d of %d ... " % (counter, total))
             if sighting.image:
                 if create_thumbnails(sighting.image):
-                    print "done"
+                    _log("done\n")
                 else:
-                    print "ERRORS (logged)"
+                    _log("ERRORS (logged)\n")
             else:
-                print "no image, skipping"
+                _log("no image, skipping\n")
             counter += 1
