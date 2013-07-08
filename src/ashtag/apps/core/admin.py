@@ -11,7 +11,7 @@ from .models import Sighting, Tree
 
 class SightingAdmin(gis_admin.GeoModelAdmin):
 
-    list_display = ('created', 'link', 'tree_tag_number', 'thumbnail',
+    list_display = ('created', 'link', 'tree_tag_number', 
                     'creator_email', 'creator', 'disease_state', 'notes')
     search_fields = ('tree__tag_number',)
 
@@ -50,7 +50,7 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
 
 class TreeAdmin(gis_admin.GeoModelAdmin):
     search_fields = ('tag_number',)
-    list_display = ('tag_number', 'id', 'link', 'tag_checked_by', 'creator_email', 'thumbnail')
+    list_display = ('tag_number', 'id', 'link', 'tag_checked_by', 'creator_email')
     actions = ('verify_tag', 'reject_tag')
     list_display_links = ('tag_number', 'id')
 
