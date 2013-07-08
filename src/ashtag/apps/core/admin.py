@@ -9,6 +9,7 @@ from sorl.thumbnail import get_thumbnail
 from sorl.thumbnail.helpers import ThumbnailError
 
 from .models import Sighting, Tree
+from .tasks import create_thumbnails
 
 
 def get_thumbnail_html(image):
@@ -29,6 +30,7 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
     list_display = ('created', 'link', 'tree_tag_number',
                     'creator_email', 'creator', 'disease_state', 'notes', 'thumbnail')
     search_fields = ('tree__tag_number',)
+    actions = ('create_thumbnails',)
 
     def tree_tag_number(self, obj):
         return """
@@ -57,6 +59,11 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
 #            sighting.save()
 #            sighting_rejected.send(sender=self, sighting=sighting)
     reject.short_description = "Mark as rejected"
+
+    def create_thumbnails(self, request, queryset):
+        for obj in queryset:
+            create_thumbnails.delay(obj.image)
+    create_thumbnails.short_description = "Update thumbnails of selected sightings (background process)"
 
 
 class TreeAdmin(gis_admin.GeoModelAdmin):
