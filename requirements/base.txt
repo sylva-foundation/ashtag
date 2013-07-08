@@ -16,3 +16,4 @@ django-tastypie==0.9.15
 https://github.com/adamcharnock/django-tz-detect/archive/v0.1.4.tar.gz#egg=django-tz-detect
 -e git+https://github.com/adamcharnock/manifesto.git#egg=manifesto
 fabric
+django-celery-with-redis==3.0

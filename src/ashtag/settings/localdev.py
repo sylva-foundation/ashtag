@@ -29,3 +29,7 @@ HAYSTACK_CONNECTIONS = {
 
 # Django Nose
 TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
+
+# Celery
+BROKER_URL = 'django://'
+INSTALLED_APPS += ['kombu.transport.django']

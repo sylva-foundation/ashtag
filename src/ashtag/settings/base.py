@@ -189,6 +189,7 @@ INSTALLED_APPS = [
     'tastypie',
     'tz_detect',
     'manifesto',
+    'djcelery',
 
     # oscar
     'compressor',
@@ -322,5 +323,9 @@ IMAGE_SIZES = {
 
 # Tracking switch
 ENABLE_TRACKING_CODE = bool(os.environ.get('ENABLE_TRACKING_CODE', False))
+
+# Celery
+import djcelery
+djcelery.setup_loader()
 
 from ashtag.settings.assets import *
