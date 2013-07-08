@@ -13,6 +13,7 @@ from django.core.mail import mail_managers
 from django.db.models import Q
 
 from ashtag.apps.core.models import Tree, Sighting
+from ashtag.apps.core.utils import create_thumbnails
 
 from .forms import SightingForm, AnonSightingForm, ClaimForm
 from .utils import email_owner
@@ -116,6 +117,9 @@ class SubmitView(TemplateView):
                 sighting.creator_email = request.user.email
             sighting.tree = form.cleaned_data['tree']
             sighting.save()
+            # Create the thumbnails. Consider moving to an offline
+            # process in the future
+            create_thumbnails(sighting.image)
             if sighting.tree.creator_email != sighting.creator_email:
                 email_owner(
                     sighting.tree,

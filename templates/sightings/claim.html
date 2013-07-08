@@ -11,7 +11,7 @@
         <div class="claim-wrapper ui-texture-wrapper ui-shadow">
             <div class="info clearfix">
                 <div class="gallery-thumb">
-                    {% thumbnail tree.display_sighting.image '750x600' crop='center' as thmb %}
+                    {% thumbnail tree.display_sighting.image IMG_LARGE crop='center' as thmb %}
                     <img src="{{ thmb.url }}" />
                     {% endthumbnail %}
                 </div>

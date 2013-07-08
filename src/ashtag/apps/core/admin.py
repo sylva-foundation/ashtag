@@ -3,16 +3,31 @@
 from django.contrib import admin
 from django.contrib.gis import admin as gis_admin
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 from sorl.thumbnail import get_thumbnail
+from sorl.thumbnail.helpers import ThumbnailError
 
 from .models import Sighting, Tree
 
 
-class SightingAdmin(gis_admin.GeoModelAdmin):
+def get_thumbnail_html(image):
+    try:
+        im = get_thumbnail(image, settings.IMAGE_SIZES['admin'])
+    except IOError as e:
+        return "IOError: %s" % e
+    except ThumbnailError as e:
+        return "ThumbnailError: %s" % e
 
-    list_display = ('created', 'link', 'tree_tag_number', 
-                    'creator_email', 'creator', 'disease_state', 'notes')
+    return """
+    <a href="%s">
+    <img src="%s" width="228px" height="135px"/>
+    </a>""" % (image.url, im.url)
+
+
+class SightingAdmin(gis_admin.GeoModelAdmin):
+    list_display = ('created', 'link', 'tree_tag_number',
+                    'creator_email', 'creator', 'disease_state', 'notes', 'thumbnail')
     search_fields = ('tree__tag_number',)
 
     def tree_tag_number(self, obj):
@@ -32,11 +47,7 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
     link.allow_tags = True
 
     def thumbnail(self, obj):
-        im = get_thumbnail(obj.image, '450x270')
-        return """
-        <a href="{0}">
-        <img src="{1}" width="228px" height="135px"/>
-        </a>""".format(obj.image.url, im.url)
+        return get_thumbnail_html(obj.image)
     thumbnail.allow_tags = True
 
     def reject(self, request, queryset):
@@ -50,7 +61,7 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
 
 class TreeAdmin(gis_admin.GeoModelAdmin):
     search_fields = ('tag_number',)
-    list_display = ('tag_number', 'id', 'link', 'tag_checked_by', 'creator_email')
+    list_display = ('tag_number', 'id', 'link', 'tag_checked_by', 'creator_email', 'thumbnail')
     actions = ('verify_tag', 'reject_tag')
     list_display_links = ('tag_number', 'id')
 
@@ -62,11 +73,7 @@ class TreeAdmin(gis_admin.GeoModelAdmin):
     link.allow_tags = True
 
     def thumbnail(self, obj):
-        im = get_thumbnail(obj.display_sighting.image, '450x270')
-        return """
-        <a href="{0}">
-        <img src="{1}" width="228px" height="135px"/>
-        </a>""".format(obj.display_sighting.image.url, im.url)
+        return get_thumbnail_html(obj.image)
     thumbnail.allow_tags = True
 
     def verify_tag(self, request, queryset):

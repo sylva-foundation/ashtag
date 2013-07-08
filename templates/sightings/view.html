@@ -18,7 +18,7 @@
 
             <div class="gallery-thumb">
                 <a href="">
-                    {% thumbnail object.display_sighting.image '750x600' crop='center' as thmb %}
+                    {% thumbnail object.display_sighting.image IMG_LARGE crop='center' as thmb %}
                     <img src="{{ thmb.url }}" />
                     {% endthumbnail %}
                 </a>
@@ -52,7 +52,7 @@
                             {% endif %}
                         </div>
                         <span class="image-holder">
-                            {% thumbnail update.image '150x150' crop='center' as thmb %}
+                            {% thumbnail update.image IMG_THUMB crop='center' as thmb %}
                             <img src="{{ thmb.url }}" />
                             {% empty %} {# no image means this is a comment or something. #}
                             <img src="{{ STATIC_URL }}/picture_of_a_person.png" alt="Person face" />

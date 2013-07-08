@@ -129,6 +129,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'oscar.core.context_processors.metadata',
 
     'ashtag.apps.core.context_processors.enable_tracking',
+    'ashtag.apps.core.context_processors.image_sizes',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -228,11 +229,6 @@ LOGGING = {
             # 'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
-        },
-        'boto': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
         }
     }
 }
@@ -306,6 +302,14 @@ if os.environ.get('AWS_MEDIA_ENABLE', False):
 
 if os.environ.get('AWS_STATIC_ENABLE', False):
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+# Image sizes
+# (We define these here so we can pre-generate them)
+IMAGE_SIZES = {
+    'admin': '228x135',
+    'large': '750x600',
+    'thumb': '150x150',
+}
 
 # Tracking switch
 ENABLE_TRACKING_CODE = bool(os.environ.get('ENABLE_TRACKING_CODE', False))

@@ -15,7 +15,7 @@
                         {% with tree.display_sighting as sighting %}
                         <li class="{% if tree.tag_number %}tagged{% else %}untagged{% endif %}">
                             {% if tree.tag_number %}<a href="{{ tree.get_absolute_url }}">{% endif %}
-                                {% thumbnail tree.display_sighting.image '150x150' crop='center' as thmb %}
+                                {% thumbnail tree.display_sighting.image IMG_THUMB crop='center' as thmb %}
                                 <img src="{{ thmb.url }}" />
                                 {% endthumbnail %}
                                 {% if tree.tag_number %}

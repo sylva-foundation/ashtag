@@ -19,7 +19,7 @@
                     {% for tree in object_list|slice:":20" %}
                     <li {% if not tree.tag_number %}class="untagged"{% endif %}>
                         <a href="{{ tree.get_absolute_url }}">
-                            {% thumbnail tree.display_sighting.image '150x150' crop='center' as thmb %}
+                            {% thumbnail tree.display_sighting.image IMG_THUMB crop='center' as thmb %}
                             <img src="{{ thmb.url }}" class="ui-li-thumb" />
                             {% endthumbnail %}
                             
