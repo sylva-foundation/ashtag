@@ -10,3 +10,7 @@ Welcome to AshTag's documentation!
    deployment
 
 
+Test status
+-----------
+
+.. image: https://travis-ci.org/adapt/ashtag.png?branch=master
