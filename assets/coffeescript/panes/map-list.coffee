@@ -4,12 +4,12 @@ class ashtag.panes.MapListPane extends ashtag.panes.MapBasePane
 
     handleMapLoad: (e, map) =>
         super
-        @centerOnUser()
         @getLocations().then(@renderLocations)
 
     getLocations: ->
         # The the tree locations and return a deferred
-        $.getJSON "/api/v1/tree/"
+        $.getJSON "/api/v1/marker/",
+            limit: 0
 
     renderLocations: (json) =>
         # render the locations onto the map

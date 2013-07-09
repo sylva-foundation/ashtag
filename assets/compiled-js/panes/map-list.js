@@ -20,12 +20,13 @@
 
     MapListPane.prototype.handleMapLoad = function(e, map) {
       MapListPane.__super__.handleMapLoad.apply(this, arguments);
-      this.centerOnUser();
       return this.getLocations().then(this.renderLocations);
     };
 
     MapListPane.prototype.getLocations = function() {
-      return $.getJSON("/api/v1/tree/");
+      return $.getJSON("/api/v1/marker/", {
+        limit: 0
+      });
     };
 
     MapListPane.prototype.renderLocations = function(json) {

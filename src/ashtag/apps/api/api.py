@@ -41,3 +41,20 @@ class SightingResource(LatLngMixin, NamespacedModelResource):
         resource_name = 'sighting'
         excludes = ['creator_email', 'location']
         allowed_methods = ['get']
+
+
+class MarkerResource(LatLngMixin, NamespacedModelResource):
+    """A slimmed down Tree resource to only give bare minimum data for the map"""
+    latlng = fields.ListField()
+    view_url = fields.CharField()
+
+    class Meta:
+        queryset = Tree.objects.all()
+        resource_name = 'marker'
+        fields = ['latlng', 'view_url', 'tag_number']
+        allowed_methods = ['get']
+        include_resource_uri = False
+
+    def dehydrate_view_url(self, bundle):
+        """Get the view url for this tree."""
+        return bundle.obj.get_absolute_url()
