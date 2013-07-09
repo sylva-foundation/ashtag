@@ -13,4 +13,5 @@ Welcome to AshTag's documentation!
 Test status
 -----------
 
-.. image: https://travis-ci.org/adapt/ashtag.png?branch=master
+.. image:: https://travis-ci.org/adapt/ashtag.png?branch=master
+   :target: https://travis-ci.org/adapt/ashtag
