@@ -12,11 +12,12 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Adam Charnock', 'adam@adamcharnock.com'),
-    ('Steve Pike', 'ashtag@stevepike.co.uk'),
+    ('AshTag Admin', 'admin@ashtag.org'),
 )
 
 MANAGERS = ADMINS
+
+EMAIL_SUBJECT_PREFIX = ''
 
 DATABASES = {
     'default': {

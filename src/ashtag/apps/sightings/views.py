@@ -2,6 +2,7 @@ import json
 import base64
 
 from StringIO import StringIO
+import logging
 
 from django.utils.datastructures import MultiValueDict
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -19,6 +20,7 @@ from .forms import SightingForm, AnonSightingForm, ClaimForm
 from .utils import email_owner
 from .messages import NEW_TAG_MESSAGE, SIGHTING_MESSAGE, FLAGGED_MESSAGE
 
+logger = logging.getLogger('ashtag.apps.sightings.views')
 
 class MyTagsView(ListView):
     """Shows all my trees, that haven't been hidden by admin."""
@@ -125,8 +127,7 @@ class SubmitView(TemplateView):
                     sighting.tree,
                     "Update on your Tree!",
                     SIGHTING_MESSAGE.format(
-                        sighting.tree.tag_number,
-                        sighting.get_absolute_url()
+                        request.build_absolute_uri(sighting.get_absolute_url())
                     )
                 )
 
@@ -163,13 +164,14 @@ class ClaimView(FormView):
         )
         tree.tag_number = form.data['tag_number']
         tree.save()
+        template_data = {
+            'url': request.build_absolute_uri(tree.get_absolute_url()),
+            'admin_url': request.build_absolute_uri(reverse('admin:core_tree_changelist')),
+            'this_tree_was': 'claimed from a previous sighting',
+        }
         mail_managers(
-            "Tree was claimed!",
-            NEW_TAG_MESSAGE.format(
-                tree.get_absolute_url(),
-                reverse('admin:core_tree_changelist'),
-                "claimed from a previous sighting"
-            )
+            "[AshTag Admin] A tree was claimed",
+            NEW_TAG_MESSAGE % template_data
         )
         return super(ClaimView, self).form_valid(form)
 
@@ -202,10 +204,7 @@ class TreeGetterMixin(object):
         except Tree.DoesNotExist:
             raise Http404
         except Tree.MultipleObjectsReturned:
-            # TODO: are we sure that a tag number will never be same as id?
-            mail_managers(
-                "Clashing Tree Tag number/IDs!",
-                "ID/Tag was: {0}...".format(self.kwargs['identifier']))
+            logger.exception('Clashing Tree Tag number/IDs')
             raise Http404
 
 
@@ -224,16 +223,15 @@ class FlagView(TreeGetterMixin, DetailView):
             # just mail managers to deal with it
             tree.flagged = True
             tree.save()
+            template_data = {
+                'url': request.build_absolute_uri(tree.get_absolute_url()),
+                'admin_url': request.build_absolute_uri(reverse('admin:core_tree_change', args=[tree.id])),
+                'email': request.user.email if request.user.is_authenticated() else 'anonymous',
+                'the_item': 'a tree',
+            }
             mail_managers(
-                "Tagged Tree was flagged!",
-                FLAGGED_MESSAGE.format(
-                    tree.get_absolute_url(),
-                    reverse('admin:core_tree_change', args=[tree.id]),
-                    request.user.email
-                    if request.user.is_authenticated()
-                    else 'anonymous',
-                    "a tree"
-                )
+                "[AshTag Admin] A Tagged Tree was flagged",
+                FLAGGED_MESSAGE % template_data
             )
             result['tree'] = {
                 'message': 'OK',
@@ -261,17 +259,16 @@ class FlagView(TreeGetterMixin, DetailView):
                 # set a flag, and maybe alert the owner/ADAPT
                 sighting.flagged = True
                 sighting.save()
+                template_data = {
+                    'url': request.build_absolute_uri(tree.get_absolute_url()),
+                    'admin_url': request.build_absolute_uri(reverse('admin:core_sighting_change', args=[sighting.id])),
+                    'email': request.user.email if request.user.is_authenticated() else 'anonymous',
+                    'the_item': 'an update',
+                }
                 mail_managers(
-                    "Update was flagged",
-                    FLAGGED_MESSAGE.format(
-                        tree.get_absolute_url(),
-                        reverse('admin:core_sighting_change', args=[sighting.id]),
-                        request.user.email
-                        if request.user.is_authenticated()
-                        else 'anonymous',
-                        "an update"
-                    ),
-                    fail_silently=True)
+                    "[AshTag Admin] An update was flagged",
+                    FLAGGED_MESSAGE % template_data
+                )
                 result['sighting'] = {
                     'message': 'OK',
                     'flag': flag_sighting,

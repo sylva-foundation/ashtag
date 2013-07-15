@@ -3,15 +3,15 @@
 FLAGGED_MESSAGE = """
 Dear ADAPT,
 
-Someone has flagged {3}:
+Someone has flagged %(the_item)s:
 
-    {0}
+    %(url)s
 
 You can hide it or un-flag it here:
 
-    {1}
+    %(admin_url)s
 
-The flagger's email address is: {2}
+The flagger's email address is: %(email)s
 
 Have a good day!
 
@@ -21,11 +21,11 @@ Have a good day!
 SIGHTING_MESSAGE = """
 Dear AshTag Tagger,
 
-An update was posted to your Tagged Tree #{0}!
+An update was posted to your Tagged Tree.
 
 You can see the update here:
 
-    {1}
+    %(url)s
 
 Please note, if the update is not for your tree, you can flag the update and it
 will be removed.
@@ -39,13 +39,13 @@ Dear ADAPT,
 
 Someone has just added a tag number to a tree:
 
-    {0}
+    %(url)s
 
 You can reject this tag by selecting 'Reject this tag' in the admin list:
 
-    {1}
+    %(admin_url)s
 
-The tree was {2}.
+The tree was %(this_tree_was)s.
 
 Have a good day!
 
