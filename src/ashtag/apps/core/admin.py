@@ -26,6 +26,18 @@ def get_thumbnail_html(image):
     </a>""" % (image.url, im.url)
 
 
+class SightingsInline(admin.TabularInline):
+    model = Sighting
+    extra = 0
+    # readonly_fields = ('id', 'creator_email', 'image', '')
+    fields = ('id', 'creator_email', 'thumbnail', 'disease_state', 'notes', 'flagged', 'hidden')
+    readonly_fields = ('creator_email', 'thumbnail', 'disease_state', 'notes', 'flagged', 'hidden')
+
+    def thumbnail(self, obj):
+        return get_thumbnail_html(obj.image)
+    thumbnail.allow_tags = True
+
+
 class SightingAdmin(gis_admin.GeoModelAdmin):
     list_display = ('created', 'link', 'tree_tag_number',
                     'creator_email', 'creator', 'disease_state', 'notes', 'thumbnail')
@@ -37,7 +49,7 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
         <a href="{0}">{1}</a>
         """.format(
             reverse('admin:core_tree_change', args=[obj.tree.id]),
-            obj.tree.tag_number or obj.tree.id)
+            obj.tree.tag_or_id)
     tree_tag_number.short_description = 'tree'
     tree_tag_number.allow_tags = True
 
@@ -69,8 +81,10 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
 class TreeAdmin(gis_admin.GeoModelAdmin):
     search_fields = ('tag_number',)
     list_display = ('tag_number', 'id', 'link', 'tag_checked_by', 'creator_email', 'thumbnail')
-    actions = ('verify_tag', 'reject_tag')
+    actions = ('verify_tag', 'reject_tag', 'update_display_sighting')
     list_display_links = ('tag_number', 'id')
+    readonly_fields = ('display_sighting',)
+    inlines = (SightingsInline,)
 
     def link(self, obj):
         return """
@@ -80,7 +94,11 @@ class TreeAdmin(gis_admin.GeoModelAdmin):
     link.allow_tags = True
 
     def thumbnail(self, obj):
-        return get_thumbnail_html(obj.image)
+        display_sighting = obj.display_sighting
+        if display_sighting:
+            return get_thumbnail_html(obj.display_sighting.image)
+        else:
+            return "No display sighting"
     thumbnail.allow_tags = True
 
     def verify_tag(self, request, queryset):
@@ -95,6 +113,12 @@ class TreeAdmin(gis_admin.GeoModelAdmin):
             tree.tag_number = None
             tree.save()
     reject_tag.short_description = "Reject this tag number"
+
+    def update_display_sighting(self, request, queryset):
+        for tree in queryset:
+            tree.update_display_sighting()
+            tree.save()
+    update_display_sighting.short_description = "Update display sightings"
 
 
 admin.site.register(Sighting, SightingAdmin)

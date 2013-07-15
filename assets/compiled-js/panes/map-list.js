@@ -41,9 +41,7 @@
     };
 
     MapListPane.prototype.handleMarkerClick = function(event, marker) {
-      if (marker.tree.tag_number) {
-        return $.mobile.changePage(marker.tree.view_url);
-      }
+      return $.mobile.changePage(marker.tree.view_url);
     };
 
     MapListPane.prototype.addTree = function(tree) {

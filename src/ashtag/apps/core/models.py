@@ -31,18 +31,13 @@ class Tree(CreatorMixin, models.Model):
     """A tree, complete with tag number."""
     id = models.CharField(max_length=6, primary_key=True, default=pk_generator)
     created = AutoCreatedField('created')
+    display_sighting = models.OneToOneField('Sighting', null=True, default=None, on_delete=models.SET_NULL, related_name='displayed_on_set')
     creator_email = models.EmailField(max_length=254)
 
     tag_checked_by = models.ForeignKey(User, blank=True, null=True)
     tag_number = models.CharField(
         max_length=10, db_index=True, null=True, blank=True)
     location = models.PointField()
-
-    exemplar = models.ForeignKey(
-        'Sighting',
-        blank=True, null=True,
-        related_name='exemplary_of',
-        help_text="Which sighting is to be shown on the tree page big image?")
 
     flagged = models.BooleanField(default=False)
     hidden = models.BooleanField(default=False)
@@ -59,20 +54,42 @@ class Tree(CreatorMixin, models.Model):
         else:
             return u"Unclaimed Tree {0}".format(self.id)
 
-    def get_absolute_url(self):
-        return reverse('sightings:tree', args=[self.tag_number or self.pk])
+    def save(self, *args, **kwargs):
+        self.update_display_sighting()
+        super(Tree, self).save(*args, **kwargs)
 
-    @property
-    def display_sighting(self):
+    def get_absolute_url(self):
+        return reverse('sightings:tree', args=[self.tag_or_id])
+
+    def update_display_sighting(self):
+        self.display_sighting = self.find_display_sighting()
+
+    def find_display_sighting(self):
         """Get the sighting which should be displayed for this tree
 
         We assume this should be the lastest sighting by the tree's creator
+
+        NOTE: You should normally use the display_sighting field as it
+              will be more performant
         """
         qs = self.sighting_set.filter(
             creator_email=self.creator_email,
             hidden=False
         )
-        return qs.latest()
+        try:
+            sighting = qs.latest()
+        except Sighting.DoesNotExist:
+            sighting = None
+        return sighting
+
+    @property
+    def disease_state(self):
+        # For now we just take the disease_state of the current display_sighting
+        return self.display_sighting.disease_state
+
+    @property
+    def tag_or_id(self):
+        return self.tag_number or self.pk
 
 
 class Sighting(CreatorMixin, models.Model):

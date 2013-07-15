@@ -9,7 +9,13 @@
     <div data-role="content" class="at-content" role="main">
         <div class="single-sighting-wrapper ui-texture-wrapper ui-shadow clearfix">
             
-            <h2 class="heading">Tag: #{{ object.tag_number }}</h2>
+            <h2 class="heading">
+                {% if object.tag_number %}
+                Tag: #{{ object.tag_number }}
+                {% else %}
+                Untagged tree
+                {% endif %}
+            </h2>
             
             <div class="meta">
                 <p>Last update on: {{ updates.latest.created }}</p>

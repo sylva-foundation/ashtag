@@ -17,9 +17,7 @@ class ashtag.panes.MapListPane extends ashtag.panes.MapBasePane
             @addTree(tree)
 
     handleMarkerClick: (event, marker) ->
-        if marker.tree.tag_number
-            # Only for tagged trees
-            $.mobile.changePage marker.tree.view_url
+        $.mobile.changePage marker.tree.view_url
 
     addTree: (tree) ->
         latLng = new google.maps.LatLng tree.latlng[0], tree.latlng[1]
