@@ -106,7 +106,7 @@
     SubmitSightingPane.prototype.resetForm = function() {
       var location;
       location = this.$locationInput.val();
-      this.$form.reset();
+      this.$form.get(0).reset();
       return this.$locationInput.val(location);
     };
 

@@ -2,6 +2,8 @@ module "ashtag"
 
 class ashtag.FileStore
     constructor: () ->
+        ashtag.lib.mixins.Logging::augment @
+
         @imageFieldName = "image"
         @imageMaxWidth = 800
         @imageMaxHeight = 600
@@ -30,7 +32,10 @@ class ashtag.FileStore
 
     getDb: ->
         # Get the db connection
-        return window.openDatabase('uploader', '', 'Pending uploads', 5 * 1024 * 1024)
+        if not window.uploaderDb
+            window.uploaderDb = window.openDatabase('uploader', '', 'Pending uploads', 5 * 1024 * 1024)
+            @log 'Creating and caching database connection'
+        return window.uploaderDb
 
     initialiseDb: ->
         # create the table if necessary
@@ -49,28 +54,38 @@ class ashtag.FileStore
         if not @enabled
             throw 'Offline uploading disabled'
 
+        console?.group?('Storing file')
+
         return @_readFile(file, meta)
             .then(@_resizeFile)
             .then(@_storeFile)
             .then(@_handleStoreSuccess, @_handleStoreFailure)
+            .then(
+                -> console.groupEnd()
+                -> console.groupEnd()
+            )
 
 
     _readFile: (file, meta) ->
         # read a file into a FileReader. Returns a promise
+        @log "Reading file"
         deferred = $.Deferred()
         reader = new FileReader()
         reader.onloadend = (e) =>
+            @log "Reading complete"
             deferred.resolve(file, reader, meta)
         reader.readAsDataURL(file)
         return deferred.promise()
 
     _resizeFile: (file, reader, meta) =>
+        @log "Resizing file"
         def = $.Deferred()
 
         canvas = document.createElement "canvas"
         img = new Image()
 
         handleLoaded = =>
+            @log 'Image loaded. Calculating dimentions'
             ctx = canvas.getContext "2d"
             ctx.drawImage(img, 0, 0)
 
@@ -88,15 +103,19 @@ class ashtag.FileStore
             canvas.width = width
             canvas.height = height
 
+            @log "Resizing to #{width} x #{height}"
             ctx = canvas.getContext("2d")
             ctx.drawImage(img, 0, 0, width, height)
 
+            @log "Getting image as encoded data"
             resizedData = canvas.toDataURL("image/jpeg")
 
+            @log "Resize complete"
             def.resolve(file, resizedData, meta)
 
         img.src = reader.result
 
+        @log 'Waiting for image to load'
         interval = setInterval =>
                 if img.width > 0
                     handleLoaded()
@@ -107,25 +126,34 @@ class ashtag.FileStore
 
     _storeFile: (file, fileData, meta) =>
         # store a file into the db. Returns a promise
+        @log "Locally storing file with length #{fileData.length}"
         deferred = $.Deferred()
         @query("INSERT INTO [files] ([name], [meta], [file]) VALUES (?, ?, ?)", [file.name, meta, fileData]).then(
-            -> deferred.resolve()
-            -> deferred.reject()
+            => 
+                @log "Storing complete"
+                deferred.resolve()
+            => 
+                @warn "Storing failed"
+                deferred.reject()
         )
         return deferred.promise()
 
     _handleStoreSuccess: =>
+        @log "File stored locally successfully"
         # image successfully stored locally, lets 
         # sync if we are online
         return @allToServer()
 
     _handleStoreFailure: =>
+        @warn "Local storage failed"
         # failed to store image locally
     
     allToServer: ->
         # upload all locally stored files to the server. Returns a promise
+        @log "Sending all locally stored files to the server"
         deferred = $.Deferred()
         @query("SELECT * FROM [files]").then (rows) =>
+            @log "Sending #{rows.length} files"
             send = =>
                 row = rows.pop()
                 if row
@@ -141,11 +169,17 @@ class ashtag.FileStore
 
     popToServer: (row) ->
         # send the file specified by the db row `row` to the server. Returns a promise
+        @log "Popping file to the server"
         deferred = $.Deferred()
         @sendRequest(row.name, row.file, row.meta).then =>
+            @log "File sent, deleting from local db"
             @query("DELETE FROM [files] WHERE [id] = ?", [row.id]).then(
-                -> deferred.resolve()
-                -> deferred.resolve()
+                =>
+                    @log "Deletion complete"
+                    deferred.resolve()
+                => 
+                    @warn "Deletion failed"
+                    deferred.resolve()
             )
         , -> deferred.resolve()
         return deferred.promise()
@@ -153,6 +187,7 @@ class ashtag.FileStore
     sendRequest: (name, file, meta) ->
         # Do the file request to the server
         # For now we assume that 'meta' is url encoded already
+        @log "Doing request to server"
         data = [
             "#{@imageFieldName}_name=" + encodeURIComponent(name)
             "#{@imageFieldName}=" + encodeURIComponent(file)
@@ -164,6 +199,9 @@ class ashtag.FileStore
             url: window.location.pathname
             data: data.join '&'
             type: 'POST'
+            success: => @log "File sent to server"
+            error: => @warn "Failed to send file to server"
+
 
     query: (sql, values=[]) ->
         # Utility method to run queries against the server. Returns a promise

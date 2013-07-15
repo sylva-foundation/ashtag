@@ -31,6 +31,7 @@
       this.$el = $el;
       this.spec = spec != null ? spec : {};
       ashtag.lib.mixins.Observable.prototype.augment(this);
+      ashtag.lib.mixins.Logging.prototype.augment(this);
       if ((_ref = this.requiredParams) != null ? _ref.length : void 0) {
         this._requireParams.apply(this, this.requiredParams);
       }

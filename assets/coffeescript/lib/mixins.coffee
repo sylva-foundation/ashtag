@@ -103,5 +103,9 @@ class ashtag.lib.mixins.Observable extends ashtag.lib.mixins.Mixin
             
             fn.apply(@, params)
         
-    
+class ashtag.lib.mixins.Logging extends ashtag.lib.mixins.Mixin
+    log: (m, args...) ->
+        console?.log? m, args...
 
+    warn: (m, args...) ->
+        console?.warn? m, args...

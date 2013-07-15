@@ -79,7 +79,7 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
 
     resetForm: =>
         location = @$locationInput.val()
-        @$form.reset()
+        @$form.get(0).reset()
         @$locationInput.val(location)
 
     updateSavedForLater: =>
