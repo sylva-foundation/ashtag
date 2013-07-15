@@ -27,7 +27,6 @@ class ashtag.FileStore
     enable: ->
         # Disable offline uploading through the FileStore
         @enabled = true
-        @initialiseDb()
         @fire 'enable'
 
     getDb: ->

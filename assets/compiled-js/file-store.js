@@ -33,7 +33,6 @@
 
     FileStore.prototype.enable = function() {
       this.enabled = true;
-      this.initialiseDb();
       return this.fire('enable');
     };
 
