@@ -31,7 +31,7 @@ class SightingsInline(admin.TabularInline):
     extra = 0
     # readonly_fields = ('id', 'creator_email', 'image', '')
     fields = ('id', 'creator_email', 'thumbnail', 'disease_state', 'notes', 'flagged', 'hidden')
-    readonly_fields = ('creator_email', 'thumbnail', 'disease_state', 'notes', 'flagged', 'hidden')
+    readonly_fields = ('creator_email', 'thumbnail')
 
     def thumbnail(self, obj):
         return get_thumbnail_html(obj.image)

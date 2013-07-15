@@ -120,6 +120,12 @@ class Sighting(CreatorMixin, models.Model):
         ordering = ('-created',)
         get_latest_by = ('created',)
 
+    def save(self, *args, **kwargs):
+        super(Sighting, self).save(*args, **kwargs)
+        tree = self.tree
+        tree.update_display_sighting()
+        tree.save()
+
     def __unicode__(self):
         return u"{0} @ {1}".format(self.tree, self.created)
 

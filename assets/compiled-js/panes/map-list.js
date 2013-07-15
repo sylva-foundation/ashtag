@@ -44,13 +44,26 @@
       return $.mobile.changePage(marker.tree.view_url);
     };
 
+    MapListPane.prototype._getMarkerIcon = function(tree) {
+      var probability, tagged;
+      tagged = tree.tag_number ? 'tagged' : 'untagged';
+      if (tree.disease_state === true) {
+        probability = 'likely';
+      } else if (tree.disease_state === false) {
+        probability = 'unlikely';
+      } else if (tree.disease_state === null) {
+        probability = 'uncertain';
+      }
+      return "/static/images/markers/" + tagged + "-" + probability + ".png";
+    };
+
     MapListPane.prototype.addTree = function(tree) {
       var icon, latLng, marker, markerOpts,
         _this = this;
       latLng = new google.maps.LatLng(tree.latlng[0], tree.latlng[1]);
       if (tree.tag_number) {
         icon = {
-          url: '/static/images/map-tree-icon-green.png',
+          url: this._getMarkerIcon(tree),
           scaledSize: {
             width: 32,
             height: 32
@@ -58,7 +71,7 @@
         };
       } else {
         icon = {
-          url: '/static/images/map-tree-icon-orange.png',
+          url: this._getMarkerIcon(tree),
           scaledSize: {
             width: 18,
             height: 18

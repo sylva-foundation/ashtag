@@ -47,14 +47,22 @@ class MarkerResource(LatLngMixin, NamespacedModelResource):
     """A slimmed down Tree resource to only give bare minimum data for the map"""
     latlng = fields.ListField()
     view_url = fields.CharField()
+    disease_state = fields.CharField()
 
     class Meta:
-        queryset = Tree.objects.all()
+        queryset = Tree.objects.select_related('display_sighting').all()
         resource_name = 'marker'
-        fields = ['latlng', 'view_url', 'tag_number']
+        fields = ['latlng', 'view_url', 'tag_number', 'disease_state']
         allowed_methods = ['get']
         include_resource_uri = False
 
     def dehydrate_view_url(self, bundle):
         """Get the view url for this tree."""
         return bundle.obj.get_absolute_url()
+
+    def dehydrate_disease_state(self, bundle):
+        if bundle.obj.display_sighting:
+            state = bundle.obj.display_sighting.disease_state
+        else:
+            state = None
+        return state
