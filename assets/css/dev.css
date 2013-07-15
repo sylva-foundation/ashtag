@@ -61,3 +61,8 @@ body.authenticated .if-anonymous {
 body.anonymous .if-authenticated {
     display: none;
 }
+
+/* Images on guide page were too wide on mobile devices */
+.guide-figure img {
+    max-width: 100%;
+}
