@@ -27,13 +27,15 @@ jQuery ->
 
     # Are we logged in?
     $.ajax
-        url: '/auth-status/'
+        url: '/session-status/'
         type: 'get'
         dataType: 'json'
     .then (data) ->
         $('body')
             .toggleClass('authenticated', data.authenticated)
             .toggleClass('anonymous', not data.authenticated)
+            .toggleClass('ios', data.phonegap)
+            .toggleClass('non-ios', not data.phonegap)
 
 
 

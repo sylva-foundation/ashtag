@@ -66,3 +66,8 @@ body.anonymous .if-authenticated {
 .guide-figure img {
     max-width: 100%;
 }
+
+/* Disable elements we are not allows to show on ios apps, 
+then show them if we are not on ios */
+ul li.buy-tags { display: none; }
+body.non-ios ul li.buy-tags { display: block; }

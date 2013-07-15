@@ -30,11 +30,11 @@
       });
     }
     return $.ajax({
-      url: '/auth-status/',
+      url: '/session-status/',
       type: 'get',
       dataType: 'json'
     }).then(function(data) {
-      return $('body').toggleClass('authenticated', data.authenticated).toggleClass('anonymous', !data.authenticated);
+      return $('body').toggleClass('authenticated', data.authenticated).toggleClass('anonymous', !data.authenticated).toggleClass('ios', data.phonegap).toggleClass('non-ios', !data.phonegap);
     });
   });
 
