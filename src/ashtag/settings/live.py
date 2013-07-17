@@ -46,6 +46,12 @@ if env.get('RAVEN_DSN', None):
         'raven.contrib.django.raven_compat',
     ]
 
+    LOGGING['root']['handlers'] = ['sentry']
+    LOGGING['handlers']['sentry'] = {
+        'level': 'ERROR',
+        'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+    }
+
 # SSL
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PORT', '443')
 SESSION_COOKIE_SECURE = True

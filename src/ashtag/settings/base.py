@@ -202,7 +202,7 @@ LOGGING = {
     'disable_existing_loggers': True,
     'root': {
         'level': 'WARNING',
-        'handlers': ['sentry'],
+        'handlers': ['console'],
     },
     'filters': {
         'require_debug_false': {
@@ -215,10 +215,7 @@ LOGGING = {
         },
     },
     'handlers': {
-        'sentry': {
-            'level': 'ERROR',
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-        },
+        # Note: Sentry handler is added in live.py
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
