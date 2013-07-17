@@ -57,7 +57,7 @@ cp $PROJECT_DIR/vagrant/install/pg_hba.conf /etc/postgresql/$PGSQL_VERSION/main/
 /etc/init.d/postgresql reload
 
 # postgis setup
-apt-get install -y postgresql-9.1-postgis2 
+apt-get install -y postgresql-9.1-postgis2 libgdal1
 
 # postgres user & db setup
 psql postgres postgres -c 'CREATE ROLE vagrant WITH SUPERUSER LOGIN' || true
