@@ -116,16 +116,23 @@ body {
 }
 
 .menu-button {
-    background: #666 url(../images/menu-icon.png) no-repeat center center;
-    text-indent: -9999px;
+    background: #666 url(../images/menu-icon.png) no-repeat 7px 7px;
     border: none;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
+    text-shadow: none;
+    color: #fff;
+    padding-left: 22px;
     &:hover {
         background-color: #333;
+        color: #fff;
+    }
+    .ui-btn-inner {
+        padding: 5px 9px 8px 10px;
     }
 }
+
 .mytags-button {
     background: @green url(../images/leaves-icon.png) no-repeat center center;
     background-size: 22px;
@@ -1311,15 +1318,80 @@ body.offline #submit-sighting-page .submit-done-msgs .online-msg {
 }
 
 /* Guide */
+.guide-page {
+    h3, h4 {
+        text-align: center;
+    }
+}
 .guide-figure {
     text-align:center;
 
     img {
-        margin: 0 auto;
-        max-width: 300px;
+        max-width: 100%;
         height: auto;
+        .border-radius;
+        margin: 0 auto;
+        border: 10px solid #fff;  
+        .box-sizing;     
     }
+    
 }
+
+/* sightings map */
+
+#map-page {
+    .map-key {
+        background: #f5f5f5;
+        border: 1px solid #ccc;
+        padding: 10px 20px;
+        .border-radius;
+        font-weight: bold;
+        text-align: center;
+        .box-sizing; 
+        margin: 0 auto;
+        margin-top: 1em;
+        
+        ul {
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        li {
+            list-style: none;
+            display: inline-block;
+            font-size: 13px;
+            font-weight: normal;
+            float: left;
+            &.tagged {
+                margin-right: 10px;
+            }
+            img {
+                vertical-align: middle;
+                position: relative;
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+    }
+
+
+}
+
+/* We now alter the UI for anonymous/authenticated users using CSS */
+body.authenticated .if-anonymous {
+    display: none;
+}
+body.anonymous .if-authenticated {
+    display: none;
+}
+/* Disable elements we are not allows to show on ios apps, 
+then show them if we are not on ios */
+ul li.buy-tags { display: none; }
+body.non-ios ul li.buy-tags { display: block; }
 
 @media all and (max-width: 35em) {
     .cookies-block-inner {
