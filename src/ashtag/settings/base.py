@@ -316,4 +316,8 @@ ENABLE_TRACKING_CODE = bool(os.environ.get('ENABLE_TRACKING_CODE', False))
 import djcelery
 djcelery.setup_loader()
 
+# South
+SOUTH_TESTS_MIGRATE = False
+SKIP_SOUTH_TESTS = True
+
 from ashtag.settings.assets import *

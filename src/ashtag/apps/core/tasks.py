@@ -13,3 +13,7 @@ def create_thumbnails(imageField):
 def create_all_thumbnails():
     for sighting in Sighting.objects.all():
         create_thumbnails.delay(sighting.image)
+
+@task()
+def send_email(email):
+    email.send()

@@ -10,15 +10,12 @@ from django.views.generic import TemplateView, DetailView, ListView, FormView
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.mail import mail_managers
 from django.db.models import Q
 
-from ashtag.apps.core.models import Tree, Sighting
+from ashtag.apps.core.models import Tree, Sighting, EmailTemplate
 from ashtag.apps.core.tasks import create_thumbnails
 
 from .forms import SightingForm, AnonSightingForm, ClaimForm
-from .utils import email_owner
-from .messages import NEW_TAG_MESSAGE, SIGHTING_MESSAGE, FLAGGED_MESSAGE
 
 logger = logging.getLogger('ashtag.apps.sightings.views')
 
@@ -112,7 +109,7 @@ class SubmitView(TemplateView):
         else:
             files = request.FILES
 
-        form = form_class(request.user, request.POST, files)
+        form = form_class(request, request.user, request.POST, files)
         if form.is_valid():
             sighting = form.save(commit=False)
             if request.user.is_authenticated():
@@ -123,12 +120,10 @@ class SubmitView(TemplateView):
             # process in the future
             create_thumbnails.delay(sighting.image)
             if sighting.tree.creator_email != sighting.creator_email:
-                email_owner(
-                    sighting.tree,
-                    "Update on your Tree!",
-                    SIGHTING_MESSAGE.format(
-                        request.build_absolute_uri(sighting.get_absolute_url())
-                    )
+                EmailTemplate.send('new_sighting_to_owner',
+                    to_emails=[sighting.tree.creator_email],
+                    sighting=sighting,
+                    request=request,
                 )
 
             if request.is_ajax():
@@ -164,15 +159,12 @@ class ClaimView(FormView):
         )
         tree.tag_number = form.data['tag_number']
         tree.save()
-        template_data = {
-            'url': request.build_absolute_uri(tree.get_absolute_url()),
-            'admin_url': request.build_absolute_uri(reverse('admin:core_tree_changelist')),
-            'this_tree_was': 'claimed from a previous sighting',
-        }
-        mail_managers(
-            "[AshTag Admin] A tree was claimed",
-            NEW_TAG_MESSAGE % template_data
+        EmailTemplate.send('admin_new_tag',
+            tree=tree,
+            request=self.request,
+            this_tree_was='claimed from a previous sighting',
         )
+
         return super(ClaimView, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -223,16 +215,11 @@ class FlagView(TreeGetterMixin, DetailView):
             # just mail managers to deal with it
             tree.flagged = True
             tree.save()
-            template_data = {
-                'url': request.build_absolute_uri(tree.get_absolute_url()),
-                'admin_url': request.build_absolute_uri(reverse('admin:core_tree_change', args=[tree.id])),
-                'email': request.user.email if request.user.is_authenticated() else 'anonymous',
-                'the_item': 'a tree',
-            }
-            mail_managers(
-                "[AshTag Admin] A Tagged Tree was flagged",
-                FLAGGED_MESSAGE % template_data
+            EmailTemplate.send('admin_flagged',
+                request=request,
+                obj=tree,
             )
+
             result['tree'] = {
                 'message': 'OK',
                 'flag': tree.id,
@@ -259,15 +246,9 @@ class FlagView(TreeGetterMixin, DetailView):
                 # set a flag, and maybe alert the owner/ADAPT
                 sighting.flagged = True
                 sighting.save()
-                template_data = {
-                    'url': request.build_absolute_uri(tree.get_absolute_url()),
-                    'admin_url': request.build_absolute_uri(reverse('admin:core_sighting_change', args=[sighting.id])),
-                    'email': request.user.email if request.user.is_authenticated() else 'anonymous',
-                    'the_item': 'an update',
-                }
-                mail_managers(
-                    "[AshTag Admin] An update was flagged",
-                    FLAGGED_MESSAGE % template_data
+                EmailTemplate.send('admin_flagged',
+                    request=request,
+                    obj=sighting,
                 )
                 result['sighting'] = {
                     'message': 'OK',

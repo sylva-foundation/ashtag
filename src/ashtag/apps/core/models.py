@@ -1,11 +1,13 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.template import Template, Context
+from django.core.mail import EmailMessage
 
 from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 from model_utils import Choices
 
-from ashtag.apps.core.utils import pk_generator
+from .utils import pk_generator
 
 
 class CreatorMixin(object):
@@ -147,3 +149,92 @@ class Comment(models.Model):
 
     class Meta:
         abstract = True  # Just testing for now
+
+
+class EmailTemplate(models.Model):
+    name = models.CharField(max_length=32, primary_key=True)
+    description = models.CharField(max_length=255)
+    subject = models.CharField(max_length=255)
+    body = models.TextField()
+    enabled = models.BooleanField(default=True, help_text='Should this email actually be sent?')
+    default_to = models.TextField(default='', blank=True, help_text='Who should this email be sent to by default? Only applies to admin-related emails. Separate multiple emails using commas.')
+
+    @staticmethod
+    def send(template_name, to_emails=None, **kwargs):
+        obj = EmailTemplate.objects.get(name=template_name)
+        obj.send_delayed(to_emails, **kwargs)
+
+    def parse_default_to(self):
+        default_to = self.default_to or ''
+        emails = default_to.split(',')
+        emails = [e.strip() for e in emails if e.strip()]
+        return emails
+
+    def make_email(self, to_emails=None, **kwargs):
+        to_emails = to_emails or self.parse_default_to()
+        body_template = Template(self.body)
+        subject_template = Template(self.subject)
+        context = kwargs
+
+        if hasattr(self, "context_%s" % self.name):
+            method = getattr(self, "context_%s" % self.name)
+            extra_context = method(**kwargs)
+            if extra_context:
+                context.update(extra_context)
+
+        body = body_template.render(Context(context))
+        subject = subject_template.render(Context(context))
+
+        email = EmailMessage(subject, body, to=to_emails)
+        return email
+
+    def send_delayed(self, to_emails=None, **kwargs):
+        from .tasks import send_email
+        if not self.enabled:
+            return
+        email = self.make_email(to_emails=to_emails, **kwargs)
+        send_email.delay(email)
+
+    def context_new_untagged_tree(self, request, **kwargs):
+        return {
+            'buy_tags_url': request.build_absolute_uri(reverse('store:tagpacks')),
+        }
+
+    def context_new_sighting_to_owner(self, request, sighting, **kwargs):
+        tree = sighting.tree
+        return {
+            'url': request.build_absolute_uri(sighting.get_absolute_url()),
+            'sighting': sighting,
+            'tree': tree,
+            'user': tree.creator,
+        }
+
+    def context_admin_new_tag(self, request, tree, this_tree_was, **kwargs):
+        return {
+            'url': request.build_absolute_uri(tree.get_absolute_url()),
+            'admin_url': request.build_absolute_uri(reverse('admin:core_tree_changelist')),
+            'this_tree_was': this_tree_was,
+        }
+
+    def context_admin_flagged(self, request, obj, **kwargs):
+        if isinstance(obj, Tree):
+            url_name = 'admin:core_tree_change'
+            the_item = 'a tree'
+        else:
+            url_name = 'admin:core_sighting_change'
+            the_item = 'a sighting'
+
+        return {
+            'url': request.build_absolute_uri(obj.get_absolute_url()),
+            'admin_url': request.build_absolute_uri(reverse(url_name, args=[obj.id])),
+            'email': request.user.email if request.user.is_authenticated() else 'anonymous',
+            'the_item': the_item,
+        }
+
+
+
+
+
+
+
+

@@ -28,9 +28,9 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-# Django Nose
-TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
+TEST_RUNNER = 'discover_runner.DiscoverRunner'
 
 # Celery
 BROKER_URL = 'django://'
 INSTALLED_APPS += ['kombu.transport.django']
+CELERY_ALWAYS_EAGER = True

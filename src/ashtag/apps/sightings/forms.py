@@ -8,8 +8,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.core.mail import mail_managers
 
-from ashtag.apps.core.models import Sighting, Tree
-from .messages import NEW_TAG_MESSAGE
+from ashtag.apps.core.models import Sighting, Tree, EmailTemplate
 
 
 class SightingForm(forms.ModelForm):
@@ -19,8 +18,9 @@ class SightingForm(forms.ModelForm):
         model = Sighting
         exclude = ('id', 'tree', 'created', 'modified', 'creator_email')
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, request, user, *args, **kwargs):
         super(SightingForm, self).__init__(*args, **kwargs)
+        self.request = request
         self.user = user
 
     def clean_tag_number(self):
@@ -57,13 +57,11 @@ class SightingForm(forms.ModelForm):
                         tag_number=tag_number
                     )
                     c_data['tree'] = tree
-                    mail_managers(
-                        "Tree was claimed!",
-                        NEW_TAG_MESSAGE.format(
-                            tree.get_absolute_url(),
-                            reverse('admin:core_tree_changelist'),
-                            "tagged from a new sighting."
-                        )
+
+                    EmailTemplate.send('admin_new_tag',
+                        tree=tree,
+                        request=self.request,
+                        this_tree_was='tagged from a new sighting',
                     )
                 else:
                     self._errors["tag_number"] = self.error_class([(
@@ -71,12 +69,16 @@ class SightingForm(forms.ModelForm):
                         "yet. If you are trying to claim it, please log in "
                         "first!")])
         else:
+            email = self.user.email if self.user.is_authenticated() else c_data['creator_email']
             c_data['tree'] = Tree.objects.create(
                 location=c_data.get('location'),
-                creator_email=self.user.email
-                if self.user.is_authenticated()
-                else c_data['creator_email']
+                creator_email=email
             )
+            EmailTemplate.send('new_untagged_tree',
+                to_emails=[email],
+                request=self.request,
+            )
+
 
         return c_data
 

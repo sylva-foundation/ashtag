@@ -8,7 +8,7 @@ from django.conf import settings
 from sorl.thumbnail import get_thumbnail
 from sorl.thumbnail.helpers import ThumbnailError
 
-from .models import Sighting, Tree
+from .models import Sighting, Tree, EmailTemplate
 from .tasks import create_thumbnails
 
 
@@ -121,5 +121,10 @@ class TreeAdmin(gis_admin.GeoModelAdmin):
     update_display_sighting.short_description = "Update display sightings"
 
 
+class EmailTemplateAdmin(gis_admin.GeoModelAdmin):
+    list_display = ('name', 'description', 'enabled')
+
+
 admin.site.register(Sighting, SightingAdmin)
 admin.site.register(Tree, TreeAdmin)
+admin.site.register(EmailTemplate, EmailTemplateAdmin)

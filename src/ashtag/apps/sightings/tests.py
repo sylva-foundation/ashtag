@@ -17,6 +17,7 @@ X_IMAGE = """data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD//gATQ3JlYXRlZCB3
 class SightingTestCase(WebTest):
     """Test that a tree tagger and spotter can do certain things."""
     csrf_checks = False
+    fixtures = ["email-templates"]
 
     @classmethod
     def setUpClass(cls):
@@ -140,6 +141,7 @@ class SightingTestCase(WebTest):
                 'notes': 'test anon',
             }, status=302)
         self.assertTrue(reverse('sightings:sent') in response.location)
+        self.assertEqual(1, len(mail.outbox))
 
     def test_tagger_emailed_on_update(self):
         """Tagger should get an email when a tree is updated by a spotter."""

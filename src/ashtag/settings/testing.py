@@ -47,3 +47,5 @@ LOGGING = {
 
 SECRET_KEY = '123'
 DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
+
+TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
