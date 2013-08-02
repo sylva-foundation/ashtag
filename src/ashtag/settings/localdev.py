@@ -1,4 +1,5 @@
 from ashtag.settings.base import *
+from path import path
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
