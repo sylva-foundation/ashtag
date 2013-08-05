@@ -97,9 +97,9 @@ class Tree(CreatorMixin, models.Model):
 class Sighting(CreatorMixin, models.Model):
     """Sighting, recording date, time, location, notes, image, tree, state."""
     DISEASE_STATE = Choices(
-        (None, 'unknown', "I don't know"),
-        (True, 'diseased', "Diseased"),
-        (False, 'notdiseased', "Not diseased"),
+        (None, 'unknown', "Uncertain"),
+        (True, 'diseased', "Likely"),
+        (False, 'notdiseased', "Unlikely"),
     )
 
     id = models.CharField(max_length=6, primary_key=True, default=pk_generator)

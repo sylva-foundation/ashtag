@@ -1,0 +1,19 @@
+.comments .info {
+    height: 23px;
+}
+.comments .info .title {
+    float: left;
+    margin-top: 3px;
+}
+.comments .info .disease_state_wrap {
+    float: right;
+    overflow: hidden;
+}
+.comments .info .disease_state_wrap .label {
+    float: right;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+.comments .info .disease_state_wrap .disease_state {
+    float: right;
+}

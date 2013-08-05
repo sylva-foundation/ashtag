@@ -52,11 +52,16 @@
                     {% for update in updates %}
                     <li class="ui-corner-all clearfix" id="sighting-{{ update.id }}">
                         
-                        <div class="info">Spotted on {{ update.created }} by {{ update.creator|default:"a spotter" }}
-                            {% if update.disease_state != None %}
-                            <span class="disease_state disease_{{ update.disease_state }}">{{ update.get_disease_state_display }}</span>
-                            {% endif %}
+                        <div class="info">
+                            <div class="title">
+                                Spotted on {{ update.created }} by {{ update.creator|default:"a spotter" }}
+                            </div>
+                            <div class="disease_state_wrap">
+                                <span class="disease_state disease_{{ update.disease_state }}">{{ update.get_disease_state_display }}</span>
+                                <span class="label">Reported dieback likelihood:</span>
+                            </div>
                         </div>
+
                         <span class="image-holder">
                             {% thumbnail update.image IMG_THUMB crop='center' as thmb %}
                             <img src="{{ thmb.url }}" />
