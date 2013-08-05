@@ -17,3 +17,10 @@
 .comments .info .disease_state_wrap .disease_state {
     float: right;
 }
+.credit {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    font-size: 12px;
+    margin-top: -2px;
+}
