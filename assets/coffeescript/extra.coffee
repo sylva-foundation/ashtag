@@ -61,5 +61,19 @@ ashtag.extra.geoLocate = =>
     ashtag.extra._locationPromise = def
     return def.promise()
 
+ashtag.extra.isLatLngSane = (lat, lng) ->
+    # Bounds around the UK
+    bounds = 
+        lat:
+            max: 63 
+            min: 48
+        lng:
+            max: 3
+            min: -12
 
+    if lat > bounds.lat.max or lat < bounds.lat.min
+        return false
+    if lng > bounds.lng.max or lat < bounds.lng.min
+        return false
+    return true
 

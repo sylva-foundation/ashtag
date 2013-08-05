@@ -73,4 +73,25 @@
     return def.promise();
   };
 
+  ashtag.extra.isLatLngSane = function(lat, lng) {
+    var bounds;
+    bounds = {
+      lat: {
+        max: 63,
+        min: 48
+      },
+      lng: {
+        max: 3,
+        min: -12
+      }
+    };
+    if (lat > bounds.lat.max || lat < bounds.lat.min) {
+      return false;
+    }
+    if (lng > bounds.lng.max || lat < bounds.lng.min) {
+      return false;
+    }
+    return true;
+  };
+
 }).call(this);

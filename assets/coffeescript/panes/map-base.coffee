@@ -25,14 +25,18 @@ class ashtag.panes.MapBasePane extends ashtag.lib.panes.BasePane
         google.maps.event.addListenerOnce @map, 'idle', @handleMapLoad
 
     centerOnUser: ->
-        promise = ashtag.extra.geoLocate()
-        promise.then(
+        deferred = $.Deferred()
+        ashtag.extra.geoLocate().then(
             # Success, got a location
-            (lat, lng) => @setMapLocation lat, lng, @zoomedInZoomLevel
+            (lat, lng) =>
+                if ashtag.extra.isLatLngSane(lat, lng)
+                    # Only set the location if it is sane
+                    @setMapLocation lat, lng, @zoomedInZoomLevel
+                deferred.resolve(lat, lng)
             # Failed, used default location
             => @setMapLocation @defaultLat, @defaultLat, @defaultZoom
         )
-        return promise
+        return deferred.promise()
 
     handleMapLoad: (e, map) =>
         # Called once map setup is complete
