@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+    #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.contrib.gis import admin as gis_admin
@@ -43,6 +43,7 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
                     'creator_email', 'creator', 'disease_state', 'notes', 'thumbnail')
     search_fields = ('tree__tag_number',)
     actions = ('create_thumbnails',)
+    openlayers_url = '%sjs/admin/OpenLayers.js' % settings.STATIC_URL
 
     def tree_tag_number(self, obj):
         return """
@@ -85,6 +86,7 @@ class TreeAdmin(gis_admin.GeoModelAdmin):
     list_display_links = ('tag_number', 'id')
     readonly_fields = ('display_sighting',)
     inlines = (SightingsInline,)
+    openlayers_url = '%sjs/admin/OpenLayers.js' % settings.STATIC_URL
 
     def link(self, obj):
         return """
