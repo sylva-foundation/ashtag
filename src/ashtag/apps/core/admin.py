@@ -40,7 +40,7 @@ class SightingsInline(admin.TabularInline):
 
 class SightingAdmin(gis_admin.GeoModelAdmin):
     list_display = ('created', 'link', 'tree_tag_number',
-                    'creator_email', 'creator', 'disease_state', 'notes', 'thumbnail')
+                    'creator_email', 'creator', 'disease_state', 'notes', 'hidden', 'thumbnail')
     search_fields = ('tree__tag_number',)
     actions = ('create_thumbnails',)
     openlayers_url = '%sjs/admin/OpenLayers.js' % settings.STATIC_URL
@@ -81,7 +81,7 @@ class SightingAdmin(gis_admin.GeoModelAdmin):
 
 class TreeAdmin(gis_admin.GeoModelAdmin):
     search_fields = ('tag_number',)
-    list_display = ('tag_number', 'id', 'link', 'tag_checked_by', 'creator_email', 'thumbnail')
+    list_display = ('tag_number', 'id', 'link', 'tag_checked_by', 'creator_email', 'hidden', 'thumbnail')
     actions = ('verify_tag', 'reject_tag', 'update_display_sighting')
     list_display_links = ('tag_number', 'id')
     readonly_fields = ('display_sighting',)
