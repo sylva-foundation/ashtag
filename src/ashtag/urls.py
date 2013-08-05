@@ -1,7 +1,9 @@
 from django.conf.urls import patterns, include, url
+from django.contrib.auth.decorators import login_required
 
 from django.contrib import admin
 admin.autodiscover()
+admin.site.login = login_required(admin.site.login)
 
 from ashtag.apps.core.views import AshTagRegistrationView
 from oscar.app import application as oscar_application

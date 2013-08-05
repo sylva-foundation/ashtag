@@ -34,6 +34,7 @@
             <p class="reset-text"><a href="{% url 'auth_password_reset' %}" data-ajax="false">Forgot password?</a></p>
             <p class="signup-text">Don't have an account yet?<br /><a href="{% url 'registration_register' %}" >Sign up now</a></p>
         </div>
+        <input type="hidden" name="next" value="{{ next }}" />
     </form><!--//login-form-->                            
 </div><!--//at-content-->
 
