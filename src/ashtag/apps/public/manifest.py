@@ -10,6 +10,7 @@ class PublicManifest(Manifest):
     def cache(self):
         return [
             reverse('public:home'),
+            '/static/images/ashtaglogo.png',
         ]
 
     def version_data(self):
