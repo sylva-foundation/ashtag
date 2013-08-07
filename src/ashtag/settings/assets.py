@@ -20,7 +20,7 @@ PIPELINE_JS = {
             'js/lib/jquery.mobile-1.3.1.min.js',
         ),
         'output_filename': 'js/jquery.js',
-    }
+    },
     'commonjs': {
         'source_filenames': (
             'js/jquery.min.js',
