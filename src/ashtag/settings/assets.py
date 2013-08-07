@@ -14,13 +14,6 @@ PIPELINE_CSS = {
 }
 
 PIPELINE_JS = {
-    'jquery': {
-        'source_filenames': (
-            'js/lib/jquery-1.9.1.min.js',
-            'js/lib/jquery.mobile-1.3.1.min.js',
-        ),
-        'output_filename': 'js/jquery.js',
-    },
     'commonjs': {
         'source_filenames': (
             'js/jquery.min.js',
