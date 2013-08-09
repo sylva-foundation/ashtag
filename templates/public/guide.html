@@ -1,5 +1,5 @@
 {% extends "core/jqm-page.html" %}
-
+{% load staticfiles %}
 {% block title %}Ash Dieback Identification Guide{% endblock %}
 {% block class %}guide-page{% endblock %}
 
@@ -11,7 +11,7 @@
                 <h3>Be sure it's an ash tree</h3>
 
                 <div class="guide-figure">
-                    <img src="{{ STATIC_URL}}images/guide/black_ash_buds_October.jpg">
+                    <img src="{% static 'images/guide/guide1.jpg' %}">
                     <div class="credit">Photo credit: Iben Margrete Thomson</div>
                 </div>
 
@@ -20,7 +20,7 @@
                 <h3>Identifying ash dieback</h3>
 
                 <div class="guide-figure">
-                    <img src="{{ STATIC_URL }}images/guide/Chalara_Golden_wood2.jpg">
+                    <img src="{% static 'images/guide/guide2.jpg' %}">
                     <div class="credit">Photo credit: Forestry Commission</div>
                 </div>
 
@@ -31,7 +31,7 @@
                 <h4>Does the tree have scars on its smaller branches?</h4>
 
                 <div class="guide-figure">
-                    <img src="{{ STATIC_URL }}images/guide/photo_2.jpg">
+                    <img src="{% static 'images/guide/guide3.jpg' %}">
                     <div class="credit">Photo credit: Forestry Commission</div>
                 </div>
 
@@ -40,7 +40,7 @@
                 <h4>Is the top of the tree dead or dying?</h4>
 
                 <div class="guide-figure">
-                    <img src="{{ STATIC_URL }}images/guide/ash_dieback_dead_top_October_DK_2008_IMT.jpg">
+                    <img src="{% static 'images/guide/guide4.jpg' %}">
                     <div class="credit">Photo credit: Iben Margrete Thomson</div>
                 </div>
 
@@ -48,7 +48,9 @@
                  
                 <h4>Is there dieback on shed leaves?</h4>
 
-                <div class="guide-figure"><img src="{{ STATIC_URL }}images/guide/ash_leaf_stalk_infection_on_shed_leaves_October_DK_2006_IMT.jpg"></div>
+                <div class="guide-figure">
+                    <img src="{% static 'images/guide/guide5.jpg' %}">
+                </div>
 
                 <p>If the leaves have fallen, you can see distinctive discolouration, especially on the underside. Note the brown discolouration of the leaf stalk, which may also be on the central vein of the leaflet.</p>
 
