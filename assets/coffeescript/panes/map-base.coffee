@@ -34,7 +34,7 @@ class ashtag.panes.MapBasePane extends ashtag.lib.panes.BasePane
                     @setMapLocation lat, lng, @zoomedInZoomLevel
                 deferred.resolve(lat, lng)
             # Failed, used default location
-            => @setMapLocation @defaultLat, @defaultLat, @defaultZoom
+            => @setMapLocation @defaultLat, @defaultLng, @defaultZoom
         )
         return deferred.promise()
 

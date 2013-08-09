@@ -55,7 +55,7 @@
         }
         return deferred.resolve(lat, lng);
       }, function() {
-        return _this.setMapLocation(_this.defaultLat, _this.defaultLat, _this.defaultZoom);
+        return _this.setMapLocation(_this.defaultLat, _this.defaultLng, _this.defaultZoom);
       });
       return deferred.promise();
     };
