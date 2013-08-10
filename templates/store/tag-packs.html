@@ -1,4 +1,5 @@
 {% extends "core/jqm-page.html" %}
+{% load staticfiles %}
 
 {% block title %}Buy Tags{% endblock %}
 {% block class %}buy-tags-page{% endblock %}
@@ -10,7 +11,7 @@
                 <form class="buy-tags-wrapper ui-texture-wrapper ui-shadow" action="{% url 'basket:add' %}" method="post" data-ajax="false">
                     {% csrf_token %}
                     <div class="tags-thumb">
-                        <img class="ui-shadow" src="http://www.elegantepress.com/wp-content/uploads/gallery/bambalyne/bambalyne_tag1.jpg" />
+                        <img class="ui-shadow" src="{% static 'images/tags.jpg' %}" />
                     </div>
                     
                     <p class="tags-desc">
