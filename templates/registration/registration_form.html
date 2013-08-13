@@ -12,16 +12,12 @@
 
             {{ form }}
 
-            <fieldset data-role="controlgroup" >
-                <input type="checkbox" name="show-password" id="show-password" onchange="document.forms['signup-form'].password.type = (this.checked) ? 'text' : 'password'" />
-                <label for="show-password">Show password</label>
-            </fieldset>
             <p class="legal">By clicking Sign Up, I agree to the <a href="{% url 'public:terms' %}">Terms and Conditions</a></p>
             <div class="cta-btn-wrapper">
                 <input class="button signup-submit" type="submit" value="Sign Up" name="signup-submit" />
             </div>
             <div class="form-text-wrapper">
-                <p class="signup-text">Already have an account?<br /><a href="login.html" >Log in now</a></p>
+                <p class="signup-text">Already have an account?<br /><a href="{% url 'auth_login' %}" >Log in now</a></p>
             </div>
         </form><!--//signup-form-->                           
     </div><!--//at-content-->
