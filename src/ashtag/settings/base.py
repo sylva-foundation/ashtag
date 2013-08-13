@@ -250,6 +250,8 @@ OSCAR_INITIAL_LINE_STATUS = 'processing'
 OSCAR_LINE_STATUS_PIPELINE = OSCAR_ORDER_STATUS_PIPELINE = {
     'processing': ('shipped', 'cancelled'),
     'shipped': ('returned',),
+    'returned': (),
+    'cancelled': (),
 }
 
 # Check for a sensible flow before enabling this
