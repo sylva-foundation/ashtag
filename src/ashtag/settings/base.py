@@ -247,10 +247,11 @@ LOGIN_REDIRECT_URL = 'sightings:my-tags'
 # Oscar
 OSCAR_INITIAL_ORDER_STATUS = 'processing'
 OSCAR_INITIAL_LINE_STATUS = 'processing'
-OSCAR_ORDER_STATUS_PIPELINE = {
+OSCAR_LINE_STATUS_PIPELINE = OSCAR_ORDER_STATUS_PIPELINE = {
     'processing': ('shipped', 'cancelled'),
     'shipped': ('returned',),
 }
+
 # Check for a sensible flow before enabling this
 OSCAR_ALLOW_ANON_CHECKOUT = True
 OSCAR_PARTNER_WRAPPERS = {
