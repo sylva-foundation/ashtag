@@ -1117,7 +1117,26 @@ body.offline #submit-sighting-page .submit-done-msgs .online-msg {
         ul {
             padding-left: 0;
         }
-        
+        .info {
+            overflow: hidden;
+            .title {
+                float: left;
+                margin-top: 3px;
+            }
+            .disease_state_wrap {
+                float: right;
+                overflow: hidden;
+                .label {
+                    float: right;
+                    margin-right: 10px;
+                    margin-top: 3px;
+                }
+                .disease_state {
+                    float: right;
+                }
+            }
+        }
+                    
         li {
             background: #fff;
             padding: 10px;
@@ -1380,6 +1399,18 @@ body.offline #submit-sighting-page .submit-done-msgs .online-msg {
 
 
 }
+
+
+/* Credit */
+.credit {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    font-size: 12px;
+    margin-top: -2px;
+}
+
+
 
 /* We now alter the UI for anonymous/authenticated users using CSS */
 body.authenticated .if-anonymous {
