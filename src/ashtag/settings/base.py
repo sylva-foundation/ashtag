@@ -245,12 +245,11 @@ REGISTRATION_OPEN = True
 LOGIN_REDIRECT_URL = 'sightings:my-tags'
 
 # Oscar
-OSCAR_INITIAL_ORDER_STATUS = 'Pending'
-OSCAR_INITIAL_LINE_STATUS = 'Pending'
+OSCAR_INITIAL_ORDER_STATUS = 'processing'
+OSCAR_INITIAL_LINE_STATUS = 'processing'
 OSCAR_ORDER_STATUS_PIPELINE = {
-    'Pending': ('Being processed', 'Cancelled',),
-    'Being processed': ('Processed', 'Cancelled',),
-    'Cancelled': (),
+    'processing': ('shipped', 'cancelled'),
+    'shipped': ('returned',),
 }
 # Check for a sensible flow before enabling this
 OSCAR_ALLOW_ANON_CHECKOUT = True
