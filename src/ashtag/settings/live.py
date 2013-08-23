@@ -36,6 +36,67 @@ OSCAR_FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+# This is the suggested dotcloud logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'log_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'verbose',
+            'filename': '/var/log/supervisor/django.log',
+            'maxBytes': 1024*1024*25, # 25 MB
+            'backupCount': 5,
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'log_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console', 'log_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'ashtag.request': {
+            'handlers': ['console', 'log_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['console', 'log_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        # Catch All Logger -- Captures any other logging
+        '': {
+            'handlers': ['console', 'log_file'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    }
+}
+
 # Raven / sentry
 if env.get('RAVEN_DSN', None):
     RAVEN_CONFIG = {
