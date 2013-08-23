@@ -8,4 +8,5 @@ from oscar.apps.partner.wrappers import DefaultWrapper
 class AdaptWrapper(DefaultWrapper):
 
     def calculate_tax(self, stockrecord):
-        return stockrecord.price_excl_tax * D(settings.OSCAR_TAX)
+        tax = stockrecord.price_excl_tax * D(settings.OSCAR_TAX)
+        return tax.quantize(D('0.01'))
