@@ -107,7 +107,7 @@ class Sighting(CreatorMixin, models.Model):
     modified = AutoLastModifiedField('modified')
     creator_email = models.EmailField(max_length=254)
     tree = models.ForeignKey('Tree', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='sightings/%Y/%m/%d')
+    image = models.ImageField(upload_to=lambda i, fn: 'sightings/%s/%s-%s' % (i.id, pk_generator(10), fn))
     disease_state = models.NullBooleanField(
         choices=DISEASE_STATE, default=DISEASE_STATE.unknown)
     location = models.PointField()
