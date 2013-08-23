@@ -23,3 +23,7 @@ class TagPack(Product):
         if not hasattr(self, '_num_tags'):
             self._num_tags = self.attribute_values.get(attribute__code='num_tags_in_pack').value
         return self._num_tags
+
+
+from ashtag.apps.oscar.dashboard.orders.views import setup_views
+setup_views()
