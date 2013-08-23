@@ -40,6 +40,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['console'],
+    },
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
@@ -76,17 +80,17 @@ LOGGING = {
         'django.request': {
             'handlers': ['console', 'log_file'],
             'level': 'ERROR',
-            'propagate': False,
+            'propagate': True,
         },
         'ashtag.request': {
             'handlers': ['console', 'log_file'],
             'level': 'DEBUG',
-            'propagate': False,
+            'propagate': True,
         },
         'django.db.backends': {
             'handlers': ['console', 'log_file'],
             'level': 'INFO',
-            'propagate': False,
+            'propagate': True,
         },
         # Catch All Logger -- Captures any other logging
         '': {
