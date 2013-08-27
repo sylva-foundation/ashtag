@@ -39,6 +39,6 @@ class ashtag.panes.SubmitSightingMapPane extends ashtag.panes.MapBasePane
         super
         google.maps.event.addDomListener @map, 'click', @handleMapClick
         if @doLocateUser
-            @centerOnUser().then(@createMarker)
+            @centerOnUser().then(@createMarker, => @createMarker(@defaultLat, @defaultLng))
         else
             @createMarker(@defaultLat, @defaultLng)

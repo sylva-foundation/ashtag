@@ -60,10 +60,13 @@
     };
 
     SubmitSightingMapPane.prototype.handleMapLoad = function() {
+      var _this = this;
       SubmitSightingMapPane.__super__.handleMapLoad.apply(this, arguments);
       google.maps.event.addDomListener(this.map, 'click', this.handleMapClick);
       if (this.doLocateUser) {
-        return this.centerOnUser().then(this.createMarker);
+        return this.centerOnUser().then(this.createMarker, function() {
+          return _this.createMarker(_this.defaultLat, _this.defaultLng);
+        });
       } else {
         return this.createMarker(this.defaultLat, this.defaultLng);
       }
