@@ -5,4 +5,4 @@
 <li class="login if-anonymous"><a href="{% url 'auth_login' %}">Log in</a></li>
 <li class="signup if-anonymous"><a href="{% url 'registration_register' %}">Sign up</a></li>
 <li class="my-tags if-authenticated"><a href="{% url 'sightings:my-tags' %}">My tags</a></li>
-<li class="logout if-authenticated" data-ajax="false"><a href="{% url 'auth_logout' %}">Logout</a></li>
+<li class="logout if-authenticated"><a href="{% url 'auth_logout' %}" data-ajax="false">Logout</a></li>
