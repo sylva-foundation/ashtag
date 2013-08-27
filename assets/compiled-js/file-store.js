@@ -80,7 +80,7 @@
       deferred = $.Deferred();
       reader = new FileReader();
       reader.onloadend = function(e) {
-        _this.log("Reading complete");
+        _this.log("Reading of " + reader.result.length + " bytes complete");
         return deferred.resolve(file, reader, meta);
       };
       reader.readAsDataURL(file);
@@ -95,39 +95,32 @@
       canvas = document.createElement("canvas");
       img = new Image();
       handleLoaded = function() {
-        var ctx, height, resizedData, width;
-        _this.log('Image loaded. Calculating dimentions');
-        ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
-        width = img.width;
-        height = img.height;
-        if (width > height) {
-          if (width > _this.imageMaxWidth) {
-            height *= _this.imageMaxWidth / width;
-            width = _this.imageMaxWidth;
-          }
-        } else {
-          if (height > _this.imageMaxHeight) {
-            width *= _this.imageMaxHeight / height;
-            height = _this.imageMaxHeight;
-          }
-        }
-        canvas.width = width;
-        canvas.height = height;
-        _this.log("Resizing to " + width + " x " + height);
-        ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-        _this.log("Getting image as encoded data");
-        resizedData = canvas.toDataURL("image/jpeg");
-        _this.log("Resize complete");
-        return def.resolve(file, resizedData, meta);
+        var handleRendered, mpImg, parent_this;
+        _this.log('Image loaded. Resizing');
+        handleRendered = function() {
+          var resizedData;
+          _this.log('Getting image as encoded data');
+          resizedData = canvas.toDataURL("image/jpeg");
+          _this.log("Resize complete. Image now " + resizedData.length + " bytes");
+          return def.resolve(file, resizedData, meta);
+        };
+        mpImg = new MegaPixImage(file);
+        mpImg.onrender = handleRendered;
+        parent_this = _this;
+        return EXIF.getData(file, function() {
+          return mpImg.render(canvas, {
+            orientation: EXIF.getTag(this, 'Orientation'),
+            maxWidth: parent_this.imageMaxWidth,
+            maxHeight: parent_this.imageMaxHeight
+          });
+        });
       };
       img.src = reader.result;
       this.log('Waiting for image to load');
       interval = setInterval(function() {
         if (img.width > 0) {
-          handleLoaded();
-          return clearInterval(interval);
+          clearInterval(interval);
+          return handleLoaded();
         }
       }, 100);
       return def;

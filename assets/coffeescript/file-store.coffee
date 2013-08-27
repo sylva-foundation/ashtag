@@ -71,7 +71,7 @@ class ashtag.FileStore
         deferred = $.Deferred()
         reader = new FileReader()
         reader.onloadend = (e) =>
-            @log "Reading complete"
+            @log "Reading of #{reader.result.length} bytes complete"
             deferred.resolve(file, reader, meta)
         reader.readAsDataURL(file)
         return deferred.promise()
@@ -84,41 +84,32 @@ class ashtag.FileStore
         img = new Image()
 
         handleLoaded = =>
-            @log 'Image loaded. Calculating dimentions'
-            ctx = canvas.getContext "2d"
-            ctx.drawImage(img, 0, 0)
+            @log 'Image loaded. Resizing'
 
-            width = img.width
-            height = img.height
-            if width > height
-                if width > @imageMaxWidth
-                    height *= @imageMaxWidth / width
-                    width = @imageMaxWidth
-            else
-                if height > @imageMaxHeight
-                    width *= @imageMaxHeight / height
-                    height = @imageMaxHeight
+            handleRendered = =>
+                @log 'Getting image as encoded data'
+                resizedData = canvas.toDataURL("image/jpeg")
+                @log "Resize complete. Image now #{resizedData.length} bytes"
+                
+                def.resolve(file, resizedData, meta)
 
-            canvas.width = width
-            canvas.height = height
+            mpImg = new MegaPixImage(file);
+            mpImg.onrender = handleRendered
 
-            @log "Resizing to #{width} x #{height}"
-            ctx = canvas.getContext("2d")
-            ctx.drawImage(img, 0, 0, width, height)
-
-            @log "Getting image as encoded data"
-            resizedData = canvas.toDataURL("image/jpeg")
-
-            @log "Resize complete"
-            def.resolve(file, resizedData, meta)
+            parent_this = @ # Slight hack to give us access to both contexts
+            EXIF.getData file, ->
+                mpImg.render canvas, 
+                    orientation: EXIF.getTag(@, 'Orientation')
+                    maxWidth: parent_this.imageMaxWidth
+                    maxHeight: parent_this.imageMaxHeight
 
         img.src = reader.result
 
         @log 'Waiting for image to load'
         interval = setInterval =>
                 if img.width > 0
-                    handleLoaded()
                     clearInterval(interval)
+                    handleLoaded()
             , 100
 
         return def
