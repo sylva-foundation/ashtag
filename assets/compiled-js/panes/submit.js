@@ -62,6 +62,13 @@
     };
 
     SubmitSightingPane.prototype.handleSubmit = function(e) {
+      var $invalid;
+      $invalid = this.$form.find(":invalid");
+      if ($invalid.length) {
+        e.preventDefault();
+        $invalid.eq(0).focus();
+        return;
+      }
       if (this.fileStore.enabled) {
         return this.submitViaFileStore(e);
       } else {

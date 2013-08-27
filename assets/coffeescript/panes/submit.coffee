@@ -33,6 +33,12 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
                 alert 'Could not get your location. Find an Internet connection and try again'
 
     handleSubmit: (e) =>
+        $invalid = @$form.find(":invalid")
+        if $invalid.length
+            e.preventDefault();
+            $invalid.eq(0).focus()
+            return
+
         # Use the filestore if it is available, even if 
         # we are online (the process is more robust and 
         # will resize images)
