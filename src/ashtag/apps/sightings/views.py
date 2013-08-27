@@ -121,6 +121,8 @@ class SubmitView(TemplateView):
             if duplicate:
                 # It is a duplicate, so lets just pretend we just saved 
                 # the original (and ignore the unsaved sighting we have here)
+                if sighting.tree.sighting_set.count() == 0:
+                    sighting.tree.delete()
                 return self.success_response(request, duplicate)
             
             sighting.save()
