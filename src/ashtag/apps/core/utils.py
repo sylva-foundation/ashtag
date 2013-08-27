@@ -24,9 +24,9 @@ def pk_generator(length=6):
 
 def create_thumbnails(image_field):
     errors = False
-    for size in settings.IMAGE_SIZES.values():
+    for size_name, size in settings.IMAGE_SIZES.items():
         try:
-            get_thumbnail(image_field, size)
+            get_thumbnail(image_field, size, **settings.IMAGE_OPTIONS[size_name])
         except (IOError, ThumbnailError):
             errors = True
             logger.exception("Failed to create thumbnail")

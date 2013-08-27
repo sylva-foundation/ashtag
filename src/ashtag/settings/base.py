@@ -310,6 +310,11 @@ IMAGE_SIZES = {
     'large': '600x600',
     'thumb': '150x150',
 }
+IMAGE_OPTIONS = {
+    'admin': {},
+    'large': {},
+    'thumb': {'crop': 'center'},
+}
 THUMBNAIL_UPSCALE = False
 THUMBNAIL_QUALITY = 80
 
