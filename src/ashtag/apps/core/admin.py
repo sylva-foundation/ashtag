@@ -22,7 +22,7 @@ def get_thumbnail_html(image):
 
     return """
     <a href="%s">
-    <img src="%s" width="228px" height="135px"/>
+    <img src="%s"/>
     </a>""" % (image.url, im.url)
 
 
@@ -39,10 +39,11 @@ class SightingsInline(admin.TabularInline):
 
 
 class SightingAdmin(gis_admin.GeoModelAdmin):
-    list_display = ('created', 'link', 'tree_tag_number',
+    list_display = ('id', 'created', 'link', 'tree_tag_number',
                     'creator_email', 'creator', 'disease_state', 'notes', 'hidden', 'thumbnail')
     search_fields = ('tree__tag_number',)
     actions = ('create_thumbnails',)
+    search_fields = ['=id', '=tree__id', '=tree__tag_number', '=creator_email']
     openlayers_url = '%sjs/admin/OpenLayers.js' % settings.STATIC_URL
 
     def tree_tag_number(self, obj):

@@ -24,7 +24,7 @@
 
             <div class="gallery-thumb">
                 <a href="">
-                    {% thumbnail object.display_sighting.image IMG_LARGE crop='center' as thmb %}
+                    {% thumbnail object.display_sighting.image IMG_LARGE as thmb %}
                     <img src="{{ thmb.url }}" />
                     {% endthumbnail %}
                 </a>

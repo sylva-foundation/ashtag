@@ -307,9 +307,11 @@ if os.environ.get('AWS_STATIC_ENABLE', False):
 # (We define these here so we can pre-generate them)
 IMAGE_SIZES = {
     'admin': '228x135',
-    'large': '750x600',
+    'large': '600x600',
     'thumb': '150x150',
 }
+THUMBNAIL_UPSCALE = False
+THUMBNAIL_QUALITY = 80
 
 # Tracking switch
 ENABLE_TRACKING_CODE = bool(os.environ.get('ENABLE_TRACKING_CODE', False))
