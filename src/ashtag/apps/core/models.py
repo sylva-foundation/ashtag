@@ -1,3 +1,7 @@
+from hashlib import sha1
+from datetime import datetime, timedelta
+
+from django.db.models import Q
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -76,7 +80,7 @@ class Tree(CreatorMixin, models.Model):
         """
         qs = self.sighting_set.filter(
             creator_email=self.creator_email,
-            hidden=False
+            hidden=False,
         )
         try:
             sighting = qs.latest()
@@ -108,6 +112,7 @@ class Sighting(CreatorMixin, models.Model):
     creator_email = models.EmailField(max_length=254)
     tree = models.ForeignKey('Tree', on_delete=models.CASCADE)
     image = models.ImageField(upload_to=lambda i, fn: 'sightings/%s/%s-%s' % (i.id, pk_generator(10), fn))
+    image_hash = models.CharField(max_length=50, default='', blank=True)
     disease_state = models.NullBooleanField(
         choices=DISEASE_STATE, default=DISEASE_STATE.unknown)
     location = models.PointField()
@@ -136,6 +141,27 @@ class Sighting(CreatorMixin, models.Model):
             return reverse('sightings:tree', args=[self.tree.tag_number])
         else:
             return reverse('sightings:map')
+
+    def set_image_hash(self, f):
+        f.seek(0)
+        img_hash = sha1(f.read())
+        f.seek(0)
+        self.image_hash = img_hash.hexdigest()
+
+    def is_duplicate(self):
+        time_threshold = datetime.now() - timedelta(hours=12)
+        try:
+            duplicate = Sighting.objects.filter(
+                creator_email=self.creator_email,
+                image_hash=self.image_hash,
+                location=self.location,
+                notes=self.notes,
+                created__gt=time_threshold,
+            ).exclude(pk=self.pk).latest()
+        except Sighting.DoesNotExist:
+            return None
+
+        return duplicate
 
 
 class Comment(models.Model):

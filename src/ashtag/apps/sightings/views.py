@@ -112,12 +112,19 @@ class SubmitView(TemplateView):
         form = form_class(request, request.user, request.POST, files)
         if form.is_valid():
             sighting = form.save(commit=False)
+
             if request.user.is_authenticated():
                 sighting.creator_email = request.user.email
             sighting.tree = form.cleaned_data['tree']
+
+            duplicate = sighting.is_duplicate()
+            if duplicate:
+                # It is a duplicate, so lets just pretend we just saved 
+                # the original (and ignore the unsaved sighting we have here)
+                return self.success_response(request, duplicate)
+            
             sighting.save()
-            # Create the thumbnails. Consider moving to an offline
-            # process in the future
+            # Create the thumbnails as a background task
             create_thumbnails.delay(sighting.image)
             if sighting.tree.creator_email != sighting.creator_email:
                 EmailTemplate.send('new_sighting_to_owner',
@@ -126,13 +133,16 @@ class SubmitView(TemplateView):
                     request=request,
                 )
 
-            if request.is_ajax():
-                return HttpResponse('OK')
-            else:
-                url = "%s?tree=%s" % (reverse('sightings:sent'), sighting.tree.id)
-                return redirect(url)
+            return self.success_response(request, sighting)
         else:
             return render(request, self.template_name, {'form': form})
+
+    def success_response(self, request, sighting):
+        if request.is_ajax():
+            return HttpResponse('OK')
+        else:
+            url = "%s?tree=%s" % (reverse('sightings:sent'), sighting.tree.id)
+            return redirect(url)
 
 
 class ClaimView(FormView):

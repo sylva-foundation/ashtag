@@ -23,6 +23,11 @@ class SightingForm(forms.ModelForm):
         self.request = request
         self.user = user
 
+    def save(self, *args, **kwargs):
+        sighting = super(SightingForm, self).save(*args, **kwargs)
+        sighting.set_image_hash(self.cleaned_data['image'])
+        return sighting
+
     def clean_tag_number(self):
         tag_number = self.cleaned_data['tag_number']
         if not tag_number:
