@@ -15,7 +15,7 @@ class LoggingMiddleware(object):
             request.method,
             request.get_full_path(),
             response.status_code,
-            len(request.body),
+            request.META.get('CONTENT_LENGTH', 'unknown'),
             len(response.content),
             time() - request.timer
         )
