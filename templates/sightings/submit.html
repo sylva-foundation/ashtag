@@ -40,7 +40,9 @@
                 <label for="id_image">Select a photo</label>
                 <input id="id_image" type="file" name="image" single 
                     required aria-required="true" />
-                <span class="help-text">One photo per sighting. Need help identifying ash tress? See our <a href="{% url 'public:guide' %}">identification guide</a>.</span>
+                <span class="help-text">
+                    <em>Have multiple photos?</em> Just submit a sighting for each.<br />
+                    <em>Need help identifying ash tress?</em> See our <a href="{% url 'public:guide' %}">identification guide</a>.</span>
             </div><!--//form-row-->
             
             <div class="form-row{% if form.errors.location %} errors{% endif %}">
