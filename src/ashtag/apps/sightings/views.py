@@ -277,7 +277,21 @@ class TreeView(TreeGetterMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(TreeView, self).get_context_data(**kwargs)
-        context['updates'] = self.object.sighting_set.exclude(hidden=True)
+        sightings = self.object.sighting_set.exclude(hidden=True)
+
+        sighting_pk = self.request.GET.get('sighting', None)
+        display_sighting = None
+        if sighting_pk:
+            try:
+                display_sighting = sightings.get(pk=sighting_pk)
+            except Sighting.DoesNotExist:
+                pass
+
+        if not display_sighting:
+            display_sighting = self.object.display_sighting
+
+        context['updates'] = sightings
         context['tagged'] = self.object.tag_number
+        context['display_sighting'] = display_sighting
 
         return context

@@ -24,7 +24,7 @@
 
             <div class="gallery-thumb">
                 <a href="">
-                    {% thumbnail object.display_sighting.image IMG_LARGE as thmb %}
+                    {% thumbnail display_sighting.image IMG_LARGE as thmb %}
                     <img src="{{ thmb.url }}" />
                     {% endthumbnail %}
                 </a>
@@ -64,7 +64,9 @@
 
                         <span class="image-holder">
                             {% thumbnail update.image IMG_THUMB crop='center' as thmb %}
-                            <img src="{{ thmb.url }}" />
+                            <a href="{% url 'sightings:tree' object.pk %}?sighting={{ update.pk }}">
+                                <img src="{{ thmb.url }}" />
+                            </a>
                             {% empty %} {# no image means this is a comment or something. #}
                             <img src="{{ STATIC_URL }}/picture_of_a_person.png" alt="Person face" />
                             {% endthumbnail %}
