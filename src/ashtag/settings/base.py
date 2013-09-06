@@ -196,7 +196,7 @@ INSTALLED_APPS = [
     # oscar
     'compressor',
     'paypal',
-] + oscar_get_core_apps(['ashtag.apps.oscar.shipping'])
+] + oscar_get_core_apps(['ashtag.apps.oscar.shipping', 'ashtag.apps.oscar.order'])
 
 LOGGING = {
     'version': 1,
@@ -249,10 +249,10 @@ LOGIN_REDIRECT_URL = 'sightings:my-tags'
 OSCAR_INITIAL_ORDER_STATUS = 'processing'
 OSCAR_INITIAL_LINE_STATUS = 'processing'
 OSCAR_LINE_STATUS_PIPELINE = OSCAR_ORDER_STATUS_PIPELINE = {
-    'processing': ('shipped', 'cancelled'),
-    'shipped': ('returned',),
-    'returned': (),
-    'cancelled': (),
+    'Pending': ('Shipped', 'Returned', 'Cancelled'),
+    'Shipped': ('Pending', 'Returned', 'Cancelled'),
+    'Returned': ('Pending', 'Shipped', 'Cancelled'),
+    'Cancelled': ('Pending', 'Shipped', 'Returned'),
 }
 
 # Check for a sensible flow before enabling this
