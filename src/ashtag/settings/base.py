@@ -249,10 +249,10 @@ LOGIN_REDIRECT_URL = 'sightings:my-tags'
 OSCAR_INITIAL_ORDER_STATUS = 'processing'
 OSCAR_INITIAL_LINE_STATUS = 'processing'
 OSCAR_LINE_STATUS_PIPELINE = OSCAR_ORDER_STATUS_PIPELINE = {
-    'Pending': ('Shipped', 'Returned', 'Cancelled'),
-    'Shipped': ('Pending', 'Returned', 'Cancelled'),
-    'Returned': ('Pending', 'Shipped', 'Cancelled'),
-    'Cancelled': ('Pending', 'Shipped', 'Returned'),
+    'Pending': ('Shipped', 'Cancelled'),
+    'Cancelled': [],
+    'Shipped': ('Returned', ),
+    'Returned': []
 }
 
 # Check for a sensible flow before enabling this
