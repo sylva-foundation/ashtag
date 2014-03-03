@@ -30,10 +30,10 @@
                 {{ form.errors.tag_number }}
                 <label for="id_tag_number">Tag Number (if present)</label>
                 <input class="tag-number" type="text" name="tag_number"
-                pattern="[\d]{5}"
-                title="Tag numbers are five digits"
-                x-moz-errormessage="Tag numbers are five digits"
-                id="id_tag_number" placeholder="eg. 12345" value="{{ form.tag_number.value }}" />
+                    pattern="[\d]{5}"
+                    title="Tag numbers are five digits"
+                    x-moz-errormessage="Tag numbers are five digits"
+                    id="id_tag_number" placeholder="eg. 12345" value="{{ form.tag_number.value }}" />
             </div><!--//form-row-->
             <div class="form-row{% if form.errors.image %} errors{% endif %}">
                 {{ form.errors.image }}
@@ -58,33 +58,33 @@
             </div>
             
             <div class="form-row{% if form.errors.disease_state %} errors{% endif %}">
-            <fieldset data-role="controlgroup">
-                {{ form.errors.disease_state }}
-                <legend>In your opinion, how likely is this tree to have Ash Dieback Disease?</legend>
-                <input type="radio" name="disease_state"
-                id="id_disease_state_1" value=""
-                {% if form.disease_state.value == "" or form.disease_state.value == None %}checked="checked"{% endif %} />
+                <fieldset data-role="controlgroup">
+                    {{ form.errors.disease_state }}
+                    <legend>In your opinion, how likely is this tree to have Ash Dieback Disease?</legend>
+                    <input type="radio" name="disease_state"
+                        id="id_disease_state_1" value=""
+                        {% if form.disease_state.value == "" or form.disease_state.value == None %}checked="checked"{% endif %} />
                     <label for="id_disease_state_1">Uncertain / I don't know</label>
         
                     <input type="radio" name="disease_state"
-                    id="id_disease_state_2" value="True"
-                    {% if form.disease_state.value == 'True' %}checked="checked"{% endif %}
-                    />
+                        id="id_disease_state_2" value="True"
+                        {% if form.disease_state.value == 'True' %}checked="checked"{% endif %}
+                        />
                     <label for="id_disease_state_2">Likely</label>
         
                     <input type="radio" name="disease_state"
-                    id="id_disease_state_3" value="False"
-                    {% if form.disease_state.value == 'False' %}checked="checked"{% endif %}
-                    />
+                        id="id_disease_state_3" value="False"
+                        {% if form.disease_state.value == 'False' %}checked="checked"{% endif %}
+                        />
                     <label for="id_disease_state_3">Unlikely</label>
-            </fieldset>
+                </fieldset>
             </div><!--//form-row-->
             <span class="help-text">
                 We forward likely cases of ash dieback to the Forestry Commission for further review and verification. See their <a href="http://www.forestry.gov.uk/chalara">Chalara page</a> or <a href="http://www.forestry.gov.uk/forestry/hcou-4ubhr3">contact them</a> if you have specific concerns.
             </span>
             <div class="form-row">
-            <label for="id_notes">Leave a comment</label>
-            <textarea cols="40" rows="8" name="notes" id="id_notes">{{ form.notes.value }}</textarea>
+                <label for="id_notes">Leave a comment</label>
+                <textarea cols="40" rows="8" name="notes" id="id_notes">{{ form.notes.value }}</textarea>
             </div><!--//form-row-->
 
             <div class="cta-btn-wrapper">
@@ -101,8 +101,8 @@
                     <p><strong>Saved for later</strong></p>
                     <p>Come back here once you are online and your sighting will be uploaded automatically</p>
                 </div>
-        </div>
-        </form><!--//submit-sighting-form-->                          
+            </div>
+        </form><!--//submit-sighting-form-->
    
     </div><!--//at-content-->  
 
