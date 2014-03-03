@@ -1,7 +1,7 @@
 www:
     type: python
-    prebuild: scripts/prebuild\ www
-    postinstall: scripts/postinstall\ www
+    prebuild: scripts/prebuild-www
+    postinstall: scripts/postinstall-www
     config:
         python_version: v2.7
 db:
@@ -10,7 +10,7 @@ redis:
     type: redis
 worker:
     type: python-worker
-    prebuild: scripts/prebuild\ worker
-    postinstall: scripts/postinstall\ worker
+    prebuild: scripts/prebuild-worker
+    postinstall: scripts/postinstall-worker
     config:
         python_version: v2.7
