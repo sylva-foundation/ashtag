@@ -192,6 +192,7 @@ INSTALLED_APPS = [
     'tz_detect',
     'manifesto',
     'djcelery',
+    'multiselectfield',
 
     # oscar
     'compressor',

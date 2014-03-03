@@ -7,6 +7,7 @@ from django.conf import settings
 
 from sorl.thumbnail import get_thumbnail
 from sorl.thumbnail.helpers import ThumbnailError
+from ashtag.apps.core.models import Survey
 
 from .models import Sighting, Tree, EmailTemplate
 from .tasks import create_thumbnails
@@ -24,6 +25,14 @@ def get_thumbnail_html(image):
     <a href="%s">
     <img src="%s"/>
     </a>""" % (image.url, im.url)
+
+
+class SurveyAdmin(gis_admin.GeoModelAdmin):
+    list_display = ('id', 'created', 'sighting', 'symptoms_list', 'nearby_disease_state', 'environment')
+    search_fields = ('id', 'sighting_id', 'sighting__tree__tag_number', 'symptoms', 'nearby_disease_state', 'environment')
+
+    def symptoms_list(self, obj):
+        return ', '.join(obj.symptoms)
 
 
 class SightingsInline(admin.TabularInline):
@@ -128,6 +137,7 @@ class EmailTemplateAdmin(gis_admin.GeoModelAdmin):
     list_display = ('name', 'description', 'enabled')
 
 
+admin.site.register(Survey, SurveyAdmin)
 admin.site.register(Sighting, SightingAdmin)
 admin.site.register(Tree, TreeAdmin)
 admin.site.register(EmailTemplate, EmailTemplateAdmin)

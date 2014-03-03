@@ -12,7 +12,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 
-from ashtag.apps.core.models import Tree, Sighting, EmailTemplate
+from ashtag.apps.core.models import Tree, Sighting, EmailTemplate, Survey
 from ashtag.apps.core.tasks import create_thumbnails
 
 from .forms import SightingForm, AnonSightingForm, ClaimForm
@@ -97,11 +97,56 @@ class SubmitView(TemplateView):
         )
         return result
 
-    def get(self, request, *args, **kwargs):
-        form = self._get_form_class(request)
-        return render(request, self.template_name, {'form': form})
+    def _save_survey(self, request, sighting):
+        fields = ('symptoms', 'tree_size', 'environment', 'num_nearby_trees', 'nearby_disease_state')
+
+        # Create a survey instance and populate its fields
+        survey = Survey()
+        survey.sighting = sighting
+        for field in fields:
+            name = 'survey_%s' % field
+            if field == 'symptoms':
+                # survey_symptoms can have multiple values
+                value = dict(request.POST.lists()).get(name, [])
+            else:
+                value = request.POST.get(name, '')
+            setattr(survey, field, value)
+
+        # Ensure values fall within the available choices
+        survey.enforce_choices()
+
+        # If all the fields are empty, then don't save it
+        empty = True
+        for field in fields:
+            if getattr(survey, field):
+                empty = False
+                break
+
+        if empty:
+            return None
+        else:
+            survey.save()
+            return survey
+
+    def get_context_data(self, **kwargs):
+        context = {
+            'symptoms': Survey.SYMPTOMS,
+            'tree_sizes': Survey.TREE_SIZES,
+            'environments': Survey.ENVIRONMENTS,
+            'num_nearby_trees': Survey.NUM_NEARBY_TREES,
+            'nearby_disease_state': Survey.NEARBY_DISEASE_STATE,
+            'form': self._get_form_class(self.request),
+        }
+        context.update(kwargs)
+        return context
+
+    # def get(self, request, *args, **kwargs):
+    #     form = self._get_form_class(request)
+    #     return render(request, self.template_name, {'form': form})
 
     def post(self, request):
+        self.request = request
+
         form_class = self._get_form_class(request)
         files = None
         if not request.FILES and request.POST.get('image_name', False):
@@ -126,6 +171,9 @@ class SubmitView(TemplateView):
                 return self.success_response(request, duplicate)
             
             sighting.save()
+
+            self._save_survey(request, sighting)
+
             # Create the thumbnails as a background task
             create_thumbnails.delay(sighting.image)
             if sighting.tree.creator_email != sighting.creator_email:
@@ -137,7 +185,7 @@ class SubmitView(TemplateView):
 
             return self.success_response(request, sighting)
         else:
-            return render(request, self.template_name, {'form': form})
+            return render(request, self.template_name, self.get_context_data(form=form))
 
     def success_response(self, request, sighting):
         if request.is_ajax():

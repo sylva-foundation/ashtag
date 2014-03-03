@@ -10,6 +10,7 @@ from django.core.mail import EmailMessage
 
 from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 from model_utils import Choices
+from multiselectfield.db.fields import MultiSelectField
 
 from .utils import pk_generator
 
@@ -175,6 +176,72 @@ class Comment(models.Model):
 
     class Meta:
         abstract = True  # Just testing for now
+
+
+class Survey(CreatorMixin, models.Model):
+    """For storing Living Ash Project survey data"""
+
+    SYMPTOMS = (
+        ('dead top and shoots', 'Dead top and shoots'),
+        ('dead bark and shoots', 'Dead bark and shoots'),
+        ('dead bark on stem', 'Dead bark on stem'),
+        ('dead bark at stem base', 'Dead bark at stem base'),
+    )
+    TREE_SIZES = (
+        ('less than 5cm', 'Less than 5cm'),
+        ('5-15cm', '5-15cm'),
+        ('15-30cm', '15-30cm'),
+        ('greater than 30cm', 'Greater than 30cm'),
+    )
+    ENVIRONMENTS = (
+        ('forest or wood', 'Forest or wood'),
+        ('park', 'Park'),
+        ('hedgerow', 'Hedgerow'),
+        ('garden', 'Garden'),
+        ('street', 'Street'),
+        ('nursery', 'Nursery'),
+        ('new plantation', 'New plantation'),
+    )
+    NUM_NEARBY_TREES = (
+        ('0', 'No'),
+        ('1-2', '1-2'),
+        ('3-5', '3-5'),
+        ('6-10', '6-10'),
+        ('11-20', '11-20'),
+        ('more than 20', 'More than 20'),
+    )
+    NEARBY_DISEASE_STATE = (
+        ('unknown', 'Uncertain'),
+        ('diseased', 'Likely'),
+        ('notdiseased', 'Unlikely'),
+    )
+    
+    id = models.CharField(max_length=6, primary_key=True, default=pk_generator)
+    created = AutoCreatedField('created')
+    sighting = models.ForeignKey('Sighting', on_delete=models.CASCADE)
+
+    symptoms = MultiSelectField(choices=SYMPTOMS, default='', blank=True)
+    tree_size = models.CharField(max_length=30, choices=TREE_SIZES, default='', blank=True)
+    environment = models.CharField(max_length=30, choices=ENVIRONMENTS, default='', blank=True)
+    num_nearby_trees = models.CharField(max_length=30, choices=NUM_NEARBY_TREES, default='', blank=True)
+    nearby_disease_state = models.CharField(max_length=30, choices=NEARBY_DISEASE_STATE, default='', blank=True)
+
+    def enforce_choices(self):
+        allowed_symptoms = [x[0] for x in Survey.SYMPTOMS]
+        self.symptoms = filter(lambda s: s in allowed_symptoms, self.symptoms)
+
+        if self.tree_size not in [x[0] for x in Survey.TREE_SIZES]:
+            self.tree_size = ''
+
+        if self.environment not in [x[0] for x in Survey.ENVIRONMENTS]:
+            self.environment = ''
+
+        if self.num_nearby_trees not in [x[0] for x in Survey.NUM_NEARBY_TREES]:
+            self.num_nearby_trees = ''
+
+        if self.nearby_disease_state not in [x[0] for x in Survey.NEARBY_DISEASE_STATE]:
+            self.nearby_disease_state = ''
+
 
 
 class EmailTemplate(models.Model):

@@ -17,3 +17,4 @@ django-tz-detect==0.2.1
 -e git+https://github.com/adamcharnock/manifesto.git#egg=manifesto
 fabric
 django-celery-with-redis==3.0
+django-multiselectfield==0.1.1

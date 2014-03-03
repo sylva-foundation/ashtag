@@ -8,6 +8,7 @@ from django.test.client import Client
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.core import mail
+from ashtag.apps.core.models import Survey
 
 from ..core.models import Sighting, Tree
 
@@ -157,3 +158,150 @@ class SightingTestCase(WebTest):
                 'notes': 'test anon',
             }, status=302, user=self.tagger)
         self.assertEqual(1, len(mail.outbox))
+
+class SightingSurveyTestCase(WebTest):
+    """Test that a tree tagger and spotter can do certain things."""
+    csrf_checks = False
+    fixtures = ["email-templates"]
+
+    def test_submit_survey_valid_choices(self):
+        """User should be able to submit with email only."""
+        response = self.app.post(
+            reverse('sightings:submit'),
+            {
+                'creator_email': 'test@example.com',
+                'tag_number': '',
+                'image': X_IMAGE,
+                'image_name': 'xxx.jpg',
+                'disease_state': 'True',
+                'location': 'POINT (0 0)',
+                'notes': 'test anon',
+
+                'survey_symptoms': 'dead top and shoots',
+                'survey_tree_size': '5-15cm',
+                'survey_environment': 'street',
+                'survey_num_nearby_trees': '11-20',
+                'survey_nearby_disease_state': 'diseased',
+            }, status=302)
+        self.assertTrue(reverse('sightings:sent') in response.location)
+        sighting = Sighting.objects.get()
+        surveys = Survey.objects.all()
+        self.assertEqual(len(surveys), 1)
+        survey = surveys[0]
+        self.assertEqual(survey.sighting, sighting)
+        self.assertEqual(survey.symptoms, ['dead top and shoots'])
+        self.assertEqual(survey.tree_size, '5-15cm')
+        self.assertEqual(survey.environment, 'street')
+        self.assertEqual(survey.num_nearby_trees, '11-20')
+        self.assertEqual(survey.nearby_disease_state, 'diseased')
+
+    def test_submit_survey_no_values(self):
+        """User should be able to submit with email only."""
+        response = self.app.post(
+            reverse('sightings:submit'),
+            {
+                'creator_email': 'test@example.com',
+                'tag_number': '',
+                'image': X_IMAGE,
+                'image_name': 'xxx.jpg',
+                'disease_state': 'True',
+                'location': 'POINT (0 0)',
+                'notes': 'test anon',
+
+                'survey_symptoms': '',
+                'survey_tree_size': '',
+                'survey_environment': '',
+                'survey_num_nearby_trees': '',
+                'survey_nearby_disease_state': '',
+            }, status=302)
+        self.assertTrue(reverse('sightings:sent') in response.location)
+        sighting = Sighting.objects.get()
+        surveys = Survey.objects.all()
+        self.assertEqual(len(surveys), 0)
+
+    def test_submit_survey_no_valid_choices(self):
+        """User should be able to submit with email only."""
+        response = self.app.post(
+            reverse('sightings:submit'),
+            {
+                'creator_email': 'test@example.com',
+                'tag_number': '',
+                'image': X_IMAGE,
+                'image_name': 'xxx.jpg',
+                'disease_state': 'True',
+                'location': 'POINT (0 0)',
+                'notes': 'test anon',
+
+                'survey_symptoms': 'aaa',
+                'survey_tree_size': 'bbb',
+                'survey_environment': 'ccc',
+                'survey_num_nearby_trees': 'ddd',
+                'survey_nearby_disease_state': 'eee',
+            }, status=302)
+        self.assertTrue(reverse('sightings:sent') in response.location)
+        sighting = Sighting.objects.get()
+        surveys = Survey.objects.all()
+        self.assertEqual(len(surveys), 0)
+
+    def test_submit_survey_some_bad_choices(self):
+        """User should be able to submit with email only."""
+        response = self.app.post(
+            reverse('sightings:submit'),
+            {
+                'creator_email': 'test@example.com',
+                'tag_number': '',
+                'image': X_IMAGE,
+                'image_name': 'xxx.jpg',
+                'disease_state': 'True',
+                'location': 'POINT (0 0)',
+                'notes': 'test anon',
+
+                'survey_symptoms': 'dead top and shoots',
+                'survey_tree_size': 'xxx',
+                'survey_environment': 'street',
+                'survey_num_nearby_trees': 'yyy',
+                'survey_nearby_disease_state': 'diseased',
+            }, status=302)
+        self.assertTrue(reverse('sightings:sent') in response.location)
+        sighting = Sighting.objects.get()
+        surveys = Survey.objects.all()
+        self.assertEqual(len(surveys), 1)
+        survey = surveys[0]
+        self.assertEqual(survey.sighting, sighting)
+        self.assertEqual(survey.symptoms, ['dead top and shoots'])
+        self.assertEqual(survey.tree_size, '')
+        self.assertEqual(survey.environment, 'street')
+        self.assertEqual(survey.num_nearby_trees, '')
+        self.assertEqual(survey.nearby_disease_state, 'diseased')
+
+    def test_submit_survey_multiple_symptoms(self):
+        """User should be able to submit with email only."""
+        response = self.app.post(
+            reverse('sightings:submit'),
+            (
+                ('creator_email', 'test@example.com'),
+                ('tag_number', ''),
+                ('image', X_IMAGE),
+                ('image_name', 'xxx.jpg'),
+                ('disease_state', 'True'),
+                ('location', 'POINT (0 0)'),
+                ('notes', 'test anon'),
+
+                ('survey_symptoms', 'dead top and shoots'),
+                ('survey_symptoms', 'dead bark at stem base'),
+                ('survey_tree_size', '5-15cm'),
+                ('survey_environment', 'street'),
+                ('survey_num_nearby_trees', '11-20'),
+                ('survey_nearby_disease_state', 'diseased'),
+            ), status=302)
+        self.assertTrue(reverse('sightings:sent') in response.location)
+        sighting = Sighting.objects.get()
+        surveys = Survey.objects.all()
+        self.assertEqual(len(surveys), 1)
+        survey = surveys[0]
+        self.assertEqual(survey.sighting, sighting)
+        self.assertEqual(survey.symptoms, ['dead top and shoots', 'dead bark at stem base'])
+        self.assertEqual(survey.tree_size, '5-15cm')
+        self.assertEqual(survey.environment, 'street')
+        self.assertEqual(survey.num_nearby_trees, '11-20')
+        self.assertEqual(survey.nearby_disease_state, 'diseased')

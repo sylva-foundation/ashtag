@@ -112,3 +112,4 @@ class ClaimForm(forms.Form):
                 "It looks like you didn't tag this tree originally. "
                 "Are you using the same email address?")
         return self.cleaned_data
+
