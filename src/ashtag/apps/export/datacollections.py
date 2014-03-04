@@ -8,14 +8,13 @@ class BaseCollection(object):
     fields = None
 
     def __init__(self):
-        self.queryset = self.get_queryset()
+        self.queryset_iterator = self.get_queryset().iterator()
+
+    def __iter__(self):
+        return self
 
     def next(self):
-        # for inst in self.queryset.
-        for inst in self.get_queryset().iterator():
-            return self.prepare_record(inst)
-
-        raise StopIteration()
+        return self.prepare_record(self.queryset_iterator.next())
 
     def get_queryset(self):
         """ Return a queryset from which the collection will be formed

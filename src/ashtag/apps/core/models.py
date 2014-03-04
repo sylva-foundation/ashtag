@@ -111,7 +111,7 @@ class Sighting(CreatorMixin, models.Model):
     created = AutoCreatedField('created')
     modified = AutoLastModifiedField('modified')
     creator_email = models.EmailField(max_length=254)
-    tree = models.ForeignKey('Tree', on_delete=models.CASCADE, related_name='sightings')
+    tree = models.ForeignKey('Tree', on_delete=models.CASCADE)
     image = models.ImageField(upload_to=lambda i, fn: 'sightings/%s/%s-%s' % (i.id, pk_generator(10), fn))
     image_hash = models.CharField(max_length=50, default='', blank=True)
     disease_state = models.NullBooleanField(
@@ -218,7 +218,7 @@ class Survey(CreatorMixin, models.Model):
     
     id = models.CharField(max_length=6, primary_key=True, default=pk_generator)
     created = AutoCreatedField('created')
-    sighting = models.OneToOneField('Sighting', on_delete=models.CASCADE, related_name='surveys')
+    sighting = models.OneToOneField('Sighting', on_delete=models.CASCADE)
 
     symptoms = MultiSelectField(choices=SYMPTOMS, default='', blank=True)
     tree_size = models.CharField(max_length=30, choices=TREE_SIZES, default='', blank=True)
