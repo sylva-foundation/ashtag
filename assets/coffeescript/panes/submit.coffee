@@ -28,6 +28,7 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         @sync()
 
         @updateSurveyQuestions()
+        @loadDefaults()
 
         return ashtag.extra.geoLocate().then @updateLocation, =>
             # Failed. If we are offline then show the user an error
@@ -51,11 +52,21 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
             @submitTraditional(e)
 
     updateSurveyQuestions: () =>
+        # Show/hide survey questions depending on the disease state (or perhaps other factors too)
         if @$('#id_disease_state_likely').is(':checked')
             @$('.survey-if-likely').show()
             @$('.survey-if-likely input').attr('checked', false).checkboxradio("refresh")
         else
             @$('.survey-if-likely').hide()
+
+    loadDefaults: () =>
+        # Loads the default values from the query string
+        $tagNumber = @$form.find('#id_tag_number')
+        if not $tagNumber.val()
+            $tagNumber.val(ashtag.extra.getQueryParameter('tag_number'))
+
+        if ashtag.extra.getQueryParameter('survey')
+            @$('#survey-collapsible').trigger 'expand'
 
     submitViaFileStore: (e) ->
         # Do the form submission using the FileStore

@@ -18,6 +18,7 @@
       this.resetForm = __bind(this.resetForm, this);
       this.hideOfflineStorageMessage = __bind(this.hideOfflineStorageMessage, this);
       this.showOfflineStorageMessage = __bind(this.showOfflineStorageMessage, this);
+      this.loadDefaults = __bind(this.loadDefaults, this);
       this.updateSurveyQuestions = __bind(this.updateSurveyQuestions, this);
       this.handleSubmit = __bind(this.handleSubmit, this);
       this.updateLocation = __bind(this.updateLocation, this);
@@ -54,6 +55,7 @@
     SubmitSightingPane.prototype.start = function() {
       this.sync();
       this.updateSurveyQuestions();
+      this.loadDefaults();
       return ashtag.extra.geoLocate().then(this.updateLocation, (function(_this) {
         return function() {
           if (!ashtag.extra.online()) {
@@ -84,6 +86,17 @@
         return this.$('.survey-if-likely input').attr('checked', false).checkboxradio("refresh");
       } else {
         return this.$('.survey-if-likely').hide();
+      }
+    };
+
+    SubmitSightingPane.prototype.loadDefaults = function() {
+      var $tagNumber;
+      $tagNumber = this.$form.find('#id_tag_number');
+      if (!$tagNumber.val()) {
+        $tagNumber.val(ashtag.extra.getQueryParameter('tag_number'));
+      }
+      if (ashtag.extra.getQueryParameter('survey')) {
+        return this.$('#survey-collapsible').trigger('expand');
       }
     };
 

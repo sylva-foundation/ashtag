@@ -77,3 +77,8 @@ ashtag.extra.isLatLngSane = (lat, lng) ->
         return false
     return true
 
+ashtag.extra.getQueryParameter = (name) ->
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    regex = new RegExp("[\\?&]#{name}=([^&#]*)")
+    results = regex.exec(location.search);
+    return if results == null then "" else decodeURIComponent(results[1].replace(/\+/g, " "))
