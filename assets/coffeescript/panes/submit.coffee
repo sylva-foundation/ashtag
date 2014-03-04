@@ -19,12 +19,15 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
         @$form.on 'submit', @handleSubmit
         $(window).on 'online', @sync
         @mapPane.observe 'locationChange', (e, lat, lng) => @updateLocation(lat, lng)
+        @$form.find('input[name="disease_state"]').on 'change', @updateSurveyQuestions
 
     updateLocation: (lat, lng) =>
         @$locationInput.val "POINT (#{lng} #{lat})"
 
     start: ->
         @sync()
+
+        @updateSurveyQuestions()
 
         return ashtag.extra.geoLocate().then @updateLocation, =>
             # Failed. If we are offline then show the user an error
@@ -46,6 +49,13 @@ class ashtag.panes.SubmitSightingPane extends ashtag.lib.panes.BasePane
             @submitViaFileStore(e)
         else
             @submitTraditional(e)
+
+    updateSurveyQuestions: () =>
+        if @$('#id_disease_state_likely').is(':checked')
+            @$('.survey-if-likely').show()
+            @$('.survey-if-likely input').attr('checked', false).checkboxradio("refresh")
+        else
+            @$('.survey-if-likely').hide()
 
     submitViaFileStore: (e) ->
         # Do the form submission using the FileStore

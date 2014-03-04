@@ -18,6 +18,7 @@
       this.resetForm = __bind(this.resetForm, this);
       this.hideOfflineStorageMessage = __bind(this.hideOfflineStorageMessage, this);
       this.showOfflineStorageMessage = __bind(this.showOfflineStorageMessage, this);
+      this.updateSurveyQuestions = __bind(this.updateSurveyQuestions, this);
       this.handleSubmit = __bind(this.handleSubmit, this);
       this.updateLocation = __bind(this.updateLocation, this);
       return SubmitSightingPane.__super__.constructor.apply(this, arguments);
@@ -38,11 +39,12 @@
     SubmitSightingPane.prototype.setupEvents = function() {
       this.$form.on('submit', this.handleSubmit);
       $(window).on('online', this.sync);
-      return this.mapPane.observe('locationChange', (function(_this) {
+      this.mapPane.observe('locationChange', (function(_this) {
         return function(e, lat, lng) {
           return _this.updateLocation(lat, lng);
         };
       })(this));
+      return this.$form.find('input[name="disease_state"]').on('change', this.updateSurveyQuestions);
     };
 
     SubmitSightingPane.prototype.updateLocation = function(lat, lng) {
@@ -51,6 +53,7 @@
 
     SubmitSightingPane.prototype.start = function() {
       this.sync();
+      this.updateSurveyQuestions();
       return ashtag.extra.geoLocate().then(this.updateLocation, (function(_this) {
         return function() {
           if (!ashtag.extra.online()) {
@@ -72,6 +75,15 @@
         return this.submitViaFileStore(e);
       } else {
         return this.submitTraditional(e);
+      }
+    };
+
+    SubmitSightingPane.prototype.updateSurveyQuestions = function() {
+      if (this.$('#id_disease_state_likely').is(':checked')) {
+        this.$('.survey-if-likely').show();
+        return this.$('.survey-if-likely input').attr('checked', false).checkboxradio("refresh");
+      } else {
+        return this.$('.survey-if-likely').hide();
       }
     };
 

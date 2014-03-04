@@ -63,21 +63,21 @@
                     {{ form.errors.disease_state }}
                     <legend>In your opinion, how likely is this tree to have Ash Dieback Disease?</legend>
                     <input type="radio" name="disease_state"
-                        id="id_disease_state_1" value=""
+                        id="id_disease_state_uncertain" value=""
                         {% if form.disease_state.value == "" or form.disease_state.value == None %}checked="checked"{% endif %} />
-                    <label for="id_disease_state_1">Uncertain / I don't know</label>
+                    <label for="id_disease_state_uncertain">Uncertain / I don't know</label>
         
                     <input type="radio" name="disease_state"
-                        id="id_disease_state_2" value="True"
+                        id="id_disease_state_likely" value="True"
                         {% if form.disease_state.value == 'True' %}checked="checked"{% endif %}
                         />
-                    <label for="id_disease_state_2">Likely</label>
+                    <label for="id_disease_state_likely">Likely</label>
         
                     <input type="radio" name="disease_state"
-                        id="id_disease_state_3" value="False"
+                        id="id_disease_state_unlikely" value="False"
                         {% if form.disease_state.value == 'False' %}checked="checked"{% endif %}
                         />
-                    <label for="id_disease_state_3">Unlikely</label>
+                    <label for="id_disease_state_unlikely">Unlikely</label>
                 </fieldset>
             </div><!--//form-row-->
             <span class="help-text">
@@ -85,14 +85,14 @@
             </span>
 
             <div role="main" class="ui-content survey-wrapper">
-                <div data-role="collapsible">
+                <div data-role="collapsible" data-collapsed="true">
                     <h3>Living Ash Project survey</h3>
                     <p>
                         <p>Thank you for agreeing to answer a few more questions. We are working with scientists who are interested in ash trees that are tolerant (to some degree) to Chalara ash dieback. They are most interested in larger trees but any tree can be surveyed. They are particularly keen to survey ash trees in every corner of Britain, because the genetics of ash trees vary across the country. Ideally, the trees selected need to be surveyed every year for at least three years, so that a detailed picture of their health is built up. Ultimately, trees that appear to have some tolerance to Chalara ash dieback will be sampled by taking cuttings, and will enter a programme aiming to breed resistant trees for the future of ash trees in Britain.</p>
                         <p><em>All questions are optional</em></p>
                     </p>
 
-                    <div class="survey-question">
+                    <div class="survey-question survey-if-likely">
                         <fieldset data-role="controlgroup">
                             <legend>Can you see any disease symptoms?</legend>
                             <p>Tick any that apply</p>
