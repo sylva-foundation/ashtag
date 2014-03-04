@@ -4,9 +4,10 @@ from django.test.testcases import TestCase
 from pytz import UTC
 from ashtag.apps.core.models import Survey, Sighting, Tree
 from ashtag.apps.export.datacollections import SurveyCollection, SightingCollection, UserCollection
+from ashtag.apps.export.dataformatters import CsvFormatter
 
 
-class BaseCollectionTestCase(TestCase):
+class BaseExportTestCase(TestCase):
     collection_class = None
 
     def setUp(self):
@@ -56,6 +57,11 @@ class BaseCollectionTestCase(TestCase):
             email='a@a.com',
             date_joined=self.now,
         )
+
+
+class BaseCollectionTestCase(BaseExportTestCase):
+    pass
+
 
 class SurveyCollectionTestCase(BaseCollectionTestCase):
     collection_class = SurveyCollection
@@ -142,3 +148,30 @@ class UserCollectionTestCase(BaseCollectionTestCase):
     def test_fields_match(self):
         record = self.collection.prepare_record(self.user)
         self.assertSetEqual(set(record.keys()), set(self.collection.fields))
+
+
+class BaseFormatterTestCase(BaseExportTestCase):
+    collection_class = None
+    formatter_class = None
+
+    def setUp(self):
+        super(BaseFormatterTestCase, self).setUp()
+        self.formatter = self.formatter_class(self.collection)
+
+
+class CsvFormatterTestCase(BaseFormatterTestCase):
+    collection_class = UserCollection
+    formatter_class = CsvFormatter
+
+    def test_get_csv_row(self):
+        row = self.formatter.get_csv_row(['a', 'b', 3, 'hey, bob'])
+        self.assertEqual(row, 'a,b,3,"hey, bob"\r\n')
+
+    def test_format_header(self):
+        row = self.formatter.format_header()
+        self.assertEqual(row, 'id,username,email,date_joined\r\n')
+
+    def test_iterator(self):
+        rows = "".join(self.formatter)
+        self.assertEqual(rows, 'id,username,email,date_joined\r\n3,testuser,a@a.com,2012-03-04T12:30:10+00:00\r\n')
+
