@@ -36,7 +36,7 @@ class BaseCollection(object):
 class SurveyCollection(BaseCollection):
     fields = [
             # Standard fields
-            'id', 'tree', 'sighting', 'name', 'email', 'user', 'date', 'repeat_url',
+            'id', 'tree', 'tag_number', 'sighting', 'email', 'user', 'date', 'repeat_url',
             # Answer fields
             'symptoms', 'tree_size', 'environment', 'num_nearby_trees', 'nearby_disease_state',
         ]
@@ -50,7 +50,7 @@ class SurveyCollection(BaseCollection):
             return None
 
         url = reverse('sightings:submit')
-        url = 'http://www.ashtag.org%s/tag_number=%s&survey=1' % (url, tree.tag_number)
+        url = 'http://www.ashtag.org%s?tag_number=%s&survey=1' % (url, tree.tag_number)
         return url
 
     def prepare_record(self, survey):
@@ -62,7 +62,6 @@ class SurveyCollection(BaseCollection):
             tree=tree.pk,
             tag_number=tree.tag_number,
             sighting=sighting.pk,
-            name=survey,
             email=sighting.creator_email,
             user=creator.pk if creator else None,
             date=survey.created.isoformat(),
@@ -76,7 +75,7 @@ class SurveyCollection(BaseCollection):
         )
 
 
-class SightingsCollection(BaseCollection):
+class SightingCollection(BaseCollection):
     """ Provides anonymous sighting data """
     fields = [
         'id', 'tree', 'tag_number', 'date', 'image', 'disease_state', 'latitude', 'longitude', 'notes',
@@ -93,14 +92,14 @@ class SightingsCollection(BaseCollection):
             tree=tree.pk,
             tag_number=tree.tag_number,
             date=sighting.created.isoformat(),
-            image='%s%s' % (settings.MEDIA_URL, sighting.image.url),
+            image=sighting.image.url,
             disease_state=sighting.get_disease_state_display(),
             latitude=sighting.location.y,
             longitude=sighting.location.x,
             notes=sighting.notes,
         )
 
-class UsersCollection(BaseCollection):
+class UserCollection(BaseCollection):
     fields = [
         'id', 'username', 'email', 'date_joined'
     ]
