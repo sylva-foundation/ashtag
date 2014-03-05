@@ -26,6 +26,8 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+EMAIL_SUBJECT_PREFIX = '[staging]'
+
 EMAIL_HOST = env.get('EMAIL_HOST', None)
 EMAIL_HOST_USER = env.get('EMAIL_HOST_USER', None)
 EMAIL_PORT = int(env.get('EMAIL_PORT', None))

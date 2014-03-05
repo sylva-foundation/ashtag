@@ -57,9 +57,11 @@ class FileWriterTestCase(BaseWriterTestCase):
 
     def test_compressed_named(self):
         self.writer.compress = True
-        self.writer.compressed_name= 'myfile.csv'
+        self.writer.name = 'myfile'
 
         with self.writer.do_it() as f:
+            self.assertIn('/myfile.', f.name)
+            self.assertIn('.csv', f.name)
             with ZipFile(f.name) as zipf:
                 self.assertEqual(zipf.namelist(), ['myfile.csv'])
                 # How big is the compressed file

@@ -35,18 +35,24 @@ class BaseWriter(object):
 
 class FileWriter(BaseWriter):
 
-    def __init__(self, formatter, compress=True, compressed_name=None):
+    def __init__(self, formatter, compress=True, name=None):
         super(FileWriter, self).__init__(formatter)
         self.compress = compress
-        self.compressed_name = compressed_name
+        self.name = name
 
     def do_it(self):
+        if self.name:
+            prefix = '%s.' % self.name
+        else:
+            prefix = ''
+
         if self.formatter.file_ext:
             suffix = '.%s' % self.formatter.file_ext
         else:
-            suffix = None
+            suffix = ''
 
-        with NamedTemporaryFile(mode='wb', suffix=suffix, delete=self.compress) as f:
+        with NamedTemporaryFile(mode='wb', prefix=prefix, suffix=suffix, delete=self.compress) as f:
+
             for record in self.formatter:
                 f.write(record)
 
@@ -55,13 +61,13 @@ class FileWriter(BaseWriter):
             else:
                 f.flush()
 
-                if self.compressed_name:
-                    compressed_name = self.compressed_name
+                if self.name:
+                    name = '%s.%s' % (self.name, self.formatter.file_ext)
                 else:
-                    compressed_name = os.path.basename(f.name)
+                    name = os.path.basename(f.name)
                 file_name = '%s.zip' % f.name
                 with ZipFile(file_name, mode='w') as zip:
-                    zip.write(f.name, arcname=compressed_name)
+                    zip.write(f.name, arcname=name)
 
         return open(file_name)
 
