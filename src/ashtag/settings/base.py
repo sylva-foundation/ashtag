@@ -182,6 +182,7 @@ INSTALLED_APPS = [
     'ashtag.apps.public',
     'ashtag.apps.sightings',
     'ashtag.apps.store',
+    'ashtag.apps.export',
 
     'django_extensions',
     'pipeline',
