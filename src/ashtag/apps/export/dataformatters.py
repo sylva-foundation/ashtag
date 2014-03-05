@@ -1,5 +1,6 @@
 import StringIO
 import csv
+from kombu.utils.encoding import safe_str
 
 
 class BaseFormatter(object):
@@ -42,6 +43,7 @@ class CsvFormatter(BaseFormatter):
     def format_record(self, record):
         values = []
         for field in self.collection.fields:
-            values.append(record.get(field, None))
+            value = record.get(field, None)
+            values.append(safe_str(value))
         return self.get_csv_row(values)
 

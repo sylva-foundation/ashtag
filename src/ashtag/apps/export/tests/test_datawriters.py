@@ -1,3 +1,4 @@
+# coding=utf-8
 import os.path
 
 from zipfile import ZipFile
@@ -29,6 +30,15 @@ class FileWriterTestCase(BaseWriterTestCase):
         with self.writer.do_it() as f:
             data = f.read()
         self.assertEqual(data, 'id,username,email,date_joined\r\n%s,testuser,a@a.com,2012-03-04T12:30:10+00:00\r\n' % self.user.pk)
+
+    def test_unicode(self):
+        self.writer.compress = False
+        self.user.username = 'teßtuser'
+        self.user.save()
+
+        with self.writer.do_it() as f:
+            data = f.read()
+        self.assertEqual(data, 'id,username,email,date_joined\r\n%s,teßtuser,a@a.com,2012-03-04T12:30:10+00:00\r\n' % self.user.pk)
 
     def test_compressed_no_name(self):
         self.writer.compress = True
