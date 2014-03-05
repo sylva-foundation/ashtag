@@ -188,7 +188,7 @@ class SightingSurveyTestCase(WebTest):
         surveys = Survey.objects.all()
         self.assertEqual(len(surveys), 1)
         survey = surveys[0]
-        self.assertEqual(survey.make_sighting, sighting)
+        self.assertEqual(survey.sighting, sighting)
         self.assertEqual(survey.symptoms, ['dead top and shoots'])
         self.assertEqual(survey.tree_size, '5-15cm')
         self.assertEqual(survey.environment, 'street')
@@ -267,7 +267,7 @@ class SightingSurveyTestCase(WebTest):
         surveys = Survey.objects.all()
         self.assertEqual(len(surveys), 1)
         survey = surveys[0]
-        self.assertEqual(survey.make_sighting, sighting)
+        self.assertEqual(survey.sighting, sighting)
         self.assertEqual(survey.symptoms, ['dead top and shoots'])
         self.assertEqual(survey.tree_size, '')
         self.assertEqual(survey.environment, 'street')
@@ -299,7 +299,7 @@ class SightingSurveyTestCase(WebTest):
         surveys = Survey.objects.all()
         self.assertEqual(len(surveys), 1)
         survey = surveys[0]
-        self.assertEqual(survey.make_sighting, sighting)
+        self.assertEqual(survey.sighting, sighting)
         self.assertEqual(survey.symptoms, ['dead top and shoots', 'dead bark at stem base'])
         self.assertEqual(survey.tree_size, '5-15cm')
         self.assertEqual(survey.environment, 'street')
