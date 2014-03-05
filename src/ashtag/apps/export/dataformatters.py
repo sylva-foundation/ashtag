@@ -4,6 +4,7 @@ import csv
 
 class BaseFormatter(object):
     send_header = False
+    file_ext = None
 
     def __init__(self, collection):
         self.collection = collection
@@ -27,6 +28,7 @@ class BaseFormatter(object):
 
 class CsvFormatter(BaseFormatter):
     send_header = True
+    file_ext = 'csv'
 
     def get_csv_row(self, values):
         csv_file = StringIO.StringIO()
