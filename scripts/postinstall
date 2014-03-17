@@ -11,7 +11,7 @@ cd ~/current/scripts
 if [ "$1" == "worker" ]; then
     python createdb.py
     django-admin.py syncdb --noinput
-    #django-admin.py migrate
+    django-admin.py migrate
     mv ~/current/supervisord.worker.conf ~/current/supervisord.conf
 fi
 
