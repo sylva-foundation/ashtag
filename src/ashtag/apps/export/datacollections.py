@@ -92,7 +92,7 @@ class SightingCollection(BaseCollection):
             tree=tree.pk,
             tag_number=tree.tag_number,
             date=sighting.created.isoformat(),
-            image=sighting.image.url,
+            image=sighting.image.url if sighting.image else None,
             disease_state=sighting.get_disease_state_display(),
             latitude=sighting.location.y,
             longitude=sighting.location.x,
