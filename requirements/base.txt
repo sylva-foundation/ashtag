@@ -7,7 +7,7 @@ django-extensions==1.1.1
 django-registration==1.0
 # Install django-oscar (latest version, compatible with Django 1.5)
 git+https://github.com/tangentlabs/django-oscar.git@f117c549a8a9ca694f92eb25180c30aa932dea9b#egg=django-oscar
-django-oscar-paypal==0.4.1
+django-oscar-paypal==0.8
 django-model-utils==1.4.0
 django-storages==1.1.8
 boto==2.9.5
