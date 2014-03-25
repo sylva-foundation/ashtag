@@ -198,7 +198,7 @@ INSTALLED_APPS = [
     # oscar
     'compressor',
     'paypal',
-] + oscar_get_core_apps(['ashtag.apps.oscar.shipping', 'ashtag.apps.oscar.order'])
+] + oscar_get_core_apps(['ashtag.apps.oscar.shipping', 'ashtag.apps.oscar.order', 'ashtag.apps.oscar.partner'])
 
 LOGGING = {
     'version': 1,
