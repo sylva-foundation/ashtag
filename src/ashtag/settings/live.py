@@ -66,7 +66,7 @@ LOGGING = {
         },
         'ashtag.request': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'django.db.backends': {
@@ -93,7 +93,7 @@ if os.environ.get('RAVEN_DSN', None):
         'raven.contrib.django.raven_compat',
     ]
 
-    LOGGING['root']['handlers'] = ['sentry']
+    LOGGING['root']['handlers'] = ['console', 'sentry']
     LOGGING['handlers']['sentry'] = {
         'level': 'ERROR',
         'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
