@@ -105,4 +105,4 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Celery
-BROKER_URL = os.environ.get('REDISCLOUD_URL')
+BROKER_URL = os.environ.get('REDISTOGO_URL')
