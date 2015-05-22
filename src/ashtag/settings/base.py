@@ -10,6 +10,8 @@ ENV = os.environ.copy()
 if 'CRED_FILE' in ENV:
     with open(os.environ['CRED_FILE']) as cred_file:
         for k, conf in json.load(cred_file).items():
+            if k == "CONFIG":
+                conf = conf['CONFIG_VARS']
             for key, value in conf.items():
                 ENV[key] = value
 
