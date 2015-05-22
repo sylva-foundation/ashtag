@@ -9,7 +9,7 @@ TEMPLATE_DEBUG = DEBUG
 with open(os.environ['CRED_FILE']) as cred_file:
     creds = json.load(cred_file)
 
-mysqld_uri = urlparse(creds['MYSQLD']['MYSQLD_URL'])
+mysqld_uri = urlparse(creds['MYSQLS']['MYSQLS_URL'])
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
