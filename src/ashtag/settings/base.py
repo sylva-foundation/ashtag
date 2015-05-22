@@ -9,8 +9,8 @@ from oscar import OSCAR_MAIN_TEMPLATE_DIR
 ENV = os.environ.copy()
 if 'CRED_FILE' in ENV:
     with open(os.environ['CRED_FILE']) as cred_file:
-        for k, conf in json.load(cred_file):
-            for key, value in conf:
+        for k, conf in json.load(cred_file).items():
+            for key, value in conf.items():
                 ENV[key] = value
 
 PROJECT_ROOT = path(__file__).dirname().abspath().realpath().parent.parent.parent
