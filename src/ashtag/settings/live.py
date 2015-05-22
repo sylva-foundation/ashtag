@@ -3,16 +3,10 @@ from ashtag.settings.base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': ENV['MYSQLS_DATABASE'],
-        'USER': ENV['MYSQLS_USERNAME'],
-        'PASSWORD': ENV['MYSQLS_PASSWORD'],
-        'HOST': ENV['MYSQLS_HOSTNAME'],
-        'PORT': ENV['MYSQLS_PORT']
-    }
-}
+import dj_database_url
+DATABASES['default'] =  dj_database_url.config()
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 PAYPAL_SANDBOX_MODE = False
 
@@ -22,12 +16,12 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-EMAIL_HOST = ENV.get('EMAIL_HOST', None)
-EMAIL_HOST_USER = ENV.get('EMAIL_HOST_USER', None)
-EMAIL_PORT = int(ENV.get('EMAIL_PORT', 0))
-EMAIL_USE_TLS = bool(ENV.get('EMAIL_USE_TLS', None))
-EMAIL_HOST_PASSWORD = ENV.get('EMAIL_HOST_PASSWORD', None)
-DEFAULT_FROM_EMAIL = ENV.get('DEFAULT_FROM_EMAIL', None)
+EMAIL_HOST = os.environ.get('EMAIL_HOST', None)
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', None)
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 0))
+EMAIL_USE_TLS = bool(os.environ.get('EMAIL_USE_TLS', None))
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', None)
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', None)
 OSCAR_FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -90,9 +84,9 @@ LOGGING = {
 }
 
 # Raven / sentry
-if ENV.get('RAVEN_DSN', None):
+if os.environ.get('RAVEN_DSN', None):
     RAVEN_CONFIG = {
-        'dsn': ENV.get('RAVEN_DSN')
+        'dsn': os.environ.get('RAVEN_DSN')
     }
 
     INSTALLED_APPS = INSTALLED_APPS + [
@@ -111,4 +105,4 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Celery
-BROKER_URL = ENV['REDISCLOUD_URL']
+BROKER_URL = os.environ.get('REDISCLOUD_URL')
