@@ -18,3 +18,5 @@ django-tz-detect==0.2.1
 fabric
 django-celery-with-redis==3.0
 django-multiselectfield==0.1.1
+dj_static==0.0.6
+gunicorn==19.3.0

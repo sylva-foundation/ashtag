@@ -194,6 +194,7 @@ INSTALLED_APPS = [
     'manifesto',
     'djcelery',
     'multiselectfield',
+    'gunicorn',
 
     # oscar
     'compressor',

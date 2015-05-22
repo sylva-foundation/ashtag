@@ -1,20 +1,23 @@
 from ashtag.settings.base import *
 
 import json
-with open('/home/dotcloud/environment.json') as f:
-    env = json.load(f)
+from urlparse import urlparse
 
-DEBUG = bool(env.get('DEBUG', False))
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+with open(os.environ['CRED_FILE']) as cred_file:
+    creds = json.load(cred_file)
+
+mysqld_uri = urlparse(creds['MYSQLD']['MYSQLD_URL'])
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'ashtag',
-        'USER': env['DOTCLOUD_DB_SQL_LOGIN'],
-        'PASSWORD': env['DOTCLOUD_DB_SQL_PASSWORD'],
-        'HOST': env['DOTCLOUD_DB_SQL_HOST'],
-        'PORT': int(env['DOTCLOUD_DB_SQL_PORT']),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': mysqld_uri.path[1:],
+        'USER': mysqld_uri.username,
+        'PASSWORD': mysqld_uri.password,
+        'HOST': mysqld_uri.hostname,
+        'PORT': mysqld_uri.port
     }
 }
 
@@ -26,12 +29,12 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-EMAIL_HOST = env.get('EMAIL_HOST', None)
-EMAIL_HOST_USER = env.get('EMAIL_HOST_USER', None)
-EMAIL_PORT = int(env.get('EMAIL_PORT', None))
-EMAIL_USE_TLS = bool(env.get('EMAIL_USE_TLS', None))
-EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD', None)
-DEFAULT_FROM_EMAIL = env.get('DEFAULT_FROM_EMAIL', None)
+EMAIL_HOST = creds.get('EMAIL_HOST', None)
+EMAIL_HOST_USER = creds.get('EMAIL_HOST_USER', None)
+EMAIL_PORT = int(creds.get('EMAIL_PORT', None))
+EMAIL_USE_TLS = bool(creds.get('EMAIL_USE_TLS', None))
+EMAIL_HOST_PASSWORD = creds.get('EMAIL_HOST_PASSWORD', None)
+DEFAULT_FROM_EMAIL = creds.get('DEFAULT_FROM_EMAIL', None)
 OSCAR_FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -102,9 +105,9 @@ LOGGING = {
 }
 
 # Raven / sentry
-if env.get('RAVEN_DSN', None):
+if creds.get('RAVEN_DSN', None):
     RAVEN_CONFIG = {
-        'dsn': env.get('RAVEN_DSN')
+        'dsn': creds.get('RAVEN_DSN')
     }
 
     INSTALLED_APPS = INSTALLED_APPS + [
@@ -123,4 +126,4 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Celery
-BROKER_URL = env.get('DOTCLOUD_REDIS_REDIS_URL')
+BROKER_URL = creds.get('DOTCLOUD_REDIS_REDIS_URL')

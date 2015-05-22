@@ -13,3 +13,4 @@
 *.swo
 ias_ess_dump.json
 /.idea
+.bash_history
