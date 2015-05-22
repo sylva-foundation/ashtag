@@ -1,23 +1,16 @@
 from ashtag.settings.base import *
 
-import json
-from urlparse import urlparse
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-with open(os.environ['CRED_FILE']) as cred_file:
-    creds = json.load(cred_file)
-
-mysqld_uri = urlparse(creds['MYSQLS']['MYSQLS_URL'])
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': mysqld_uri.path[1:],
-        'USER': mysqld_uri.username,
-        'PASSWORD': mysqld_uri.password,
-        'HOST': mysqld_uri.hostname,
-        'PORT': mysqld_uri.port
+        'NAME': ENV['MYSQLS']['MYSQLS_DATABASE'],
+        'USER': ENV['MYSQLS']['MYSQLS_USERNAME'],
+        'PASSWORD': ENV['MYSQLS']['MYSQLS_PASSWORD'],
+        'HOST': ENV['MYSQLS']['MYSQLS_HOSTNAME'],
+        'PORT': ENV['MYSQLS']['MYSQLS_PORT']
     }
 }
 
@@ -29,12 +22,12 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-EMAIL_HOST = creds.get('EMAIL_HOST', None)
-EMAIL_HOST_USER = creds.get('EMAIL_HOST_USER', None)
-EMAIL_PORT = int(creds.get('EMAIL_PORT', None))
-EMAIL_USE_TLS = bool(creds.get('EMAIL_USE_TLS', None))
-EMAIL_HOST_PASSWORD = creds.get('EMAIL_HOST_PASSWORD', None)
-DEFAULT_FROM_EMAIL = creds.get('DEFAULT_FROM_EMAIL', None)
+EMAIL_HOST = ENV.get('EMAIL_HOST', None)
+EMAIL_HOST_USER = ENV.get('EMAIL_HOST_USER', None)
+EMAIL_PORT = int(ENV.get('EMAIL_PORT', None))
+EMAIL_USE_TLS = bool(ENV.get('EMAIL_USE_TLS', None))
+EMAIL_HOST_PASSWORD = ENV.get('EMAIL_HOST_PASSWORD', None)
+DEFAULT_FROM_EMAIL = ENV.get('DEFAULT_FROM_EMAIL', None)
 OSCAR_FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -105,9 +98,9 @@ LOGGING = {
 }
 
 # Raven / sentry
-if creds.get('RAVEN_DSN', None):
+if ENV.get('RAVEN_DSN', None):
     RAVEN_CONFIG = {
-        'dsn': creds.get('RAVEN_DSN')
+        'dsn': ENV.get('RAVEN_DSN')
     }
 
     INSTALLED_APPS = INSTALLED_APPS + [
@@ -126,4 +119,4 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Celery
-BROKER_URL = creds.get('DOTCLOUD_REDIS_REDIS_URL')
+BROKER_URL = ENV['REDISCLOUD_URL']

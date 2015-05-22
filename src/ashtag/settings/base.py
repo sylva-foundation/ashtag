@@ -1,9 +1,17 @@
 # Django settings for ashtag project.
 
 import os
+import json
 from oscar.defaults import *
 from path import path
 from oscar import OSCAR_MAIN_TEMPLATE_DIR
+
+ENV = os.environ.copy()
+if 'CRED_FILE' in ENV:
+    with open(os.environ['CRED_FILE']) as cred_file:
+        for k, conf in json.load(cred_file):
+            for key, value in conf:
+                ENV[key] = value
 
 PROJECT_ROOT = path(__file__).dirname().abspath().realpath().parent.parent.parent
 APPS_ROOT = PROJECT_ROOT / 'src' / 'ashtag' / 'apps'
