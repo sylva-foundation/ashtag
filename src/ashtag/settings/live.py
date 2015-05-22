@@ -57,40 +57,32 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
-        },
-        'log_file': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'formatter': 'verbose',
-            'filename': PROJECT_ROOT / 'django.log',
-            'maxBytes': 1024*1024*25, # 25 MB
-            'backupCount': 5,
         }
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'log_file'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['console', 'log_file'],
+            'handlers': ['console'],
             'level': 'ERROR',
             'propagate': True,
         },
         'ashtag.request': {
-            'handlers': ['console', 'log_file'],
+            'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'django.db.backends': {
-            'handlers': ['console', 'log_file'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
         },
         # Catch All Logger -- Captures any other logging
         '': {
-            'handlers': ['console', 'log_file'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
         }
