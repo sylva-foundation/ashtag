@@ -6,11 +6,11 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': ENV['MYSQLS']['MYSQLS_DATABASE'],
-        'USER': ENV['MYSQLS']['MYSQLS_USERNAME'],
-        'PASSWORD': ENV['MYSQLS']['MYSQLS_PASSWORD'],
-        'HOST': ENV['MYSQLS']['MYSQLS_HOSTNAME'],
-        'PORT': ENV['MYSQLS']['MYSQLS_PORT']
+        'NAME': ENV['MYSQLS_DATABASE'],
+        'USER': ENV['MYSQLS_USERNAME'],
+        'PASSWORD': ENV['MYSQLS_PASSWORD'],
+        'HOST': ENV['MYSQLS_HOSTNAME'],
+        'PORT': ENV['MYSQLS_PORT']
     }
 }
 

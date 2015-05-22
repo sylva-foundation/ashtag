@@ -73,7 +73,7 @@ MEDIA_ROOT = ''
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
+MEDIA_URL = ENV.get('MEDIA_URL', '/media/')
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -83,7 +83,7 @@ STATIC_ROOT = PROJECT_ROOT / 'static'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = os.environ.get('STATIC_URL', '/static/')
+STATIC_URL = ENV.get('STATIC_URL', '/static/')
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -106,8 +106,8 @@ FIXTURE_DIRS = (
 )
 
 # Pull the SECRET_KEY from the environment.
-if os.environ.get('DJANGO_SECRET_KEY'):
-    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if ENV.get('DJANGO_SECRET_KEY'):
+    SECRET_KEY = ENV.get('DJANGO_SECRET_KEY')
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.Emailbackend',
@@ -276,9 +276,9 @@ OSCAR_PARTNER_WRAPPERS = {
 OSCAR_TAX = '0.2'
 
 # Oscar PayPal
-PAYPAL_API_USERNAME = os.environ.get('PAYPAL_API_USERNAME', 'not-set')
-PAYPAL_API_PASSWORD = os.environ.get('PAYPAL_API_PASSWORD', 'not-set')
-PAYPAL_API_SIGNATURE = os.environ.get('PAYPAL_API_SIGNATURE', 'not-set')
+PAYPAL_API_USERNAME = ENV.get('PAYPAL_API_USERNAME', 'not-set')
+PAYPAL_API_PASSWORD = ENV.get('PAYPAL_API_PASSWORD', 'not-set')
+PAYPAL_API_SIGNATURE = ENV.get('PAYPAL_API_SIGNATURE', 'not-set')
 PAYPAL_CURRENCY = "GBP"
 PAYPAL_ALLOW_NOTE = False
 
@@ -301,18 +301,18 @@ MANIFESTO_FILTER_EXCLUDE_PATTERNS = [
 
 # File storage configuration
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'ashtag-localdev')
+AWS_ACCESS_KEY_ID = ENV.get('AWS_ACCESS_KEY_ID', None)
+AWS_SECRET_ACCESS_KEY = ENV.get('AWS_SECRET_ACCESS_KEY', None)
+AWS_STORAGE_BUCKET_NAME = ENV.get('AWS_STORAGE_BUCKET_NAME', 'ashtag-localdev')
 AWS_QUERYSTRING_AUTH = False
 AWS_HEADERS = {
     'Cache-Control': 'max-age=31536000, public',
 }
 
-if os.environ.get('AWS_MEDIA_ENABLE', False):
+if ENV.get('AWS_MEDIA_ENABLE', False):
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-if os.environ.get('AWS_STATIC_ENABLE', False):
+if ENV.get('AWS_STATIC_ENABLE', False):
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # Image sizes
@@ -331,7 +331,7 @@ THUMBNAIL_UPSCALE = False
 THUMBNAIL_QUALITY = 80
 
 # Tracking switch
-ENABLE_TRACKING_CODE = bool(os.environ.get('ENABLE_TRACKING_CODE', False))
+ENABLE_TRACKING_CODE = bool(ENV.get('ENABLE_TRACKING_CODE', False))
 
 # Celery
 import djcelery
