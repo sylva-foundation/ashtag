@@ -1,6 +1,6 @@
 from ashtag.settings.base import *
 
-DEBUG = True
+DEBUG = bool(os.environ.get('DEBUG', False))
 TEMPLATE_DEBUG = DEBUG
 
 import dj_database_url
