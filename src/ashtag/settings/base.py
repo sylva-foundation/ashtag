@@ -100,7 +100,7 @@ FIXTURE_DIRS = (
 )
 
 # Pull the SECRET_KEY from the environment.
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '123')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', None)
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.Emailbackend',
