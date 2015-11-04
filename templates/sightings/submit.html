@@ -14,6 +14,9 @@
             {% csrf_token %}
             <div class="form-intro">
                 <p>
+                    Submitting a sighting will help inform experts in the Living Ash Project understand more about the spread of the disease. Your tree could be important in helping ash trees across Britain recover from ash dieback.
+                </p>
+                <p>
                     Need help tagging a tree for the first time? 
                     <a href="{% url 'public:tagging-video' %}">Watch our video</a> for a step-by-step guide.
                 </p>
@@ -80,20 +83,17 @@
                     <label for="id_disease_state_unlikely">Unlikely</label>
                 </fieldset>
             </div><!--//form-row-->
-            <span class="help-text">
-                We recommend forwarding likely cases of ash dieback to the Forestry Commission for further review and verification. See their <a href="http://www.forestry.gov.uk/chalara" target="_blank">Chalara page</a> page or  <a href="http://www.forestry.gov.uk/forestry/hcou-4ubhr3" target="_blank">contact them</a> if you have specific concerns.
-            </span>
 
             <p>
-                Take part in an additional survey to help scientists breed healthy ash trees for the future.
-                Simply answer a few more questions about your tree
+                Now complete the main survey to help scientists breed healthy ash trees for the future.
+                Simply answer a few more questions about your tree.
             </p>
 
             <div role="main" class="ui-content survey-wrapper">
-                <div data-role="collapsible" data-collapsed="true" id="survey-collapsible">
+                <div data-role="collapsible" data-collapsed="false" id="survey-collapsible">
                     <h3>Living Ash Project survey</h3>
                     <p>
-                        <p>Thank you for agreeing to answer a few more questions. We are working with scientists who are interested in ash trees that are tolerant (to some degree) to Chalara ash dieback. They are particularly keen to survey ash trees in every corner of Britain, because the genetics of ash trees vary across the country. Ideally, the trees selected need to be surveyed every year for at least three years, so that a detailed picture of their health is built up. Ultimately, trees that appear to have some tolerance to Chalara ash dieback will be sampled by taking cuttings, and will enter a programme aiming to breed resistant trees for the future of ash trees in Britain.</p>
+                        <p>Scientists who in the Living Ash Project are interested in ash trees that are tolerant (to some degree) to Chalara ash dieback. They are particularly keen to survey ash trees in every corner of Britain, because the genetics of ash trees vary across the country. Ideally, the trees selected need to be surveyed every year for at least three years, so that a detailed picture of their health is built up. Ultimately, trees that appear to have some tolerance to Chalara ash dieback will be sampled by taking cuttings, and will enter a programme aiming to breed resistant trees for the future of ash trees in Britain.</p>
                         <p><em>All questions are optional</em></p>
                     </p>
 
