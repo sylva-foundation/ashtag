@@ -235,6 +235,9 @@ textarea.ui-input-text {
 .at-footer .logos {
   margin: 0 auto;
 }
+.at-footer .logos.managed-by {
+  padding-left: 0;
+}
 .at-footer .logos li {
   display: inline;
 }
@@ -265,6 +268,13 @@ textarea.ui-input-text {
   background: #efefef url(../images/uea-logo.png) no-repeat center center;
 }
 .at-footer .logos .uea a:hover {
+  background-color: #fff;
+}
+.at-footer .logos .sylva a {
+  background: #efefef url(../images/sylva-logo.png) no-repeat center center;
+  background-size: 92px;
+}
+.at-footer .logos .sylva a:hover {
   background-color: #fff;
 }
 /* Cookies Block */
