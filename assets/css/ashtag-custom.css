@@ -99,9 +99,8 @@ body {
     display: none;
   }
 }
-
 .menu-button {
-  background: #666666 url(../images/menu-icon.png) no-repeat 7px 7px;
+  background: #666 url(../images/menu-icon.png) no-repeat 7px 7px;
   border: none;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
@@ -217,7 +216,6 @@ textarea.ui-input-text {
   margin-bottom: 20px;
   margin-left: -40px;
   /* visually center the links */
-
 }
 .at-footer .site-links li {
   list-style: none;
@@ -441,12 +439,12 @@ body.offline #submit-sighting-page .submit-done-msgs .online-msg {
   background: -o-linear-gradient(top, #65ad3b, #558c3a);
 }
 .cta-btn-wrapper .ui-btn.ui-btn-down-a {
-  background-color: #6da047;
-  background: -webkit-gradient(linear, left top, left bottom, from(#6da047), to(#8fd25e));
-  background: -webkit-linear-gradient(top, #6da047, #8fd25e);
-  background: -moz-linear-gradient(top, #6da047, #8fd25e);
-  background: -ms-linear-gradient(top, #6da047, #8fd25e);
-  background: -o-linear-gradient(top, #6da047, #8fd25e);
+  background-color: #6DA047;
+  background: -webkit-gradient(linear, left top, left bottom, from(#6DA047), to(#8fd25e));
+  background: -webkit-linear-gradient(top, #6DA047, #8fd25e);
+  background: -moz-linear-gradient(top, #6DA047, #8fd25e);
+  background: -ms-linear-gradient(top, #6DA047, #8fd25e);
+  background: -o-linear-gradient(top, #6DA047, #8fd25e);
 }
 .cta-btn-wrapper .ui-btn .ui-btn-text {
   text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.2);
@@ -1383,6 +1381,5 @@ body.non-ios ul li.buy-tags {
   .at-footer {
     background: none;
     /* Hide illustration when it's mobile */
-  
   }
 }
