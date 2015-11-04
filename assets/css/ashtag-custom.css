@@ -68,6 +68,38 @@ body {
 .at-header .logo {
   padding-top: 40px;
 }
+.at-header .laplogo {
+  right: 18%;
+  width: 200px;
+  height: 100px;
+  position: absolute;
+  top: -22px;
+}
+.at-header .laplogo span {
+  color: #999a99;
+  font-size: 10px;
+  text-align: center;
+  display: block;
+  font-style: italic;
+}
+.at-header .laplogo a {
+  text-align: center;
+  display: block;
+}
+.at-header .laplogo img {
+  width: 80px;
+}
+@media all and (max-width: 800px) {
+  .at-header .laplogo {
+    right: 0px;
+  }
+}
+@media all and (max-width: 600px) {
+  .at-header .laplogo {
+    display: none;
+  }
+}
+
 .menu-button {
   background: #666666 url(../images/menu-icon.png) no-repeat 7px 7px;
   border: none;
